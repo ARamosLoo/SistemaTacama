@@ -24,7 +24,10 @@
     "demo:qr": "node scripts/demo-qr.js"
   },
   "devDependencies": {
+    "@eslint/js": "9.17.0",
     "@types/node": "^20.11.0",
+    "eslint": "9.17.0",
+    "globals": "15.14.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
@@ -32,7 +35,8 @@
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
     "turbo": "^1.12.4",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "8.46.0"
   },
   "engines": {
     "node": ">=20.0.0",

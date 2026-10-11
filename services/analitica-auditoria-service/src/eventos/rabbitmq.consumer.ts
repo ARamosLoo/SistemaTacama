@@ -81,7 +81,7 @@ export class RabbitMQConsumer implements OnModuleInit, OnModuleDestroy {
     // 2. Registrar en LogAuditoria según tipo
     let categoria: any = 'SISTEMA';
     let entidad = 'Evento';
-    let accion = tipo.toUpperCase();
+    const accion = tipo.toUpperCase();
 
     if (tipo.startsWith('comanda.')) {
       categoria = 'COMANDA';
