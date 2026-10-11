@@ -53,6 +53,10 @@ jobs:
       - name: Instalar dependencias
         run: pnpm install --frozen-lockfile
 
+      # Los clientes de Prisma no se suben al repositorio (carpeta generated/): se generan aquí
+      - name: Generar clientes de Prisma
+        run: pnpm --filter "./services/*" exec prisma generate
+
       - name: Build paquetes compartidos
         run: pnpm run build --filter="./packages/*"
 
@@ -81,6 +85,10 @@ jobs:
 
       - name: Instalar dependencias
         run: pnpm install --frozen-lockfile
+
+      # Los clientes de Prisma no se suben al repositorio (carpeta generated/): se generan aquí
+      - name: Generar clientes de Prisma
+        run: pnpm --filter "./services/*" exec prisma generate
 
       - name: Build completo (Turborepo)
         run: pnpm run build
