@@ -1,0 +1,98 @@
+// ============================================================
+// schema.prisma — analitica-auditoria-service
+// Schema: analitica
+// Gestiona: log de auditoría inmutable, eventos de negocio, KPIs
+// RN11: logs inmutables por 12 meses
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["analitica"]
+}
+
+// ── Categoría del evento de negocio ──────────────────────────
+enum CategoriaEvento {
+  AUTENTICACION     // login, logout, token de mesa
+  CATALOGO          // cambios en la carta
+  COMANDA           // creación, modificación, anulación
+  INVENTARIO        // movimientos de stock
+  MARIDAJE          // recomendaciones, aceptaciones
+  VALORACION        // CSAT del comensal
+  SISTEMA           // errores, health checks
+  @@schema("analitica")
+}
+
+// ── Log de auditoría (RF22 - inmutable: solo INSERT) ─────────
+// ⚠️ NUNCA hacer UPDATE ni DELETE sobre esta tabla.
+// Usa Row-Level Security en PostgreSQL para reforzarlo.
+model LogAuditoria {
+  id          String          @id @default(uuid())
+  // Entidad afectada (ej. "Comanda", "Usuario")
+  entidad     String
+  entidadId   String?         @map("entidad_id")
+  // Acción ejecutada (ej. "CREAR", "ANULAR", "LOGIN")
+  accion      String
+  // Datos antes y después (para rollback/trazabilidad)
+  datosAntes  Json?           @map("datos_antes")
+  datosDespues Json?          @map("datos_despues")
+  // Contexto de quién hizo la acción
+  usuarioId   String?         @map("usuario_id")
+  mesaId      String?         @map("mesa_id")
+  ipOrigen    String?         @map("ip_origen")
+  userAgent   String?         @map("user_agent")
+  // Categoría para filtrado rápido
+  categoria   CategoriaEvento
+  // Servicio origen (ej. "auth-service", "comandas-service")
+  servicio    String
+  timestamp   DateTime        @default(now())
+
+  @@map("log_auditoria")
+  @@schema("analitica")
+}
+
+// ── Evento de negocio (desde RabbitMQ) ───────────────────────
+// Registro de todos los eventos async para analítica.
+model EventoNegocio {
+  id            String    @id @default(uuid())
+  tipo          String    // "comanda.confirmada", "inventario.stock_bajo", etc.
+  payload       Json      // cuerpo completo del evento
+  procesado     Boolean   @default(false)
+  errorProceso  String?   @map("error_proceso")
+  timestamp     DateTime  @default(now())
+
+  @@map("eventos_negocio")
+  @@schema("analitica")
+}
+
+// ── Indicador calculado (snapshot diario para dashboards) ─────
+// Se actualiza por un proceso batch/cron, no en tiempo real.
+model IndicadorDiario {
+  id                  String    @id @default(uuid())
+  fecha               DateTime  @db.Date
+  // Ventas
+  totalComandas       Int       @default(0) @map("total_comandas")
+  comandasAnuladas    Int       @default(0) @map("comandas_anuladas")
+  ticketPromedioPEN   Decimal?  @map("ticket_promedio_pen") @db.Decimal(10, 2)
+  // Maridaje (RF: tasa de venta cruzada)
+  recomendacionesEmitidas Int   @default(0) @map("recomendaciones_emitidas")
+  recomendacionesAceptadas Int  @default(0) @map("recomendaciones_aceptadas")
+  tasaVentaCruzada    Decimal?  @map("tasa_venta_cruzada") @db.Decimal(5, 4)
+  // CSAT
+  valoracionesTotal   Int       @default(0) @map("valoraciones_total")
+  csatPromedio        Decimal?  @map("csat_promedio") @db.Decimal(3, 2)
+  // Segmentación opcional
+  mozoId              String?   @map("mozo_id")
+  turno               String?   // "almuerzo" | "cena"
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  @@unique([fecha, mozoId, turno])
+  @@map("indicadores_diarios")
+  @@schema("analitica")
+}

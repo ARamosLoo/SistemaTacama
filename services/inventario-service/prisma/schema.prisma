@@ -1,0 +1,105 @@
+// ============================================================
+// schema.prisma — inventario-service
+// Schema: inventario
+// Gestiona: etiquetas, lotes, existencias y movimientos de stock
+// RN06: descuenta al confirmar comanda
+// RN07: revierte si se anula
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["inventario"]
+}
+
+// ── Tipo de movimiento ────────────────────────────────────────
+enum TipoMovimiento {
+  ENTRADA       // compra, recepción de bodega
+  SALIDA        // consumo por comanda
+  AJUSTE        // corrección manual (requiere autorización)
+  DEVOLUCION    // reversa de una comanda anulada (RN07)
+  @@schema("inventario")
+}
+
+// ── Etiqueta de vino o pisco (inventario) ─────────────────────
+// Datos comerciales mínimos para gestión de stock.
+// La información de maridaje vive en maridaje-service.
+model Etiqueta {
+  id              String    @id @default(uuid())
+  codigoInterno   String    @unique @map("codigo_interno")
+  nombre          String
+  tipo            String    // "VINO_BLANCO", "PISCO_PURO", etc.
+  unidadMedida    String    @default("botella") @map("unidad_medida")
+  // Umbral mínimo de stock para alertar reposición
+  umbralMinimo    Int       @default(6) @map("umbral_minimo")
+  activa          Boolean   @default(true)
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  // Relaciones
+  lotes           Lote[]
+  existencias     Existencia[]
+  movimientos     MovimientoInventario[]
+
+  @@map("etiquetas")
+  @@schema("inventario")
+}
+
+// ── Lote de ingreso ───────────────────────────────────────────
+model Lote {
+  id              String    @id @default(uuid())
+  etiquetaId      String    @map("etiqueta_id")
+  codigoLote      String    @unique @map("codigo_lote")
+  cantidadIngreso Int       @map("cantidad_ingreso")
+  fechaIngreso    DateTime  @default(now()) @map("fecha_ingreso")
+  // Código de seguimiento en la bodega (sandbox)
+  refBodega       String?   @map("ref_bodega")
+  observaciones   String?
+
+  // Relaciones
+  etiqueta        Etiqueta  @relation(fields: [etiquetaId], references: [id])
+
+  @@map("lotes")
+  @@schema("inventario")
+}
+
+// ── Existencia actual de una etiqueta ─────────────────────────
+// Una fila por etiqueta; se actualiza con cada movimiento.
+model Existencia {
+  id              String    @id @default(uuid())
+  etiquetaId      String    @unique @map("etiqueta_id")
+  stockActual     Int       @default(0) @map("stock_actual")
+  ultimaActualizacion DateTime @updatedAt @map("ultima_actualizacion")
+
+  // Relaciones
+  etiqueta        Etiqueta  @relation(fields: [etiquetaId], references: [id])
+
+  @@map("existencias")
+  @@schema("inventario")
+}
+
+// ── Movimiento de inventario (log inmutable de stock) ─────────
+// Solo INSERT; nunca UPDATE ni DELETE (trazabilidad completa).
+model MovimientoInventario {
+  id          String          @id @default(uuid())
+  etiquetaId  String          @map("etiqueta_id")
+  tipo        TipoMovimiento
+  cantidad    Int             // positivo = entrada, negativo = salida
+  comandaId   String?         @map("comanda_id")   // si vino de una comanda
+  loteId      String?         @map("lote_id")
+  referencia  String?         // nro. de documento interno o ref. bodega
+  motivo      String?
+  usuarioId   String?         @map("usuario_id")   // quien autorizó el ajuste
+  timestamp   DateTime        @default(now())
+
+  // Relaciones
+  etiqueta    Etiqueta        @relation(fields: [etiquetaId], references: [id])
+
+  @@map("movimientos_inventario")
+  @@schema("inventario")
+}

@@ -1,0 +1,1458 @@
+{
+  "TAC-001": {
+    "fr": {
+      "n": "Noix de pécan d'Ica au romarin",
+      "d": "Salées, avec une touche méditerranéenne."
+    },
+    "pt": {
+      "n": "Nozes-pecã de Ica ao alecrim",
+      "d": "Salgadinhas, com um toque mediterrâneo."
+    },
+    "de": {
+      "n": "Pekannüsse aus Ica mit Rosmarin",
+      "d": "Gesalzen, mit mediterraner Note."
+    }
+  },
+  "TAC-002": {
+    "fr": {
+      "n": "Tequeños (6 pièces) au fromage, sauce guacamole",
+      "d": "Tequeños croustillants au fromage, avec sauce guacamole."
+    },
+    "pt": {
+      "n": "Tequeños (6 un.) de queijo com molho guacamole",
+      "d": "Tequeños crocantes de queijo, com molho guacamole."
+    },
+    "de": {
+      "n": "Tequeños (6 Stück) mit Käse und Guacamole-Sauce",
+      "d": "Knusprige Tequeños mit Käsefüllung und Guacamole-Sauce."
+    }
+  },
+  "TAC-003": {
+    "fr": {
+      "n": "Tequeños (6 pièces) ají de gallina, sauce guacamole",
+      "d": "Tequeños fourrés à l'ají de gallina, avec sauce guacamole."
+    },
+    "pt": {
+      "n": "Tequeños (6 un.) de ají de gallina com molho guacamole",
+      "d": "Tequeños recheados de ají de gallina, com molho guacamole."
+    },
+    "de": {
+      "n": "Tequeños (6 Stück) mit Ají de gallina und Guacamole-Sauce",
+      "d": "Tequeños mit Ají-de-gallina-Füllung und Guacamole-Sauce."
+    }
+  },
+  "TAC-004": {
+    "fr": {
+      "n": "Tequeños (6 pièces) lomo saltado, sauce huancaína",
+      "d": "Tequeños fourrés au lomo saltado, avec sauce huancaína."
+    },
+    "pt": {
+      "n": "Tequeños (6 un.) de lomo saltado com molho huancaína",
+      "d": "Tequeños recheados de lomo saltado, com molho huancaína."
+    },
+    "de": {
+      "n": "Tequeños (6 Stück) mit Lomo saltado und Huancaína-Sauce",
+      "d": "Tequeños mit Lomo-saltado-Füllung und Huancaína-Sauce."
+    }
+  },
+  "TAC-005": {
+    "fr": {
+      "n": "Tequeños (6 pièces) rôti au vin rouge, sauce guacamole",
+      "d": "Tequeños fourrés au rôti de bœuf au vin rouge, avec sauce guacamole."
+    },
+    "pt": {
+      "n": "Tequeños (6 un.) de assado ao vinho tinto com molho guacamole",
+      "d": "Tequeños recheados de assado ao vinho tinto, com molho guacamole."
+    },
+    "de": {
+      "n": "Tequeños (6 Stück) mit Rotwein-Braten und Guacamole-Sauce",
+      "d": "Tequeños mit Rotwein-Rinderbraten und Guacamole-Sauce."
+    }
+  },
+  "TAC-006": {
+    "fr": {
+      "n": "Trilogie de tequeños (9 pièces)",
+      "d": "Trois saveurs de tequeños à partager."
+    },
+    "pt": {
+      "n": "Trilogia de tequeños (9 un.)",
+      "d": "Três sabores de tequeños para compartilhar."
+    },
+    "de": {
+      "n": "Tequeños-Trilogie (9 Stück)",
+      "d": "Drei Sorten Tequeños zum Teilen."
+    }
+  },
+  "TAC-007": {
+    "fr": {
+      "n": "Plateau de fromages péruviens",
+      "d": "Fromages péruviens variés, avec noix de pécan au romarin, raisins secs et notre incomparable pain chapla."
+    },
+    "pt": {
+      "n": "Tábua de queijos peruanos",
+      "d": "Queijos peruanos variados, com nozes-pecã ao alecrim, uvas-passas e o nosso inigualável pão chapla."
+    },
+    "de": {
+      "n": "Peruanische Käseplatte",
+      "d": "Verschiedene peruanische Käsesorten mit Rosmarin-Pekannüssen, Rosinen und unserem unvergleichlichen Chapla-Brot."
+    }
+  },
+  "TAC-008": {
+    "fr": {
+      "n": "Yuquitas classiques de la maison",
+      "d": "Croustillantes, servies avec notre sauce huancaína."
+    },
+    "pt": {
+      "n": "Yuquitas clássicas da casa",
+      "d": "Crocantes, acompanhadas do nosso molho huancaína."
+    },
+    "de": {
+      "n": "Klassische Yuquitas des Hauses",
+      "d": "Knusprig, serviert mit unserer Huancaína-Sauce."
+    }
+  },
+  "TAC-009": {
+    "fr": {
+      "n": "Grande empanada Tacama",
+      "d": "Pâte feuilletée fourrée de l'exquis adobo de porc José Antonio, servie avec une salade fraîche de tomates et de laitue du potager."
+    },
+    "pt": {
+      "n": "Grande empanada Tacama",
+      "d": "Massa folhada recheada com o requintado adobo de porco José Antonio, acompanhada de uma salada fresca de tomate e alface da horta."
+    },
+    "de": {
+      "n": "Große Empanada Tacama",
+      "d": "Blätterteig gefüllt mit dem exquisiten Schweine-Adobo José Antonio, dazu ein frischer Tomaten-Salat mit Kopfsalat aus unserem Garten."
+    }
+  },
+  "TAC-010": {
+    "fr": {
+      "n": "Grand assortiment créole Tacama (3 personnes)",
+      "d": "Une célébration créole complète : yuquitas croustillantes, chicharrones de porc dorés, tendres anticuchos avec maïs au cumin et notre classique petit tamal, avec huancaína, piment et salsa criolla."
+    },
+    "pt": {
+      "n": "Grande petisco crioulo Tacama (3 pessoas)",
+      "d": "Uma celebração crioula completa: yuquitas crocantes, torresmos de porco dourados, anticuchos macios com milho ao cominho e o nosso clássico tamalito, com huancaína, ají e salsa criolla."
+    },
+    "de": {
+      "n": "Große kreolische Platte Tacama (3 Personen)",
+      "d": "Ein komplettes kreolisches Fest: knusprige Yuquitas, goldene Schweinekrusten, zarte Anticuchos mit Kümmelmais und unser klassisches Tamalito, dazu Huancaína, Ají und Salsa criolla."
+    }
+  },
+  "TAC-011": {
+    "fr": {
+      "n": "Causa farcie au poulet",
+      "d": "L'un des plats les plus célèbres de la gastronomie péruvienne. Pomme de terre, piment et citron en sont les héros ; farcie de poulet, mayonnaise et avocat de notre potager."
+    },
+    "pt": {
+      "n": "Causa recheada com frango",
+      "d": "Um dos pratos mais famosos da gastronomia peruana. Batata, ají e limão são os protagonistas; recheada com frango, maionese e abacate da nossa horta."
+    },
+    "de": {
+      "n": "Causa mit Hähnchenfüllung",
+      "d": "Eines der berühmtesten Gerichte der peruanischen Küche. Kartoffel, Ají und Limette sind die Stars; gefüllt mit Hähnchen, Mayonnaise und Avocado aus unserem Garten."
+    }
+  },
+  "TAC-012": {
+    "fr": {
+      "n": "Pommes de terre à la huancaína",
+      "d": "Pommes de terre jaunes sélectionnées, nappées de notre très péruvienne sauce au piment jaune et au fromage frais."
+    },
+    "pt": {
+      "n": "Batata à huancaína",
+      "d": "Batata amarela selecionada, cozida e generosamente coberta com o nosso peruaníssimo molho de ají amarelo e queijo fresco."
+    },
+    "de": {
+      "n": "Kartoffeln à la Huancaína",
+      "d": "Ausgewählte gelbe Kartoffeln, großzügig mit unserer urperuanischen Sauce aus gelber Ají und Frischkäse übergossen."
+    }
+  },
+  "TAC-013": {
+    "fr": {
+      "n": "Avocat jardinière",
+      "d": "Avocat crémeux d'Ica, couronné d'un mélange de légumes cuits à la mayonnaise."
+    },
+    "pt": {
+      "n": "Abacate à jardineira",
+      "d": "Abacate cremoso de Ica, coberto com uma mistura de legumes cozidos envoltos em maionese."
+    },
+    "de": {
+      "n": "Avocado Gärtnerin",
+      "d": "Cremige Avocado aus Ica, gekrönt mit gekochtem Gemüse in Mayonnaise."
+    }
+  },
+  "TAC-014": {
+    "fr": {
+      "n": "Avocat aux langoustines, sauce anticuchera",
+      "d": "Langoustines grillées tendres, avec un mélange de légumes cuits à la mayonnaise sur un lit d'avocat."
+    },
+    "pt": {
+      "n": "Abacate com camarões em molho anticuchero",
+      "d": "Camarões grelhados macios, acompanhados de uma mistura de legumes cozidos com maionese sobre uma base de abacate."
+    },
+    "de": {
+      "n": "Avocado mit Garnelen in Anticuchera-Sauce",
+      "d": "Zarte gegrillte Garnelen mit gekochtem Gemüse in Mayonnaise auf Avocado."
+    }
+  },
+  "TAC-015": {
+    "fr": {
+      "n": "Salade de pallares d'Ica",
+      "d": "Plat traditionnel de notre terre : pallares cuits, tomates, oignons et une touche de basilic. Le pallar porte une histoire ancestrale qui remonte aux cultures préincaïques."
+    },
+    "pt": {
+      "n": "Salada de pallares de Ica",
+      "d": "Tradicional da nossa terra: pallares cozidos, tomates, cebolas e um toque de manjericão. O pallar carrega uma história ancestral que remonta às culturas pré-incaicas."
+    },
+    "de": {
+      "n": "Pallares-Salat aus Ica",
+      "d": "Traditionell aus unserer Heimat: gekochte Pallares-Bohnen, Tomaten, Zwiebeln und etwas Basilikum. Die Pallar-Bohne hat eine uralte Geschichte, die bis in vorinkaische Kulturen zurückreicht."
+    }
+  },
+  "TAC-016": {
+    "fr": {
+      "n": "Salade César",
+      "d": "Laitue avec croûtons, jus de citron, huile d'olive, œufs, sauce Worcestershire, anchois, ail, moutarde, parmesan et poivre noir."
+    },
+    "pt": {
+      "n": "Salada Caesar",
+      "d": "Alface com croutons, suco de limão, azeite, ovos, molho inglês, anchovas, alho, mostarda, queijo parmesão e pimenta-do-reino."
+    },
+    "de": {
+      "n": "Caesar Salad",
+      "d": "Salat mit Croutons, Zitronensaft, Olivenöl, Eiern, Worcestersauce, Sardellen, Knoblauch, Senf, Parmesan und schwarzem Pfeffer."
+    }
+  },
+  "TAC-017": {
+    "fr": {
+      "n": "Salade César au poulet",
+      "d": "Notre salade César accompagnée de blanc de poulet."
+    },
+    "pt": {
+      "n": "Salada Caesar com frango",
+      "d": "A nossa salada Caesar acompanhada de peito de frango."
+    },
+    "de": {
+      "n": "Caesar Salad mit Hähnchen",
+      "d": "Unser Caesar Salad mit Hähnchenbrust."
+    }
+  },
+  "TAC-018": {
+    "fr": {
+      "n": "Salade de la maison",
+      "d": "Laitues fraîches du potager, tomate, maïs, carotte, asperges, oignon blanc et avocat, avec notre vinaigrette."
+    },
+    "pt": {
+      "n": "Salada da casa",
+      "d": "Alfaces frescas da horta, tomate, milho, cenoura, aspargos, cebola branca e abacate, com o nosso molho vinagrete."
+    },
+    "de": {
+      "n": "Salat des Hauses",
+      "d": "Frischer Salat aus dem Garten, Tomate, Mais, Karotte, Spargel, weiße Zwiebel und Avocado mit unserer Vinaigrette."
+    }
+  },
+  "TAC-019": {
+    "fr": {
+      "n": "Tamalito créole",
+      "d": "Tamal classique d'Ica fourré au porc, servi avec salsa criolla."
+    },
+    "pt": {
+      "n": "Tamalito crioulo",
+      "d": "Tamal clássico de Ica recheado de porco, acompanhado de salsa criolla."
+    },
+    "de": {
+      "n": "Kreolisches Tamalito",
+      "d": "Klassischer Tamal aus Ica mit Schweinefleischfüllung, serviert mit Salsa criolla."
+    }
+  },
+  "TAC-020": {
+    "fr": {
+      "n": "Tamalito vert",
+      "d": "Petit tamal à la coriandre fourré au blanc de poulet, avec salsa criolla. Une expérience que vous voudrez répéter."
+    },
+    "pt": {
+      "n": "Tamalito verde",
+      "d": "Tamalito de coentro recheado com peito de frango, com salsa criolla. Uma boa experiência que vai querer repetir."
+    },
+    "de": {
+      "n": "Grünes Tamalito",
+      "d": "Koriander-Tamalito mit Hähnchenbrustfüllung und Salsa criolla. Ein Erlebnis, das Sie wiederholen werden."
+    }
+  },
+  "TAC-021": {
+    "fr": {
+      "n": "Humita au fromage",
+      "d": "Humita maison moelleuse préparée avec du maïs tendre à feu doux."
+    },
+    "pt": {
+      "n": "Humita de queijo",
+      "d": "Humita caseira macia preparada com milho tenro em fogo lento."
+    },
+    "de": {
+      "n": "Humita mit Käse",
+      "d": "Weiche hausgemachte Humita aus zartem Mais, langsam gegart."
+    }
+  },
+  "TAC-022": {
+    "fr": {
+      "n": "Pastel de choclo",
+      "d": "Notre exquise recette de toujours, farcie de viande. Aujourd'hui, nous la partageons avec vous."
+    },
+    "pt": {
+      "n": "Pastel de choclo",
+      "d": "A nossa deliciosa receita de sempre, recheada com carne. Hoje a compartilhamos com vocês."
+    },
+    "de": {
+      "n": "Maispastete (Pastel de choclo)",
+      "d": "Unser exquisites Hausrezept, mit Fleisch gefüllt. Heute teilen wir es mit Ihnen."
+    }
+  },
+  "TAC-023": {
+    "fr": {
+      "n": "Travers de porc barbecue",
+      "d": "L'une des recettes les plus populaires et appréciées. Texture juteuse, goût fumé et sauce irrésistible."
+    },
+    "pt": {
+      "n": "Costelas de porco ao barbecue",
+      "d": "Uma das receitas mais populares e queridas. Textura suculenta, sabor defumado e molho irresistível."
+    },
+    "de": {
+      "n": "Schweinerippchen BBQ",
+      "d": "Eines der beliebtesten Rezepte. Saftige Textur, rauchiger Geschmack und unwiderstehliche Sauce."
+    }
+  },
+  "TAC-024": {
+    "fr": {
+      "n": "Ají de gallina",
+      "d": "Un plat péruvien traditionnel. La préparation parfaite de notre douce sauce au piment jaune en fait un succès assuré. Avec pommes de terre bouillies et riz blanc."
+    },
+    "pt": {
+      "n": "Ají de gallina",
+      "d": "Um prato peruano tradicional. O preparo perfeito do nosso molho suave de ají amarelo garante o sucesso. Com batatas cozidas e arroz branco."
+    },
+    "de": {
+      "n": "Ají de gallina",
+      "d": "Ein traditionelles peruanisches Gericht. Die perfekte Zubereitung unserer milden Sauce aus gelber Ají macht es zum sicheren Erfolg. Mit Salzkartoffeln und weißem Reis."
+    }
+  },
+  "TAC-025": {
+    "fr": {
+      "n": "Poulet au riz",
+      "d": "Un délicieux équilibre de coriandre, carotte et petits pois avec salsa criolla."
+    },
+    "pt": {
+      "n": "Arroz com frango",
+      "d": "Um delicioso equilíbrio de coentro, cenoura e ervilhas com salsa criolla."
+    },
+    "de": {
+      "n": "Hähnchen mit Reis",
+      "d": "Eine köstliche Balance aus Koriander, Karotte und Erbsen, dazu Salsa criolla."
+    }
+  },
+  "TAC-026": {
+    "fr": {
+      "n": "Poulet grillé",
+      "d": "Avec deux accompagnements au choix : frites de pommes de terre jaunes, salade fraîche ou riz blanc."
+    },
+    "pt": {
+      "n": "Frango grelhado",
+      "d": "Com duas guarnições à escolha: batatas fritas amarelas, salada fresca ou arroz branco."
+    },
+    "de": {
+      "n": "Gegrilltes Hähnchen",
+      "d": "Mit zwei Beilagen zur Wahl: gelbe Pommes, frischer Salat oder weißer Reis."
+    }
+  },
+  "TAC-027": {
+    "fr": {
+      "n": "Escalope de poulet milanaise",
+      "d": "Avec deux accompagnements au choix : frites de pommes de terre jaunes, salade fraîche ou riz blanc."
+    },
+    "pt": {
+      "n": "Milanesa de frango",
+      "d": "Com duas guarnições à escolha: batatas fritas amarelas, salada fresca ou arroz branco."
+    },
+    "de": {
+      "n": "Hähnchen Milanesa",
+      "d": "Mit zwei Beilagen zur Wahl: gelbe Pommes, frischer Salat oder weißer Reis."
+    }
+  },
+  "TAC-028": {
+    "fr": {
+      "n": "Chicharrón de porc",
+      "d": "Poitrine de porc dorée et croustillante, avec chips de patate douce et bien sûr notre audacieuse salsa criolla."
+    },
+    "pt": {
+      "n": "Torresmo de porco",
+      "d": "Barriga de porco dourada e crocante, com chips de batata-doce e, claro, a nossa ousada salsa criolla."
+    },
+    "de": {
+      "n": "Knuspriger Schweinebauch",
+      "d": "Goldener, knuspriger Schweinebauch mit Süßkartoffelchips und natürlich unserer kecken Salsa criolla."
+    }
+  },
+  "TAC-029": {
+    "fr": {
+      "n": "Adobo de porc \"José Antonio\"",
+      "d": "Ragoût mariné aux piments et épices variés, servi avec purée de pallares verts et riz blanc."
+    },
+    "pt": {
+      "n": "Adobo de porco \"José Antonio\"",
+      "d": "Guisado marinado com diversos ajíes e especiarias, acompanhado de purê de pallares verdes e arroz branco."
+    },
+    "de": {
+      "n": "Schweine-Adobo \"José Antonio\"",
+      "d": "Mariniertes Schmorgericht mit verschiedenen Ajíes und Gewürzen, dazu grünes Pallares-Püree und weißer Reis."
+    }
+  },
+  "TAC-030": {
+    "fr": {
+      "n": "Carapulcra avec sopa seca",
+      "d": "L'un des plats les plus anciens du Pérou. Pomme de terre séchée mijotée avec du porc, servie avec une sopa seca de pâtes à la basilic, au poulet et au persil."
+    },
+    "pt": {
+      "n": "Carapulcra com sopa seca",
+      "d": "Um dos pratos mais antigos do Peru. Batata seca cozida e refogada com carne de porco, acompanhada de sopa seca de massa com tempero de manjericão, frango e salsinha."
+    },
+    "de": {
+      "n": "Carapulcra mit Sopa seca",
+      "d": "Eines der ältesten Gerichte Perus. Getrocknete Kartoffel, mit Schweinefleisch geschmort, dazu Sopa seca aus Nudeln mit Basilikum, Hähnchen und Petersilie."
+    }
+  },
+  "TAC-031": {
+    "fr": {
+      "n": "Fettuccine à la huancaína et filet de bœuf",
+      "d": "Délicieux fettuccine à la huancaína avec médaillon de filet de bœuf sauce au vin rouge."
+    },
+    "pt": {
+      "n": "Fettuccine à huancaína com lombo fino",
+      "d": "Deliciosos fettuccines à huancaína com medalhão de lombo em molho de vinho tinto."
+    },
+    "de": {
+      "n": "Fettuccine Huancaína mit Rinderfilet",
+      "d": "Köstliche Fettuccine mit Huancaína-Sauce und Rinderfilet-Medaillon in Rotweinsauce."
+    }
+  },
+  "TAC-032": {
+    "fr": {
+      "n": "Spaghetti au pesto et filet pané",
+      "d": "Notre fine tranche de filet de bœuf panée, accompagnée cette fois de spaghetti au pesto maison."
+    },
+    "pt": {
+      "n": "Espaguete ao pesto com lombo à milanesa",
+      "d": "O nosso lombo fino à milanesa, desta vez acompanhado de um espaguete ao pesto caseiro."
+    },
+    "de": {
+      "n": "Spaghetti mit Pesto und paniertem Filet",
+      "d": "Unser dünn paniertes Rinderfilet, diesmal mit hausgemachten Pesto-Spaghetti."
+    }
+  },
+  "TAC-033": {
+    "fr": {
+      "n": "Lomo saltado",
+      "d": "Le roi de la cuisine créole. Servi juteux, flambé au pisco, avec frites croustillantes de pommes de terre jaunes et riz blanc."
+    },
+    "pt": {
+      "n": "Lomo saltado",
+      "d": "O rei da comida crioula. Servido suculento, flambado com pisco e acompanhado de batatas fritas amarelas crocantes e arroz branco."
+    },
+    "de": {
+      "n": "Lomo saltado",
+      "d": "Der König der kreolischen Küche. Saftig serviert, mit Pisco flambiert, dazu knusprige gelbe Pommes und weißer Reis."
+    }
+  },
+  "TAC-034": {
+    "fr": {
+      "n": "Rôti au vin rouge",
+      "d": "Préparé avec le vin de notre cave. Servi avec la meilleure purée de pommes de terre jaunes et un riz blanc parfait."
+    },
+    "pt": {
+      "n": "Assado ao vinho tinto",
+      "d": "Preparado com vinho da nossa vinícola. Servido com o melhor purê de batata amarela e um arroz branco perfeito."
+    },
+    "de": {
+      "n": "Rotwein-Braten",
+      "d": "Zubereitet mit Wein aus unserem Weingut. Serviert mit feinstem Püree aus gelben Kartoffeln und perfektem weißem Reis."
+    }
+  },
+  "TAC-035": {
+    "fr": {
+      "n": "Picante de pallares et filet de bœuf pané",
+      "d": "Le pallar traditionnel d'Ica prend la forme d'un délicieux picante, accompagné d'un juteux filet de bœuf pané et de riz blanc."
+    },
+    "pt": {
+      "n": "Picante de pallares com lombo à milanesa",
+      "d": "O tradicional pallar de Ica ganha a forma de um delicioso picante, acompanhado de um suculento lombo à milanesa e arroz branco."
+    },
+    "de": {
+      "n": "Pallares-Picante mit paniertem Filet",
+      "d": "Die traditionelle Pallar-Bohne aus Ica als köstlicher Picante, dazu ein saftiges paniertes Rinderfilet und weißer Reis."
+    }
+  },
+  "TAC-036": {
+    "fr": {
+      "n": "Seco de bœuf à la morusa de pallares",
+      "d": "Rôti de bœuf tendre en sauce à la coriandre, avec une douce morusa de pallares et du riz blanc."
+    },
+    "pt": {
+      "n": "Seco de carne com morusa de pallares",
+      "d": "Assado de tira macio em molho de coentro, acompanhado de uma suave morusa de pallares e arroz branco."
+    },
+    "de": {
+      "n": "Rindfleisch-Seco mit Pallares-Morusa",
+      "d": "Zartes Rinderrippenstück in Koriandersauce, dazu eine milde Pallares-Morusa und weißer Reis."
+    }
+  },
+  "TAC-037": {
+    "fr": {
+      "n": "Riz couvert du Tambo",
+      "d": "Riz du Tambo fourré d'une double portion de savoureuse sauce de bœuf préparée avec du filet haché et les meilleures tomates de notre potager. Avec œuf au plat, bananes plantain mûres et chimichurri maison."
+    },
+    "pt": {
+      "n": "Arroz tapado do Tambo",
+      "d": "Arroz do Tambo recheado com dupla porção de um saboroso molho de carne preparado com lombo picado e os melhores tomates da nossa horta. Com ovo frito, bananas-da-terra maduras e chimichurri da casa."
+    },
+    "de": {
+      "n": "Gedeckter Reis des Tambo",
+      "d": "Reis des Tambo, gefüllt mit einer doppelten Portion herzhafter Fleischsauce aus gehacktem Filet und den besten Tomaten aus unserem Garten. Mit Spiegelei, reifen Kochbananen und hausgemachtem Chimichurri."
+    }
+  },
+  "TAC-038": {
+    "fr": {
+      "n": "Chicharrón de poisson du jour",
+      "d": "Servi avec nos frites, salsa criolla et sauce tartare maison."
+    },
+    "pt": {
+      "n": "Torresmo de peixe do dia",
+      "d": "Acompanhado das nossas batatas fritas, salsa criolla e molho tártaro da casa."
+    },
+    "de": {
+      "n": "Knuspriger Fisch des Tages",
+      "d": "Serviert mit unseren Pommes, Salsa criolla und hausgemachter Remoulade."
+    }
+  },
+  "TAC-039": {
+    "fr": {
+      "n": "Riz aux fruits de mer",
+      "d": "Riz crémeux avec un mélange de fruits de mer en sauce au piment jaune et au vin blanc."
+    },
+    "pt": {
+      "n": "Arroz com frutos do mar",
+      "d": "Arroz cremoso com mistura de frutos do mar em molho de ají amarelo e vinho branco."
+    },
+    "de": {
+      "n": "Meeresfrüchte-Reis",
+      "d": "Cremiger Reis mit einer Mischung aus Meeresfrüchten in gelber Ají-Sauce und Weißwein."
+    }
+  },
+  "TAC-040": {
+    "fr": {
+      "n": "Assortiment d'Ica",
+      "d": "Excellente option pour goûter les meilleures spécialités d'Ica façon hacienda : picante de pallares, carapulcra, ají de gallina, adobo de porc et riz blanc."
+    },
+    "pt": {
+      "n": "Petisco iqueño",
+      "d": "Excelente opção para provar as melhores especialidades de Ica ao estilo da casa-fazenda: picante de pallares, carapulcra, ají de gallina, adobo de porco e arroz branco."
+    },
+    "de": {
+      "n": "Platte aus Ica",
+      "d": "Hervorragende Wahl, um die besten Spezialitäten aus Ica nach Hacienda-Art zu probieren: Pallares-Picante, Carapulcra, Ají de gallina, Schweine-Adobo und weißer Reis."
+    }
+  },
+  "TAC-041": {
+    "fr": {
+      "n": "Escalope de poulet milanaise avec frites (Kids)",
+      "d": "Menu enfant : escalope de poulet milanaise avec frites."
+    },
+    "pt": {
+      "n": "Milanesa de frango com batatas fritas (Kids)",
+      "d": "Menu infantil: milanesa de frango com batatas fritas."
+    },
+    "de": {
+      "n": "Hähnchen Milanesa mit Pommes (Kids)",
+      "d": "Kindermenü: paniertes Hähnchen mit Pommes frites."
+    }
+  },
+  "TAC-042": {
+    "fr": {
+      "n": "Cheeseburger avec frites (Kids)",
+      "d": "Menu enfant : hamburger au fromage et frites."
+    },
+    "pt": {
+      "n": "Cheeseburger com batatas fritas (Kids)",
+      "d": "Menu infantil: hambúrguer com queijo e batatas fritas."
+    },
+    "de": {
+      "n": "Cheeseburger mit Pommes (Kids)",
+      "d": "Kindermenü: Cheeseburger mit Pommes frites."
+    }
+  },
+  "TAC-043": {
+    "fr": {
+      "n": "Rôti avec purée et riz (Kids)",
+      "d": "Menu enfant : rôti en sauce brune avec purée de pommes de terre et riz blanc."
+    },
+    "pt": {
+      "n": "Assado com purê e arroz (Kids)",
+      "d": "Menu infantil: assado em molho marrom com purê de batata e arroz branco."
+    },
+    "de": {
+      "n": "Braten mit Püree und Reis (Kids)",
+      "d": "Kindermenü: Braten in brauner Sauce mit Kartoffelpüree und weißem Reis."
+    }
+  },
+  "TAC-044": {
+    "fr": {
+      "n": "Glace au fudge (Kids)",
+      "d": "Menu enfant : glace à la vanille au fudge."
+    },
+    "pt": {
+      "n": "Sorvete com fudge (Kids)",
+      "d": "Menu infantil: sorvete de baunilha com fudge."
+    },
+    "de": {
+      "n": "Eis mit Fudge (Kids)",
+      "d": "Kindermenü: Vanilleeis mit Fudge."
+    }
+  },
+  "TAC-045": {
+    "fr": {
+      "n": "Pain chapla",
+      "d": "Pain de montagne tout chaud sorti de notre four à bois, avec mayonnaise aïoli (ail). Quatre pièces."
+    },
+    "pt": {
+      "n": "Pão chapla",
+      "d": "Pão serrano quentinho saído do nosso forno a lenha, acompanhado de maionese aioli (alho). Quatro peças."
+    },
+    "de": {
+      "n": "Chapla-Brot",
+      "d": "Warmes Bergbrot frisch aus unserem Holzofen, dazu Aioli-Mayonnaise (Knoblauch). Vier Stück."
+    }
+  },
+  "TAC-046": {
+    "fr": {
+      "n": "Pizza Americana",
+      "d": "Le classique des classiques : pizza croustillante au jambon."
+    },
+    "pt": {
+      "n": "Pizza Americana",
+      "d": "A clássica das clássicas: pizza crocante com presunto."
+    },
+    "de": {
+      "n": "Pizza Americana",
+      "d": "Der Klassiker der Klassiker: knusprige Pizza mit Schinken."
+    }
+  },
+  "TAC-047": {
+    "fr": {
+      "n": "Pizza quatre fromages",
+      "d": "Mozzarella, parmesan, gouda et bleu."
+    },
+    "pt": {
+      "n": "Pizza quatro queijos",
+      "d": "Muçarela, parmesão, gouda e queijo azul."
+    },
+    "de": {
+      "n": "Pizza Quattro Formaggi",
+      "d": "Mozzarella, Parmesan, Gouda und Blauschimmelkäse."
+    }
+  },
+  "TAC-048": {
+    "fr": {
+      "n": "Pizza Margherita",
+      "d": "Avec tomate et basilic de notre potager."
+    },
+    "pt": {
+      "n": "Pizza Margherita",
+      "d": "Com tomate e manjericão da nossa horta."
+    },
+    "de": {
+      "n": "Pizza Margherita",
+      "d": "Mit Tomate und Basilikum aus unserem Garten."
+    }
+  },
+  "TAC-049": {
+    "fr": {
+      "n": "Pizza full meat",
+      "d": "Avec lard, salami et bœuf haché."
+    },
+    "pt": {
+      "n": "Pizza full meat",
+      "d": "Com bacon, salame e carne moída."
+    },
+    "de": {
+      "n": "Pizza Full Meat",
+      "d": "Mit Speck, Salami und Rinderhack."
+    }
+  },
+  "TAC-050": {
+    "fr": {
+      "n": "Sandwich au rôti au vin",
+      "d": "Servi avec de petits oignons caramélisés, frites croustillantes de pommes de terre jaunes et une grande sauce au vin rouge."
+    },
+    "pt": {
+      "n": "Sanduíche de assado ao vinho",
+      "d": "Servido com cebolinhas doces, batatas fritas amarelas crocantes e um grande molho de vinho tinto."
+    },
+    "de": {
+      "n": "Rotwein-Braten-Sandwich",
+      "d": "Serviert mit süßen Zwiebelchen, knusprigen gelben Pommes und einer kräftigen Rotweinsauce."
+    }
+  },
+  "TAC-051": {
+    "fr": {
+      "n": "Pain au chicharrón",
+      "d": "De poitrine de porc avec chips de patate douce et petite salsa criolla."
+    },
+    "pt": {
+      "n": "Pão com torresmo",
+      "d": "De barriga de porco com chips de batata-doce e molhinho de salsa criolla."
+    },
+    "de": {
+      "n": "Brötchen mit Chicharrón",
+      "d": "Mit Schweinebauch, Süßkartoffelchips und kleiner Salsa criolla."
+    }
+  },
+  "TAC-052": {
+    "fr": {
+      "n": "Sandwich au poulet, avocat et mayonnaise",
+      "d": "Poulet effiloché, avocat d'Ica et mayonnaise crémeuse dans notre pain brioché maison."
+    },
+    "pt": {
+      "n": "Sanduíche de frango, abacate e maionese",
+      "d": "Frango desfiado, abacate de Ica e maionese cremosa no nosso pão brioche da casa."
+    },
+    "de": {
+      "n": "Sandwich mit Hähnchen, Avocado und Mayonnaise",
+      "d": "Gezupftes Hähnchen, Avocado aus Ica und cremige Mayonnaise im hausgemachten Briochebrötchen."
+    }
+  },
+  "TAC-053": {
+    "fr": {
+      "n": "Tambo burger",
+      "d": "Mélange de filet de bœuf et de porc, cheddar dans notre pain brioché maison."
+    },
+    "pt": {
+      "n": "Tambo burger",
+      "d": "Blend de lombo e porco, cheddar no pão brioche da casa."
+    },
+    "de": {
+      "n": "Tambo Burger",
+      "d": "Mischung aus Rinderfilet und Schwein, Cheddar im hausgemachten Briochebrötchen."
+    }
+  },
+  "TAC-054": {
+    "fr": {
+      "n": "Tambo royal",
+      "d": "Mélange de filet de bœuf et de porc, cheddar, lard et œuf dans notre pain brioché maison."
+    },
+    "pt": {
+      "n": "Tambo royal",
+      "d": "Blend de lombo e porco, cheddar, bacon e ovo no pão brioche da casa."
+    },
+    "de": {
+      "n": "Tambo Royal",
+      "d": "Mischung aus Rinderfilet und Schwein, Cheddar, Speck und Ei im hausgemachten Briochebrötchen."
+    }
+  },
+  "TAC-055": {
+    "fr": {
+      "n": "Gâteau au chocolat",
+      "d": "Classique et délicieux."
+    },
+    "pt": {
+      "n": "Bolo de chocolate",
+      "d": "Clássico e delicioso."
+    },
+    "de": {
+      "n": "Schokoladenkuchen",
+      "d": "Klassisch und köstlich."
+    }
+  },
+  "TAC-056": {
+    "fr": {
+      "n": "Brownie \"Cerro Prieto\"",
+      "d": "En hommage au paysage qui nous entoure. Servi avec fudge et glace à la vanille."
+    },
+    "pt": {
+      "n": "Brownie \"Cerro Prieto\"",
+      "d": "Em homenagem à paisagem que nos acompanha. Servido com fudge e sorvete de baunilha."
+    },
+    "de": {
+      "n": "Brownie \"Cerro Prieto\"",
+      "d": "Zu Ehren der Landschaft, die uns umgibt. Serviert mit Fudge und Vanilleeis."
+    }
+  },
+  "TAC-057": {
+    "fr": {
+      "n": "Gâteau tres leches",
+      "d": "Génoise moelleuse imbibée d'un parfait mélange de trois laits. Une subtile façon d'adoucir le palais de nos invités."
+    },
+    "pt": {
+      "n": "Bolo tres leches",
+      "d": "Pão de ló fofinho embebido numa perfeita combinação de três leites. Uma sutil alternativa para adoçar o paladar dos nossos convidados."
+    },
+    "de": {
+      "n": "Tres-Leches-Kuchen",
+      "d": "Luftiger Biskuit, getränkt in einer perfekten Mischung aus drei Milchsorten. Eine feine Art, den Gaumen unserer Gäste zu versüßen."
+    }
+  },
+  "TAC-058": {
+    "fr": {
+      "n": "Crumble aux pommes",
+      "d": "Servi chaud, avec glace à la vanille et nappage de caramel."
+    },
+    "pt": {
+      "n": "Crumble de maçã",
+      "d": "Quentinho, servido com sorvete de baunilha e cobertura de caramelo."
+    },
+    "de": {
+      "n": "Apfel-Crumble",
+      "d": "Warm serviert, mit Vanilleeis und Karamellsauce."
+    }
+  },
+  "TAC-059": {
+    "fr": {
+      "n": "Tocino del cielo",
+      "d": "Nous avons révélé le secret de cette ancienne recette familiale. À base de jaunes d'œufs, de lait et de sucre, cuit trois heures au bain-marie. Unique !"
+    },
+    "pt": {
+      "n": "Tocino del cielo",
+      "d": "Revelamos o segredo desta antiga receita de família. Feito com gemas, leite e açúcar, cozido por três horas em banho-maria. Único!"
+    },
+    "de": {
+      "n": "Tocino del cielo",
+      "d": "Wir haben das Geheimnis dieses alten Familienrezepts gelüftet. Aus Eigelb, Milch und Zucker, drei Stunden im Wasserbad gegart. Einzigartig!"
+    }
+  },
+  "TAC-060": {
+    "fr": {
+      "n": "Tarte aux noix de pécan \"El Lagar\"",
+      "d": "Les noix de pécan de Tacama sont exceptionnelles. La tarte \"El Lagar\" a été créée pour elles ; c'est l'un des desserts préférés de nos visiteurs."
+    },
+    "pt": {
+      "n": "Torta de nozes-pecã \"El Lagar\"",
+      "d": "As nozes-pecã de Tacama são excepcionais. Para elas foi criada a torta \"El Lagar\", uma das sobremesas preferidas dos nossos visitantes."
+    },
+    "de": {
+      "n": "Pekannuss-Tarte \"El Lagar\"",
+      "d": "Die Pekannüsse von Tacama sind außergewöhnlich. Für sie entstand die Tarte \"El Lagar\", eines der Lieblingsdesserts unserer Gäste."
+    }
+  },
+  "TAC-061": {
+    "fr": {
+      "n": "Trilogie de desserts",
+      "d": "Savourez vos desserts préférés ensemble : crumble aux pommes, brownie et tres leches."
+    },
+    "pt": {
+      "n": "Trilogia de sobremesas",
+      "d": "Aproveite suas sobremesas favoritas juntas: crumble de maçã, brownie e tres leches."
+    },
+    "de": {
+      "n": "Dessert-Trilogie",
+      "d": "Genießen Sie Ihre Lieblingsdesserts zusammen: Apfel-Crumble, Brownie und Tres Leches."
+    }
+  },
+  "TAC-062": {
+    "fr": {
+      "n": "Salsa criolla",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Salsa criolla",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Salsa criolla",
+      "d": "Beilage."
+    }
+  },
+  "TAC-063": {
+    "fr": {
+      "n": "Riz blanc",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Arroz branco",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Weißer Reis",
+      "d": "Beilage."
+    }
+  },
+  "TAC-064": {
+    "fr": {
+      "n": "Chips de patate douce",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Chips de batata-doce",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Süßkartoffelchips",
+      "d": "Beilage."
+    }
+  },
+  "TAC-065": {
+    "fr": {
+      "n": "Frites",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Batatas fritas",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Pommes frites",
+      "d": "Beilage."
+    }
+  },
+  "TAC-066": {
+    "fr": {
+      "n": "Avocat",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Abacate",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Avocado",
+      "d": "Beilage."
+    }
+  },
+  "TAC-067": {
+    "fr": {
+      "n": "Purée de pommes de terre",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Purê de batata",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Kartoffelpüree",
+      "d": "Beilage."
+    }
+  },
+  "TAC-068": {
+    "fr": {
+      "n": "Purée de pallares verts",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Purê de pallares verdes",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Püree aus grünen Pallares",
+      "d": "Beilage."
+    }
+  },
+  "TAC-069": {
+    "fr": {
+      "n": "Picante de pallares",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Picante de pallares",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Pallares-Picante",
+      "d": "Beilage."
+    }
+  },
+  "TAC-070": {
+    "fr": {
+      "n": "Carapulcra sans viande",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Carapulcra sem carne",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Carapulcra ohne Fleisch",
+      "d": "Beilage."
+    }
+  },
+  "TAC-071": {
+    "fr": {
+      "n": "Sopa seca",
+      "d": "Accompagnement."
+    },
+    "pt": {
+      "n": "Sopa seca",
+      "d": "Guarnição."
+    },
+    "de": {
+      "n": "Sopa seca",
+      "d": "Beilage."
+    }
+  },
+  "TAC-072": {
+    "fr": {
+      "n": "Chilcano classique",
+      "d": "Pisco Demonio de los Andes, jus de citron vert, bitter et Ginger Ale."
+    },
+    "pt": {
+      "n": "Chilcano clássico",
+      "d": "Pisco Demonio de los Andes, suco de limão, bitter e Ginger Ale."
+    },
+    "de": {
+      "n": "Chilcano klassisch",
+      "d": "Pisco Demonio de los Andes, Limettensaft, Bitter und Ginger Ale."
+    }
+  },
+  "TAC-073": {
+    "fr": {
+      "n": "Chilcano fruit de la passion",
+      "d": "Pisco Demonio de los Andes, jus de fruit de la passion, bitter et Ginger Ale."
+    },
+    "pt": {
+      "n": "Chilcano de maracujá",
+      "d": "Pisco Demonio de los Andes, suco de maracujá, bitter e Ginger Ale."
+    },
+    "de": {
+      "n": "Chilcano Maracuja",
+      "d": "Pisco Demonio de los Andes, Maracujasaft, Bitter und Ginger Ale."
+    }
+  },
+  "TAC-074": {
+    "fr": {
+      "n": "Tambo Sour",
+      "d": "Pisco Demonio de los Andes, jus de citron vert, sirop simple, blanc d'œuf et bitter."
+    },
+    "pt": {
+      "n": "Tambo Sour",
+      "d": "Pisco Demonio de los Andes, suco de limão, xarope simples, clara de ovo e bitter."
+    },
+    "de": {
+      "n": "Tambo Sour",
+      "d": "Pisco Demonio de los Andes, Limettensaft, Zuckersirup, Eiweiß und Bitter."
+    }
+  },
+  "TAC-075": {
+    "fr": {
+      "n": "Sour fruit de la passion",
+      "d": "Pisco Demonio de los Andes, jus de fruit de la passion, sirop simple, blanc d'œuf et bitter."
+    },
+    "pt": {
+      "n": "Sour de maracujá",
+      "d": "Pisco Demonio de los Andes, suco de maracujá, xarope simples, clara de ovo e bitter."
+    },
+    "de": {
+      "n": "Maracuja Sour",
+      "d": "Pisco Demonio de los Andes, Maracujasaft, Zuckersirup, Eiweiß und Bitter."
+    }
+  },
+  "TAC-076": {
+    "fr": {
+      "n": "Capitán",
+      "d": "Pisco Demonio de los Andes, vermouth Rosso et bitter."
+    },
+    "pt": {
+      "n": "Capitán",
+      "d": "Pisco Demonio de los Andes, vermute Rosso e bitter."
+    },
+    "de": {
+      "n": "Capitán",
+      "d": "Pisco Demonio de los Andes, Wermut Rosso und Bitter."
+    }
+  },
+  "TAC-077": {
+    "fr": {
+      "n": "Centenario",
+      "d": "Albilla d'Ica, Pisco Demonio de los Andes, jus d'ananas et de fruit de la passion, sirop de gomme."
+    },
+    "pt": {
+      "n": "Centenario",
+      "d": "Albilla d'Ica, Pisco Demonio de los Andes, suco de abacaxi e maracujá, xarope de goma."
+    },
+    "de": {
+      "n": "Centenario",
+      "d": "Albilla d'Ica, Pisco Demonio de los Andes, Ananas- und Maracujasaft, Gummisirup."
+    }
+  },
+  "TAC-078": {
+    "fr": {
+      "n": "Amore del Tambo",
+      "d": "Amore d'Ica, Pisco Demonio de los Andes, sirop de fraise, jus de citron vert et bitter."
+    },
+    "pt": {
+      "n": "Amore del Tambo",
+      "d": "Amore de Ica, Pisco Demonio de los Andes, xarope de morango, suco de limão e bitter."
+    },
+    "de": {
+      "n": "Amore del Tambo",
+      "d": "Amore de Ica, Pisco Demonio de los Andes, Erdbeersirup, Limettensaft und Bitter."
+    }
+  },
+  "TAC-079": {
+    "fr": {
+      "n": "Rosé de vendange",
+      "d": "Vin rosé, Pisco Demonio de los Andes Albilla, jus de citron vert, sirop de fraise, Aperol et Ginger Ale."
+    },
+    "pt": {
+      "n": "Rosado de vindima",
+      "d": "Vinho rosé, Pisco Demonio de los Andes Albilla, suco de limão, xarope de morango, Aperol e ginger ale."
+    },
+    "de": {
+      "n": "Rosé der Weinlese",
+      "d": "Roséwein, Pisco Demonio de los Andes Albilla, Limettensaft, Erdbeersirup, Aperol und Ginger Ale."
+    }
+  },
+  "TAC-080": {
+    "fr": {
+      "n": "Rouge de vendange",
+      "d": "Vin rouge, Pisco Demonio de los Andes Quebranta, cordial d'orange, jus de citron vert, mousseux."
+    },
+    "pt": {
+      "n": "Tinto de vindima",
+      "d": "Vinho tinto, Pisco Demonio de los Andes Quebranta, cordial de laranja, suco de limão, espumante."
+    },
+    "de": {
+      "n": "Rotwein der Weinlese",
+      "d": "Rotwein, Pisco Demonio de los Andes Quebranta, Orangen-Cordial, Limettensaft, Schaumwein."
+    }
+  },
+  "TAC-081": {
+    "fr": {
+      "n": "Pisco Tonic classique",
+      "d": "Pisco Demonio de los Andes, zestes d'agrumes, romarin et eau tonique."
+    },
+    "pt": {
+      "n": "Pisco Tonic clássico",
+      "d": "Pisco Demonio de los Andes, cascas cítricas, alecrim e água tônica."
+    },
+    "de": {
+      "n": "Pisco Tonic klassisch",
+      "d": "Pisco Demonio de los Andes, Zitrusschalen, Rosmarin und Tonic Water."
+    }
+  },
+  "TAC-082": {
+    "fr": {
+      "n": "Demonio Tonic",
+      "d": "Pisco Demonio de los Andes, fleur d'hibiscus, eau tonique."
+    },
+    "pt": {
+      "n": "Demonio Tonic",
+      "d": "Pisco Demonio de los Andes, flor de hibisco, água tônica."
+    },
+    "de": {
+      "n": "Demonio Tonic",
+      "d": "Pisco Demonio de los Andes, Hibiskusblüte, Tonic Water."
+    }
+  },
+  "TAC-083": {
+    "fr": {
+      "n": "Tambo Punch",
+      "d": "Pisco Demonio de los Andes, jus d'ananas fumé, jus de citron vert et miel picaronera."
+    },
+    "pt": {
+      "n": "Tambo Punch",
+      "d": "Pisco Demonio de los Andes, suco de abacaxi defumado, suco de limão e mel picaronera."
+    },
+    "de": {
+      "n": "Tambo Punch",
+      "d": "Pisco Demonio de los Andes, Saft von geräucherter Ananas, Limettensaft und Picaronera-Honig."
+    }
+  },
+  "TAC-084": {
+    "fr": {
+      "n": "Negroni \"Atardecer\" (Premium)",
+      "d": "Pisco Premium Leyenda, vermouth, Campari et gouttes de bitter fumées au palo santo."
+    },
+    "pt": {
+      "n": "Negroni \"Atardecer\" (Premium)",
+      "d": "Pisco Premium Leyenda, vermute, Campari e gotas de bitter com defumação de palo santo."
+    },
+    "de": {
+      "n": "Negroni \"Atardecer\" (Premium)",
+      "d": "Pisco Premium Leyenda, Wermut, Campari und Bitter-Tropfen, mit Palo-Santo-Rauch."
+    }
+  },
+  "TAC-085": {
+    "fr": {
+      "n": "Soda (600 ml)",
+      "d": "Soda (600 ml)"
+    },
+    "pt": {
+      "n": "Refrigerante (600 ml)",
+      "d": "Refrigerante (600 ml)"
+    },
+    "de": {
+      "n": "Limonade (600 ml)",
+      "d": "Limonade (600 ml)"
+    }
+  },
+  "TAC-086": {
+    "fr": {
+      "n": "Eau Premium Munay (bouteille écologique consignée)",
+      "d": "Eau Premium Munay (bouteille écologique consignée)"
+    },
+    "pt": {
+      "n": "Água Premium Munay (garrafa ecológica retornável)",
+      "d": "Água Premium Munay (garrafa ecológica retornável)"
+    },
+    "de": {
+      "n": "Munay Premium-Wasser (ökologische Mehrwegflasche)",
+      "d": "Munay Premium-Wasser (ökologische Mehrwegflasche)"
+    }
+  },
+  "TAC-087": {
+    "fr": {
+      "n": "Eau Premium Munay (avec bouteille)",
+      "d": "Eau Premium Munay (avec bouteille)"
+    },
+    "pt": {
+      "n": "Água Premium Munay (com garrafa)",
+      "d": "Água Premium Munay (com garrafa)"
+    },
+    "de": {
+      "n": "Munay Premium-Wasser (mit Flasche)",
+      "d": "Munay Premium-Wasser (mit Flasche)"
+    }
+  },
+  "TAC-088": {
+    "fr": {
+      "n": "Chicha morada (verre)",
+      "d": "Chicha morada (verre)"
+    },
+    "pt": {
+      "n": "Chicha morada (copo)",
+      "d": "Chicha morada (copo)"
+    },
+    "de": {
+      "n": "Chicha morada (Glas)",
+      "d": "Chicha morada (Glas)"
+    }
+  },
+  "TAC-089": {
+    "fr": {
+      "n": "Chicha morada (1/2 L)",
+      "d": "Chicha morada (1/2 L)"
+    },
+    "pt": {
+      "n": "Chicha morada (1/2 L)",
+      "d": "Chicha morada (1/2 L)"
+    },
+    "de": {
+      "n": "Chicha morada (1/2 L)",
+      "d": "Chicha morada (1/2 L)"
+    }
+  },
+  "TAC-090": {
+    "fr": {
+      "n": "Chicha morada (1 L)",
+      "d": "Chicha morada (1 L)"
+    },
+    "pt": {
+      "n": "Chicha morada (1 L)",
+      "d": "Chicha morada (1 L)"
+    },
+    "de": {
+      "n": "Chicha morada (1 L)",
+      "d": "Chicha morada (1 L)"
+    }
+  },
+  "TAC-091": {
+    "fr": {
+      "n": "Jus de fruit de la passion (verre)",
+      "d": "Jus de fruit de la passion (verre)"
+    },
+    "pt": {
+      "n": "Suco de maracujá (copo)",
+      "d": "Suco de maracujá (copo)"
+    },
+    "de": {
+      "n": "Maracujasaft (Glas)",
+      "d": "Maracujasaft (Glas)"
+    }
+  },
+  "TAC-092": {
+    "fr": {
+      "n": "Jus de fruit de la passion (1/2 L)",
+      "d": "Jus de fruit de la passion (1/2 L)"
+    },
+    "pt": {
+      "n": "Suco de maracujá (1/2 L)",
+      "d": "Suco de maracujá (1/2 L)"
+    },
+    "de": {
+      "n": "Maracujasaft (1/2 L)",
+      "d": "Maracujasaft (1/2 L)"
+    }
+  },
+  "TAC-093": {
+    "fr": {
+      "n": "Jus de fruit de la passion (1 L)",
+      "d": "Jus de fruit de la passion (1 L)"
+    },
+    "pt": {
+      "n": "Suco de maracujá (1 L)",
+      "d": "Suco de maracujá (1 L)"
+    },
+    "de": {
+      "n": "Maracujasaft (1 L)",
+      "d": "Maracujasaft (1 L)"
+    }
+  },
+  "TAC-094": {
+    "fr": {
+      "n": "Citronnade (verre)",
+      "d": "Citronnade (verre)"
+    },
+    "pt": {
+      "n": "Limonada (copo)",
+      "d": "Limonada (copo)"
+    },
+    "de": {
+      "n": "Limonade (Glas)",
+      "d": "Limonade (Glas)"
+    }
+  },
+  "TAC-095": {
+    "fr": {
+      "n": "Citronnade (1/2 L)",
+      "d": "Citronnade (1/2 L)"
+    },
+    "pt": {
+      "n": "Limonada (1/2 L)",
+      "d": "Limonada (1/2 L)"
+    },
+    "de": {
+      "n": "Limonade (1/2 L)",
+      "d": "Limonade (1/2 L)"
+    }
+  },
+  "TAC-096": {
+    "fr": {
+      "n": "Citronnade (1 L)",
+      "d": "Citronnade (1 L)"
+    },
+    "pt": {
+      "n": "Limonada (1 L)",
+      "d": "Limonada (1 L)"
+    },
+    "de": {
+      "n": "Limonade (1 L)",
+      "d": "Limonade (1 L)"
+    }
+  },
+  "TAC-097": {
+    "fr": {
+      "n": "Americano",
+      "d": "Café 100 % péruvien de La Merced, Chanchamayo (Junín). Disponible décaféiné."
+    },
+    "pt": {
+      "n": "Americano",
+      "d": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponível descafeinado."
+    },
+    "de": {
+      "n": "Americano",
+      "d": "100 % peruanischer Kaffee aus La Merced, Chanchamayo (Junín). Auch entkoffeiniert erhältlich."
+    }
+  },
+  "TAC-098": {
+    "fr": {
+      "n": "Expresso",
+      "d": "Café 100 % péruvien de La Merced, Chanchamayo (Junín). Disponible décaféiné."
+    },
+    "pt": {
+      "n": "Expresso",
+      "d": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponível descafeinado."
+    },
+    "de": {
+      "n": "Espresso",
+      "d": "100 % peruanischer Kaffee aus La Merced, Chanchamayo (Junín). Auch entkoffeiniert erhältlich."
+    }
+  },
+  "TAC-099": {
+    "fr": {
+      "n": "Expresso double",
+      "d": "Café 100 % péruvien de La Merced, Chanchamayo (Junín). Disponible décaféiné."
+    },
+    "pt": {
+      "n": "Expresso duplo",
+      "d": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponível descafeinado."
+    },
+    "de": {
+      "n": "Doppelter Espresso",
+      "d": "100 % peruanischer Kaffee aus La Merced, Chanchamayo (Junín). Auch entkoffeiniert erhältlich."
+    }
+  },
+  "TAC-100": {
+    "fr": {
+      "n": "Noisette",
+      "d": "Café 100 % péruvien de La Merced, Chanchamayo (Junín). Disponible décaféiné."
+    },
+    "pt": {
+      "n": "Cortado",
+      "d": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponível descafeinado."
+    },
+    "de": {
+      "n": "Cortado",
+      "d": "100 % peruanischer Kaffee aus La Merced, Chanchamayo (Junín). Auch entkoffeiniert erhältlich."
+    }
+  },
+  "TAC-101": {
+    "fr": {
+      "n": "Cappuccino",
+      "d": "Café 100 % péruvien de La Merced, Chanchamayo (Junín). Disponible décaféiné."
+    },
+    "pt": {
+      "n": "Cappuccino",
+      "d": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponível descafeinado."
+    },
+    "de": {
+      "n": "Cappuccino",
+      "d": "100 % peruanischer Kaffee aus La Merced, Chanchamayo (Junín). Auch entkoffeiniert erhältlich."
+    }
+  },
+  "TAC-102": {
+    "fr": {
+      "n": "Camomille",
+      "d": "Herbes aromatiques de notre potager biologique Tacama."
+    },
+    "pt": {
+      "n": "Camomila",
+      "d": "Ervas aromáticas da nossa horta orgânica Tacama."
+    },
+    "de": {
+      "n": "Kamille",
+      "d": "Aromatische Kräuter aus unserem Tacama-Biogarten."
+    }
+  },
+  "TAC-103": {
+    "fr": {
+      "n": "Thé, cannelle et clou de girofle",
+      "d": "Herbes aromatiques de notre potager biologique Tacama."
+    },
+    "pt": {
+      "n": "Chá, canela e cravo",
+      "d": "Ervas aromáticas da nossa horta orgânica Tacama."
+    },
+    "de": {
+      "n": "Tee, Zimt und Nelke",
+      "d": "Aromatische Kräuter aus unserem Tacama-Biogarten."
+    }
+  },
+  "TAC-104": {
+    "fr": {
+      "n": "Infusion naturelle (anis, verveine, menthe ou muña)",
+      "d": "Herbes aromatiques de notre potager biologique Tacama."
+    },
+    "pt": {
+      "n": "Infusão natural (anis, capim-limão, hortelã ou muña)",
+      "d": "Ervas aromáticas da nossa horta orgânica Tacama."
+    },
+    "de": {
+      "n": "Natürlicher Aufguss (Anis, Zitronengras, Minze oder Muña)",
+      "d": "Aromatische Kräuter aus unserem Tacama-Biogarten."
+    }
+  }
+}

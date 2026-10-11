@@ -1,0 +1,84 @@
+// ============================================================
+// schema.prisma — auth-service
+// Schema: auth
+// Gestiona: usuarios, roles, mesas y sesiones QR
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["auth"]
+}
+
+// ── Roles disponibles en el sistema ──────────────────────────
+enum Rol {
+  ANFITRION
+  MOZO
+  SOMMELIER
+  COCINA
+  CAJA
+  ALMACEN
+  JEFE_SALON
+  ADMINISTRADOR
+  @@schema("auth")
+}
+
+// ── Usuario del personal ──────────────────────────────────────
+model Usuario {
+  id            String    @id @default(uuid())
+  nombre        String
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  rol           Rol
+  activo        Boolean   @default(true)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relaciones
+  sesionesAuditadas SesionMesa[]
+
+  @@map("usuarios")
+  @@schema("auth")
+}
+
+// ── Mesa del restaurante ─────────────────────────────────────
+model Mesa {
+  id          String      @id @default(uuid())
+  numero      Int         @unique
+  codigoQR    String      @unique @map("codigo_qr")
+  capacidad   Int         @default(4)
+  activa      Boolean     @default(true)
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  // Relaciones
+  sesiones    SesionMesa[]
+
+  @@map("mesas")
+  @@schema("auth")
+}
+
+// ── Sesión de mesa (generada al escanear QR) ─────────────────
+// Token temporal; expira según JWT_MESA_EXPIRES_IN
+model SesionMesa {
+  id          String    @id @default(uuid())
+  mesaId      String    @map("mesa_id")
+  token       String    @unique     // JWT firmado
+  activa      Boolean   @default(true)
+  creadaPor   String?   @map("creada_por")   // ID del anfitrión que activó
+  expiraEn    DateTime  @map("expira_en")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  cerradaEn   DateTime? @map("cerrada_en")
+
+  // Relaciones
+  mesa        Mesa      @relation(fields: [mesaId], references: [id])
+  anfitrion   Usuario?  @relation(fields: [creadaPor], references: [id])
+
+  @@map("sesiones_mesa")
+  @@schema("auth")
+}

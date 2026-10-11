@@ -1,0 +1,53 @@
+{
+  "name": "tacamamesa",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TacamaMesa — Sistema de atención digital del restaurante El Tambo de Tacama (Viña Tacama S.A.)",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "clean": "turbo run clean && rimraf node_modules",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "db:migrate": "turbo run db:migrate",
+    "db:seed": "turbo run db:seed",
+    "prepare": "npx husky install",
+    "dev:local": "powershell -ExecutionPolicy Bypass -File scripts/dev-local.ps1",
+    "stop:local": "powershell -ExecutionPolicy Bypass -File scripts/stop-local.ps1",
+    "demo": "powershell -ExecutionPolicy Bypass -File scripts/demo.ps1",
+    "demo:reset": "node scripts/demo-reset.js",
+    "demo:qr": "node scripts/demo-qr.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
+    "qrcode": "1.5.4",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "turbo": "^1.12.4",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "packageManager": "pnpm@8.15.4",
+  "author": "Estudiantes de la Universidad Tecnológica del Perú (UTP)",
+  "license": "UNLICENSED"
+}

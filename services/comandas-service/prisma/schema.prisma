@@ -1,0 +1,131 @@
+// ============================================================
+// schema.prisma — comandas-service
+// Schema: comandas
+// Gestiona: comandas, detalles, restricciones (alergias), valoraciones
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["comandas"]
+}
+
+// ── Estado de la comanda (ciclo de vida completo) ────────────
+enum EstadoComanda {
+  BORRADOR          // en construcción por el comensal
+  PENDIENTE         // enviada a cocina, esperando preparación
+  EN_PREPARACION    // cocina confirmó inicio
+  LISTA             // lista para servir
+  ENTREGADA         // entregada en la mesa
+  CERRADA           // cuenta pagada y mesa liberada
+  ANULADA           // anulada (revierte stock en inventario)
+  @@schema("comandas")
+}
+
+// ── Comanda (pedido de una mesa) ─────────────────────────────
+// RN01: no se puede confirmar sin RestriccionAlergeno registrada
+model Comanda {
+  id              String        @id @default(uuid())
+  mesaId          String        @map("mesa_id")         // referencia a auth-service
+  sesionMesaId    String        @map("sesion_mesa_id")  // token de mesa
+  mozoId          String?       @map("mozo_id")         // ID de usuario del mozo responsable de la mesa
+  mozoNombre      String?       @map("mozo_nombre")
+  mozoTomadaEn    DateTime?     @map("mozo_tomada_en")
+  modificadaEn    DateTime?     @map("modificada_en")   // último cambio o anulación de un plato por el comensal
+  estado          EstadoComanda @default(BORRADOR)
+  // Suma total calculada al confirmar
+  totalPEN        Decimal?      @map("total_pen") @db.Decimal(10, 2)
+  // Alergias declaradas: true = se declararon (aunque sea "ninguna")
+  alergiasDeclaradas Boolean    @default(false) @map("alergias_declaradas")
+  observaciones   String?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  confirmadaEn    DateTime?     @map("confirmada_en")
+  anulada_en      DateTime?     @map("anulada_en")
+  motivoAnulacion String?       @map("motivo_anulacion")
+  // Cierre de la experiencia: el comensal pide la cuenta (tras calificar u omitir) y el mozo emite el comprobante
+  cuentaSolicitadaEn  DateTime? @map("cuenta_solicitada_en")
+  calificacionOmitida Boolean   @default(false) @map("calificacion_omitida")
+  boletaEmitidaEn     DateTime? @map("boleta_emitida_en")
+  // Cómo pagará el comensal (el mozo lleva el POS, el efectivo o los datos de la transferencia)
+  metodoPago          String?   @map("metodo_pago") // EFECTIVO | TARJETA | TRANSFERENCIA
+  efectivoPagaCon     Decimal?  @map("efectivo_paga_con") @db.Decimal(10, 2)
+  cerradaEn           DateTime? @map("cerrada_en")
+
+  // Relaciones
+  items           DetalleComanda[]
+  restricciones   RestriccionAlergeno[]
+  valoracion      Valoracion?
+
+  @@map("comandas")
+  @@schema("comandas")
+}
+
+// ── Detalle de la comanda (ítem por ítem) ─────────────────────
+model DetalleComanda {
+  id          String    @id @default(uuid())
+  comandaId   String    @map("comanda_id")
+  platoId     String    @map("plato_id")         // referencia a catalogo-service
+  platoNombre String    @map("plato_nombre")     // snapshot al momento del pedido
+  cantidad    Int       @default(1)
+  precioUnit  Decimal   @map("precio_unit") @db.Decimal(10, 2)  // snapshot
+  // Etiqueta de vino/pisco seleccionada (maridaje aceptado)
+  etiquetaId  String?   @map("etiqueta_id")
+  etiquetaNombre String? @map("etiqueta_nombre") // snapshot
+  subtotal    Decimal   @db.Decimal(10, 2)
+  notas       String?   // ej. "sin cebolla"
+
+  // Relaciones
+  comanda     Comanda   @relation(fields: [comandaId], references: [id])
+
+  @@map("detalle_comandas")
+  @@schema("comandas")
+}
+
+// ── Restricciones de alérgenos por comanda (RN01) ────────────
+// Declaración obligatoria antes de enviar a cocina.
+// Datos de salud → tratados como sensibles (Ley 29733).
+model RestriccionAlergeno {
+  id          String    @id @default(uuid())
+  comandaId   String    @map("comanda_id")
+  // Lista de códigos de alérgenos declarados (ej. ["GLUTEN","LACTEOS"])
+  // Si el comensal no tiene alergias, se guarda array vacío []
+  alergenos   String[]  // array de códigos
+  // Consentimiento explícito del comensal (Ley 29733, RN09)
+  consentimiento Boolean @default(false)
+  // Versión de los términos aceptados: evidencia del consentimiento (la prueba le corresponde al responsable del banco de datos)
+  versionTerminos String? @map("version_terminos")
+  timestamp   DateTime  @default(now())
+
+  // Relaciones
+  comanda     Comanda   @relation(fields: [comandaId], references: [id])
+
+  @@map("restricciones_alergenos")
+  @@schema("comandas")
+}
+
+// ── Valoración del comensal (CSAT) ───────────────────────────
+model Valoracion {
+  id          String    @id @default(uuid())
+  comandaId   String    @unique @map("comanda_id")
+  mesaId      String    @map("mesa_id")
+  // Escala 1-5
+  puntuacion  Int
+  comentario  String?
+  // Para analítica por segmento
+  mozoId      String?   @map("mozo_id")
+  turno       String?   // "almuerzo" | "cena"
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  // Relaciones
+  comanda     Comanda   @relation(fields: [comandaId], references: [id])
+
+  @@map("valoraciones")
+  @@schema("comandas")
+}

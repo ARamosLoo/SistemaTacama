@@ -1,0 +1,110 @@
+// ============================================================
+// schema.prisma — maridaje-service
+// Schema: maridaje
+// Gestiona: etiquetas (vino/pisco), reglas de maridaje, recomendaciones
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["maridaje"]
+}
+
+// ── Tipo de etiqueta ──────────────────────────────────────────
+enum TipoEtiqueta {
+  VINO_BLANCO
+  VINO_TINTO
+  VINO_ROSE
+  VINO_ESPUMANTE
+  PISCO_PURO
+  PISCO_ACHOLADO
+  PISCO_MOSTO_VERDE
+  @@schema("maridaje")
+}
+
+// ── Rango de precio (para RN05: variedad de precios) ──────────
+enum RangoPrecio {
+  ECONOMICO      // < 60 PEN
+  INTERMEDIO     // 60-120 PEN
+  PREMIUM        // > 120 PEN
+  @@schema("maridaje")
+}
+
+// ── Etiqueta de vino o pisco Tacama ──────────────────────────
+// Nota: el stock real viene del inventario-service.
+// Aquí se almacena la información comercial/maridaje.
+model Etiqueta {
+  id              String        @id @default(uuid())
+  codigoInterno   String        @unique @map("codigo_interno")
+  nombre          String
+  tipo            TipoEtiqueta
+  anada           Int?          // año de cosecha
+  cepa            String?       // ej. "Quebranta", "Torontel"
+  descripcionEs   String        @map("descripcion_es")
+  descripcionEn   String?       @map("descripcion_en")
+  notasDegust     String?       @map("notas_degustacion")  // notas de cata
+  maridajeGeneral String?       @map("maridaje_general")
+  precioLista     Decimal       @map("precio_lista") @db.Decimal(10, 2)
+  rangoPrecio     RangoPrecio   @map("rango_precio")
+  imagenUrl       String?       @map("imagen_url")
+  activa          Boolean       @default(true)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  // Relaciones
+  reglas          ReglaMaridaje[]
+  recomendaciones Recomendacion[]
+
+  @@map("etiquetas")
+  @@schema("maridaje")
+}
+
+// ── Regla de maridaje (administrada por el sommelier) ─────────
+// RN03: devuelve máx. 3 etiquetas con stock > 0
+// RN05: al menos una de diferente rango de precio
+model ReglaMaridaje {
+  id          String      @id @default(uuid())
+  platoId     String      @map("plato_id")   // referencia al catalogo-service
+  etiquetaId  String      @map("etiqueta_id")
+  puntaje     Int         // 1-10: relevancia del maridaje
+  motivo      String?     // explicación del sommelier
+  vigenciaDesde DateTime  @default(now()) @map("vigencia_desde")
+  vigenciaHasta DateTime? @map("vigencia_hasta")  // null = sin vencimiento
+  activa      Boolean     @default(true)
+  creadaPor   String?     @map("creada_por")  // ID del sommelier
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  // Relaciones
+  etiqueta    Etiqueta    @relation(fields: [etiquetaId], references: [id])
+  recomendaciones Recomendacion[]
+
+  @@unique([platoId, etiquetaId])
+  @@map("reglas_maridaje")
+  @@schema("maridaje")
+}
+
+// ── Recomendación emitida (registro de aceptación) ────────────
+// Para analítica: tasa de aceptación de maridaje
+model Recomendacion {
+  id            String        @id @default(uuid())
+  reglaId       String        @map("regla_id")
+  etiquetaId    String        @map("etiqueta_id")
+  comandaId     String?       @map("comanda_id")   // si fue aceptada
+  sesionMesaId  String        @map("sesion_mesa_id")
+  aceptada      Boolean?      // null = no respondida
+  timestamp     DateTime      @default(now())
+
+  // Relaciones
+  regla         ReglaMaridaje @relation(fields: [reglaId], references: [id])
+  etiqueta      Etiqueta      @relation(fields: [etiquetaId], references: [id])
+
+  @@map("recomendaciones")
+  @@schema("maridaje")
+}

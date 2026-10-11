@@ -1,0 +1,3597 @@
+[
+  {
+    "codigo": "TAC-001",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Pecanas Iqueñas al Romero",
+    "nombreEn": "Rosemary pecans from Ica",
+    "descEs": "Saladitas y con su toque mediterráneo.",
+    "descEn": "Salty, with a mediterranean touch.",
+    "precio": 25,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "NUECES"
+    ],
+    "tags": [
+      "vegetariano",
+      "snack"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Espumoso Magnolia Alba - Semi seco",
+    "maridaje": [
+      {
+        "etiqueta": "ESP-MAG",
+        "puntaje": 10
+      }
+    ],
+    "imagen": "pecanas",
+    "tiempoPrep": 5,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-002",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Tequeños (6 unid.) de queso con salsa guacamole",
+    "nombreEn": "Tequeños (6 pieces) - cheese with guacamole sauce",
+    "descEs": "Crocantes tequeños rellenos de queso, con salsa guacamole.",
+    "descEn": "Crispy cheese tequeños with guacamole sauce.",
+    "precio": 20,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS"
+    ],
+    "tags": [
+      "frito",
+      "queso"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Blanco de Blancos \"Triunfo\" - Sauvignon Blanc, Chardonnay, Viognier",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "tequenos",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-003",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Tequeños (6 unid.) de ají de gallina con salsa guacamole",
+    "nombreEn": "Tequeños (6 pieces) - Aji de gallina with guacamole sauce",
+    "descEs": "Tequeños rellenos de ají de gallina, con salsa guacamole.",
+    "descEn": "Tequeños filled with aji de gallina, with guacamole sauce.",
+    "precio": 23,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "NUECES"
+    ],
+    "tags": [
+      "pollo",
+      "frito",
+      "criollo"
+    ],
+    "picante": 1,
+    "estilo": "ligero",
+    "maridajeTexto": "Blanco de Blancos \"Triunfo\" - Sauvignon Blanc, Chardonnay, Viognier",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "tequenos",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-004",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Tequeños (6 unid.) de lomo saltado con salsa huancaína",
+    "nombreEn": "Tequeños (6 pieces) - Lomo saltado with huancaina sauce",
+    "descEs": "Tequeños rellenos de lomo saltado, con salsa huancaína.",
+    "descEn": "Tequeños filled with lomo saltado, with huancaina sauce.",
+    "precio": 24,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "SOYA"
+    ],
+    "tags": [
+      "res",
+      "frito",
+      "criollo"
+    ],
+    "picante": 1,
+    "estilo": "ligero",
+    "maridajeTexto": "Blanco de Blancos \"Triunfo\" - Sauvignon Blanc, Chardonnay, Viognier",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 9
+      },
+      {
+        "etiqueta": "TIN-GTC",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "tequenos",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-005",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Tequeños (6 unid.) de asado al vino tinto con salsa guacamole",
+    "nombreEn": "Tequeños (6 pieces) - Roasted beef with guacamole sauce",
+    "descEs": "Tequeños rellenos de asado al vino tinto, con salsa guacamole.",
+    "descEn": "Tequeños filled with red wine roast beef, with guacamole sauce.",
+    "precio": 24,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "SULFITOS"
+    ],
+    "tags": [
+      "res",
+      "frito"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Blanco de Blancos \"Triunfo\" - Sauvignon Blanc, Chardonnay, Viognier",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      },
+      {
+        "etiqueta": "TIN-GTC",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "tequenos",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-006",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Trilogía de tequeños (9 unid.)",
+    "nombreEn": "Tequeños trilogy (9 pieces)",
+    "descEs": "Tres sabores de tequeños para compartir.",
+    "descEn": "Three flavours of tequeños to share.",
+    "precio": 32,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "SOYA",
+      "SULFITOS"
+    ],
+    "tags": [
+      "res",
+      "pollo",
+      "queso",
+      "frito",
+      "compartir"
+    ],
+    "picante": 1,
+    "estilo": "ligero",
+    "maridajeTexto": "Blanco de Blancos \"Triunfo\" - Sauvignon Blanc, Chardonnay, Viognier",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "tequenos",
+    "tiempoPrep": 15,
+    "rol": "PIQUEO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-007",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Tabla de quesos peruanos",
+    "nombreEn": "Peruvian cheese platter",
+    "descEs": "Quesos peruanos variados, con pecanas al romero, pasas y nuestro inigualable pan chapla.",
+    "descEn": "Peruvian cheeses served with rosemary pecans, raisins and our unbeatable chapla bread.",
+    "precio": 42,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS",
+      "NUECES",
+      "GLUTEN"
+    ],
+    "tags": [
+      "vegetariano",
+      "queso",
+      "compartir"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Selección Especial \"Triunfo\" - Carménère",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SCA",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "ESP-ORQ",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "tabla_quesos",
+    "tiempoPrep": 15,
+    "rol": "PIQUEO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-008",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Clásicas yuquitas de la casa",
+    "nombreEn": "Classic homemade yuquitas",
+    "descEs": "Crocantitas, acompañadas de salsa huancaína.",
+    "descEn": "Crunchy, served with our huancaina sauce.",
+    "precio": 30,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS"
+    ],
+    "tags": [
+      "vegetariano",
+      "frito",
+      "queso"
+    ],
+    "picante": 1,
+    "estilo": "ligero",
+    "maridajeTexto": "Gran Blanco - Sauvignon Blanc, Chenin, Chardonnay",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "yuquitas",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-009",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Gran Empanada Tacama",
+    "nombreEn": "Gran Tacama empanada",
+    "descEs": "Masa hojaldrada rellena con el exquisito adobo de cerdo José Antonio, acompañado con una fresca ensalada de tomate y lechuga de la huerta.",
+    "descEn": "Puff pastry filled with the exquisite José Antonio pork adobo, with a fresh tomato and lettuce salad from our garden.",
+    "precio": 22,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "HUEVO"
+    ],
+    "tags": [
+      "cerdo",
+      "criollo",
+      "tradicional"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial \"Triunfo\" - Carménère",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SCA",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-GTC",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "empanada",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-010",
+    "seccion": "PARA_PICAR",
+    "categoria": "ENTRADA",
+    "nombreEs": "Gran Piqueo Tacama (3 personas)",
+    "nombreEn": "Grand Tacama criollo platter (serves three)",
+    "descEs": "Una completa celebración criolla: crujientes yuquitas, dorados chicharrones de cerdo, suaves anticuchos con choclito al comino y nuestro clásico tamalito, con huancaína, ají y salsa criolla.",
+    "descEn": "A real banquet. Crunchy yuquitas, crispy pork and tender anticuchos, served with buttered corn and our classic tamalito, with huancaina sauce and salsa criolla.",
+    "precio": 99,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS",
+      "GLUTEN",
+      "SULFITOS"
+    ],
+    "tags": [
+      "cerdo",
+      "res",
+      "criollo",
+      "compartir",
+      "tradicional"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial \"Triunfo\" - Alicante Bouschet",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SAL",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SPV",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "gran_piqueo",
+    "tiempoPrep": 25,
+    "rol": "PIQUEO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-011",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Causa rellena con pollo",
+    "nombreEn": "Chicken-stuffed causa",
+    "descEs": "Uno de los platos más famosos de la gastronomía peruana. Papa, ají y limón son los protagonistas; se rellena con pollo, mayonesa y palta de nuestro huerto.",
+    "descEn": "Mashed yellow potatoes stuffed with homegrown avocado and chicken with mayonnaise.",
+    "precio": 25,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "HUEVO"
+    ],
+    "tags": [
+      "pollo",
+      "criollo",
+      "frío",
+      "tradicional"
+    ],
+    "picante": 1,
+    "estilo": "ligero",
+    "maridajeTexto": "Gran Blanco Tres Cepas - Sauvignon Blanc, Chenin Blanc, Chardonnay",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "causa_pollo",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-012",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Papa a la huancaína",
+    "nombreEn": "Papa a la huancaina",
+    "descEs": "Selecta papa amarilla sancochada y bañada generosamente con nuestra peruanísima salsa de ají amarillo y queso fresco.",
+    "descEn": "Cooked potatoes, covered generously with our yellow pepper sauce and soft cheese.",
+    "precio": 24,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS",
+      "HUEVO"
+    ],
+    "tags": [
+      "vegetariano",
+      "criollo",
+      "tradicional",
+      "frío"
+    ],
+    "picante": 1,
+    "estilo": "ligero",
+    "maridajeTexto": "Blanco de Blancos \"Triunfo\" - Sauvignon Blanc, Chardonnay, Viognier",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "papa_huancaina",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-013",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Palta a la jardinera",
+    "nombreEn": "Avocado with vegetables",
+    "descEs": "Cremosa palta iqueña, coronada con un mix de verduras cocidas envueltas con mayonesa.",
+    "descEn": "Soft avocado topped with a mix of cooked vegetables dressed in mayonnaise.",
+    "precio": 24,
+    "esVegetariano": true,
+    "libreLactosa": true,
+    "alergenos": [
+      "HUEVO"
+    ],
+    "tags": [
+      "vegetariano",
+      "frío"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Espumoso Orquídea Negra - Brut",
+    "maridaje": [
+      {
+        "etiqueta": "ESP-ORQ",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "palta_jardinera",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-014",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Palta con langostinos en salsa anticuchera",
+    "nombreEn": "Avocado with prawn in anticucho sauce",
+    "descEs": "Tiernos langostinos grillados, acompañados de una mixtura de verduras cocidas envueltas en mayonesa sobre una base de palta.",
+    "descEn": "Grilled prawns served with a mix of cooked vegetables on an avocado base, dressed in our anticucho sauce.",
+    "precio": 35,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "MARISCOS",
+      "HUEVO",
+      "SULFITOS"
+    ],
+    "tags": [
+      "mariscos",
+      "frío"
+    ],
+    "picante": 1,
+    "estilo": "ligero",
+    "maridajeTexto": "Espumoso Rosa Salvaje - Extra Brut",
+    "maridaje": [
+      {
+        "etiqueta": "ESP-ROS",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "ESP-ORQ",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "palta_langostinos",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-015",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Ensalada iqueña de pallares",
+    "nombreEn": "Lima bean salad from Ica",
+    "descEs": "Tradicional de nuestra tierra: pallares cocidos, tomates, cebollas y un toque de albahaca. El pallar carga una ancestral historia que se remonta a las culturas preincaicas.",
+    "descEn": "An Ica traditional dish. A combination of cooked lima beans, tomatoes, onions and a touch of basil.",
+    "precio": 25,
+    "esVegetariano": true,
+    "libreLactosa": true,
+    "alergenos": [],
+    "tags": [
+      "vegetariano",
+      "tradicional_ica",
+      "frío"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Doña Ana - Chardonnay",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-DAN",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "ensalada_pallares",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-016",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Ensalada Cesar's",
+    "nombreEn": "Caeser's salad",
+    "descEs": "Lechuga con crutones, jugo de limón, aceite de oliva, huevos, salsa inglesa, anchoas, ajo, mostaza, queso parmesano y pimienta negra.",
+    "descEn": "Lettuce salad with croutons, lemon juice, olive oil, eggs, english sauce, anchovies, garlic, mustard, parmesan cheese and black pepper.",
+    "precio": 25,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO",
+      "PESCADO",
+      "MOSTAZA",
+      "LACTEOS"
+    ],
+    "tags": [
+      "ensalada",
+      "frío"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Espumoso Orquídea Negra - Brut",
+    "maridaje": [
+      {
+        "etiqueta": "ESP-ORQ",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "ensalada_cesar",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-017",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Ensalada Cesar's con pollo",
+    "nombreEn": "Caeser's salad with chicken",
+    "descEs": "Nuestra ensalada César acompañada de pechuga de pollo.",
+    "descEn": "Our Caesar's salad topped with chicken breast.",
+    "precio": 34,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO",
+      "PESCADO",
+      "MOSTAZA",
+      "LACTEOS"
+    ],
+    "tags": [
+      "pollo",
+      "ensalada",
+      "frío"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Espumoso Orquídea Negra - Brut",
+    "maridaje": [
+      {
+        "etiqueta": "ESP-ORQ",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "ensalada_cesar",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-018",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Ensalada de la casa",
+    "nombreEn": "House salad",
+    "descEs": "Refrescantes lechugas del huerto, tomate, choclo, zanahoria, espárragos, cebolla blanca y palta acompañada con nuestra vinagreta.",
+    "descEn": "Fresh lettuce, tomatoes, onions and avocado with our classic dressing.",
+    "precio": 25,
+    "esVegetariano": true,
+    "libreLactosa": true,
+    "alergenos": [],
+    "tags": [
+      "vegetariano",
+      "ensalada",
+      "frío"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Espumoso Orquídea Negra - Brut",
+    "maridaje": [
+      {
+        "etiqueta": "ESP-ORQ",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "ensalada_casa",
+    "tiempoPrep": 15,
+    "rol": "ENTRADA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-019",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Tamalito criollo",
+    "nombreEn": "Peruvian criollo tamale",
+    "descEs": "Clásico tamal iqueño relleno de cerdo y acompañado con salsa criolla.",
+    "descEn": "Homemade with the classic Tacama's recipe. Stuffed with pork, served with salsa criolla.",
+    "precio": 20,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "NUECES"
+    ],
+    "tags": [
+      "cerdo",
+      "criollo",
+      "tradicional_ica"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Vino Patrimonial Toñuz - Quebranta, Tannat",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-TON",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-GTC",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "tamalito_criollo",
+    "tiempoPrep": 15,
+    "rol": "DESAYUNO",
+    "momentos": [
+      "DESAYUNO"
+    ]
+  },
+  {
+    "codigo": "TAC-020",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Tamalito verde",
+    "nombreEn": "Green tamalito",
+    "descEs": "Tamalito de culantro relleno de pechuga de pollo, con salsa criolla. Una buena experiencia que querrá repetir.",
+    "descEn": "Stuffed with chopped chicken breast, served with salsa criolla.",
+    "precio": 20,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "pollo",
+      "criollo",
+      "tradicional_ica"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Gran Blanco Tres Cepas - Sauvignon Blanc, Chenin Blanc, Chardonnay",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "tamalito_verde",
+    "tiempoPrep": 15,
+    "rol": "DESAYUNO",
+    "momentos": [
+      "DESAYUNO"
+    ]
+  },
+  {
+    "codigo": "TAC-021",
+    "seccion": "ENTRADAS",
+    "categoria": "ENTRADA",
+    "nombreEs": "Humita de queso",
+    "nombreEn": "Cheese humita",
+    "descEs": "Suave humita casera preparada con choclito tierno a fuego lento.",
+    "descEn": "Prepared with fresh corn and filled with cheese. Very good option.",
+    "precio": 20,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS"
+    ],
+    "tags": [
+      "queso",
+      "tradicional_ica",
+      "caliente"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Ambrosía - Nielluccio",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-AMB",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "humita",
+    "tiempoPrep": 15,
+    "rol": "DESAYUNO",
+    "momentos": [
+      "DESAYUNO"
+    ]
+  },
+  {
+    "codigo": "TAC-022",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Pastel de choclo",
+    "nombreEn": "Corn pie (pastel de choclo)",
+    "descEs": "Nuestra exquisita receta de toda la vida, relleno con carne. Hoy la compartimos con ustedes.",
+    "descEn": "A traditional house corn pie with spices, stuffed with ground meat, olives, egg, tomato sauce and raisins.",
+    "precio": 37,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "HUEVO",
+      "LACTEOS"
+    ],
+    "tags": [
+      "res",
+      "criollo",
+      "tradicional"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Origen - Malbec & Malbec",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-ORI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SMA",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "pastel_choclo",
+    "tiempoPrep": 20,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-023",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Costillas de cerdo BBQ",
+    "nombreEn": "BBQ pork ribs",
+    "descEs": "Una de las recetas más populares y queridas. Textura jugosa, sabor ahumado e irresistible salsa.",
+    "descEn": "One of the most popular and beloved recipes. Juicy texture, smoky flavor and irresistible sauce.",
+    "precio": 70,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "SOYA",
+      "SULFITOS"
+    ],
+    "tags": [
+      "cerdo",
+      "ahumado"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Vino Patrimonial Toñuz - Quebranta, Tannat",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-TON",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-DMT",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "costillas",
+    "tiempoPrep": 25,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-024",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Ají de gallina",
+    "nombreEn": "Aji de gallina",
+    "descEs": "Un tradicional plato peruano. La perfecta preparación de nuestra suave salsa de ají amarillo hace de esta opción un éxito asegurado. Con papas sancochadas y arroz blanco.",
+    "descEn": "A traditional peruvian dish. Chicken in a creamy cheese and yellow chilli sauce (not spicy). Served with boiled potatoes and white rice on the side.",
+    "precio": 39,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS",
+      "NUECES",
+      "GLUTEN",
+      "HUEVO"
+    ],
+    "tags": [
+      "pollo",
+      "criollo",
+      "tradicional"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Blanco de Blancos \"Triunfo\" - Sauvignon Blanc, Chardonnay, Viognier",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-DAN",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "aji_gallina",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-025",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Arroz con pollo",
+    "nombreEn": "Chicken with rice (arroz con pollo)",
+    "descEs": "Un delicioso equilibrio de culantro, zanahoria y arverjitas con salsa criolla.",
+    "descEn": "Chicken served with delicious rice seasoned with coriander, cooked with carrots, green peas and red pepper. Served with our fresh peruvian salsa criolla on the side.",
+    "precio": 39,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "pollo",
+      "criollo",
+      "tradicional"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial \"Triunfo\" - Petit Verdot",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SPV",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-GTC",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "arroz_pollo",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-026",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Pollo a la plancha",
+    "nombreEn": "Grilled chicken",
+    "descEs": "Con dos guarniciones a elegir: papas fritas amarillas, ensalada fresca o arroz blanco.",
+    "descEn": "Choice of two sides: rice, salad or crispy fries.",
+    "precio": 39,
+    "esVegetariano": false,
+    "libreLactosa": true,
+    "alergenos": [],
+    "tags": [
+      "pollo",
+      "ligero"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Gran Blanco Tres Cepas - Sauvignon Blanc, Chenin Blanc, Chardonnay",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "pollo_plancha",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-027",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Milanesa de pollo",
+    "nombreEn": "Chicken milanesa",
+    "descEs": "Con dos guarniciones a elegir: papas fritas amarillas, ensalada fresca o arroz blanco.",
+    "descEn": "Choice of two sides: rice, salad or crispy fries.",
+    "precio": 42,
+    "esVegetariano": false,
+    "libreLactosa": true,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO"
+    ],
+    "tags": [
+      "pollo",
+      "frito"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Gran Blanco Tres Cepas - Sauvignon Blanc, Chenin Blanc, Chardonnay",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "pollo_plancha",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-028",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Chicharrón de cerdo",
+    "nombreEn": "Crispy pork rinds",
+    "descEs": "Doradita y crujiente panceta, acompañada de chips de camote y por supuesto nuestra atrevida salsa criolla.",
+    "descEn": "Crispy, deep-fried pork, served with crispy sweet potatoes, and unique creole sauce.",
+    "precio": 49,
+    "esVegetariano": false,
+    "libreLactosa": true,
+    "alergenos": [],
+    "tags": [
+      "cerdo",
+      "frito",
+      "criollo"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial Triunfo, Alicante Bouschet",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SAL",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SPV",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "chicharron_cerdo",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-029",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Adobo de cerdo \"José Antonio\"",
+    "nombreEn": "Pork adobo \"José Antonio\"",
+    "descEs": "Guiso macerado con diversos ajíes y especias, acompañado de puré de pallares verdes y arroz blanco.",
+    "descEn": "Pork stew made with various peppers and spices, served with green lima beans purée and white rice.",
+    "precio": 52,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "SULFITOS"
+    ],
+    "tags": [
+      "cerdo",
+      "criollo",
+      "tradicional_ica"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial Triunfo, Petit Verdot",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SPV",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-DMP",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "adobo_cerdo",
+    "tiempoPrep": 20,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-030",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Carapulcra con sopa seca",
+    "nombreEn": "Carapulcra with sopa seca",
+    "descEs": "Uno de los platos más antiguos del Perú. Papa seca sancochada y guisada con carne de chancho, acompañada de sopa seca a base de fideos con aderezo de albahaca, pollo y perejil.",
+    "descEn": "Dried potato simmered with pork meat, served with sopa seca, made with noodles, basil, chicken, parsley and other ingredients.",
+    "precio": 48,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN"
+    ],
+    "tags": [
+      "cerdo",
+      "pollo",
+      "tradicional_ica",
+      "criollo"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial Triunfo, Petit Verdot - Tannat",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SPT",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-DMT",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "carapulcra",
+    "tiempoPrep": 20,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-031",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Fettuccine a la huancaína con lomo fino",
+    "nombreEn": "Fettuccine a la huancaina with lomo fino",
+    "descEs": "Deliciosos fetuccinis a la huancaína con medallón de lomo en salsa de vino tinto.",
+    "descEn": "Fettuccine with huancaina sauce, served with a beef tenderloin in a red wine sauce reduction.",
+    "precio": 62,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "HUEVO",
+      "SULFITOS"
+    ],
+    "tags": [
+      "res",
+      "pasta"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Don Manuel, Tannat",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-DMT",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SPT",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "fettuccine",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-032",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Spaguetti al pesto con apanado especial",
+    "nombreEn": "Pesto with breaded tenderloin",
+    "descEs": "Nuestra sábana de lomo fino, en esta ocasión acompañada de un casero spaguetti al pesto.",
+    "descEn": "Our special breaded tender loin, with a homemade-like pesto spaghetti.",
+    "precio": 59,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "NUECES",
+      "HUEVO"
+    ],
+    "tags": [
+      "res",
+      "pasta",
+      "frito"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial Triunfo, Carménère",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SCA",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-ORI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "spaguetti_pesto",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-033",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Lomo saltado",
+    "nombreEn": "Lomo saltado",
+    "descEs": "El rey de la comida criolla. Lo servimos jugoso, flambeado con pisco y acompañado con crocantes papas fritas amarillas y arroz blanco.",
+    "descEn": "The king of peruvian gastronomy. Tender filet mignon sautéed with ripe and juicy tomatoes and onions, flamed with pisco. Served with french fries and perfectly cooked white rice.",
+    "precio": 62,
+    "esVegetariano": false,
+    "libreLactosa": true,
+    "alergenos": [
+      "SOYA"
+    ],
+    "tags": [
+      "res",
+      "criollo",
+      "tradicional"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Don Manuel, Petit Verdot",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-DMP",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SPV",
+        "puntaje": 9
+      },
+      {
+        "etiqueta": "TIN-GT3",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "lomo_saltado",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-034",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Asado al vino tinto",
+    "nombreEn": "Roasted beef with red wine sauce",
+    "descEs": "Preparado con vino de nuestra bodega. Lo servimos con el mejor puré de papas amarillas y un perfecto arroz blanco.",
+    "descEn": "Roast beef with Viña Tacama red wine sauce, served with mashed potatoes and our perfectly cooked white rice.",
+    "precio": 50,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS",
+      "SULFITOS"
+    ],
+    "tags": [
+      "res",
+      "tradicional"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Gran Tinto Tres Cepas - Malbec, Petit Verdot, Tannat",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-GT3",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SMA",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "asado_vino",
+    "tiempoPrep": 20,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-035",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Picante de pallares con sábana de lomo fino",
+    "nombreEn": "Picante de pallares with sábana de lomo",
+    "descEs": "El tradicional pallar iqueño toma la forma de un riquísimo picante, acompañado de una jugosa sábana de lomo apanada y arroz blanco.",
+    "descEn": "Lima beans stew served with breaded tenderloin.",
+    "precio": 59,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO",
+      "LACTEOS"
+    ],
+    "tags": [
+      "res",
+      "tradicional_ica",
+      "criollo"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Doña Ana, Chardonnay",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-DAN",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "picante_pallares",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-036",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Seco de res con morusa de pallares",
+    "nombreEn": "Dried beef with pallares morusa",
+    "descEs": "Tierno asado de tira en salsa de culantro, acompañado de una suave morusa de pallares y arroz blanco.",
+    "descEn": "Tender roast strip in coriander sauce, accompanied by a soft pallares morusa and white rice.",
+    "precio": 65,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "res",
+      "tradicional_ica",
+      "criollo"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Origen - Carménère, Malbec",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-ORI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SCA",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "seco_res",
+    "tiempoPrep": 25,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-037",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Arroz tapado del Tambo",
+    "nombreEn": "Tambo stuffed rice (arroz tapado)",
+    "descEs": "Arroz del Tambo relleno con doble porción de una sabrosísima salsa de carne preparada con lomo picadito y los mejores tomates de nuestro huerto. Con huevo frito, platanitos maduros y chimichurri de la casa.",
+    "descEn": "The Tambo rice, stuffed with a meat sauce prepared with chopped tenderloin and our best homegrown tomatoes. Served with fried eggs and plantains.",
+    "precio": 60,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "HUEVO"
+    ],
+    "tags": [
+      "res",
+      "criollo",
+      "tradicional"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Origen - Carménère, Malbec",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-ORI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SCA",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "arroz_tapado",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-038",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Chicharrón de la pesca del día",
+    "nombreEn": "Crispy fish",
+    "descEs": "Acompañado de nuestras papas fritas, salsa criolla y tártara de la casa.",
+    "descEn": "Crunchy fried white fish, accompanied by our classic fries, tartar sauce and onion salad.",
+    "precio": 65,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "PESCADO",
+      "GLUTEN",
+      "HUEVO"
+    ],
+    "tags": [
+      "pescado",
+      "frito"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Ambrosía - Nielluccio",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-AMB",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "chicharron_pescado",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-039",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Arroz con mariscos",
+    "nombreEn": "Seafood rice",
+    "descEs": "Cremoso arroz con mixtura de mariscos en salsa de ají amarillo y vino blanco.",
+    "descEn": "Creamy rice with a mix of fresh seafood, flambéed in white wine.",
+    "precio": 65,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "MARISCOS",
+      "PESCADO",
+      "SULFITOS"
+    ],
+    "tags": [
+      "mariscos"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Blancos de Blancos \"Triunfo\" - Sauvignon Blanc",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-DAN",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "arroz_mariscos",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-040",
+    "seccion": "ESPECIALIDADES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Piqueo Iqueño",
+    "nombreEn": "Iqueño sampler (piqueo iqueño)",
+    "descEs": "Excelente opción para probar las mejores especialidades iqueñas al estilo de la casa hacienda: picante de pallares, carapulcra, ají de gallina, adobo de cerdo y arroz blanco.",
+    "descEn": "A snack to try the best iqueño dishes with the hacienda's recipe.",
+    "precio": 89,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "NUECES",
+      "HUEVO"
+    ],
+    "tags": [
+      "cerdo",
+      "pollo",
+      "tradicional_ica",
+      "criollo",
+      "compartir"
+    ],
+    "picante": 1,
+    "estilo": "contundente",
+    "maridajeTexto": "Origen - Petit Verdot, Malbec",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-ORI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SPV",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "piqueo_iqueno",
+    "tiempoPrep": 25,
+    "rol": "PIQUEO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-041",
+    "seccion": "KIDS",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Milanesa de pollo con papas fritas (Kids)",
+    "nombreEn": "Chicken milanesa with french fries (Kids)",
+    "descEs": "Menú Kids: milanesa de pollo con papas fritas.",
+    "descEn": "Kid's menu: chicken milanesa with french fries.",
+    "precio": 29,
+    "esVegetariano": false,
+    "libreLactosa": true,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO"
+    ],
+    "tags": [
+      "pollo",
+      "frito",
+      "kids"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ref_kids_milanesa",
+    "tiempoPrep": 15,
+    "rol": "KIDS",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-042",
+    "seccion": "KIDS",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Cheese burger con papas fritas (Kids)",
+    "nombreEn": "Cheese burger with french fries (Kids)",
+    "descEs": "Menú Kids: hamburguesa con queso y papas fritas.",
+    "descEn": "Kid's menu: cheese burger with french fries.",
+    "precio": 29,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS"
+    ],
+    "tags": [
+      "res",
+      "frito",
+      "kids"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ref_kids_burger",
+    "tiempoPrep": 15,
+    "rol": "KIDS",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-043",
+    "seccion": "KIDS",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Asado con puré y arroz (Kids)",
+    "nombreEn": "Roasted beef with mashed potatoes and rice (Kids)",
+    "descEs": "Menú Kids: asado en salsa marrón con puré de papas y arroz blanco.",
+    "descEn": "Kid's menu: roasted beef with brown sauce served with mashed potatoes and white rice.",
+    "precio": 29,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS"
+    ],
+    "tags": [
+      "res",
+      "kids"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ref_kids_asado",
+    "tiempoPrep": 15,
+    "rol": "KIDS",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-044",
+    "seccion": "KIDS",
+    "categoria": "POSTRE",
+    "nombreEs": "Helado con fudge (Kids)",
+    "nombreEn": "Ice cream with fudge (Kids)",
+    "descEs": "Menú Kids: helado de vainilla con fudge.",
+    "descEn": "Kid's menu: vanilla ice cream with fudge.",
+    "precio": 7,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS"
+    ],
+    "tags": [
+      "dulce",
+      "kids"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-044",
+    "tiempoPrep": 5,
+    "rol": "KIDS_POSTRE",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-045",
+    "seccion": "HORNO_LENA",
+    "categoria": "ENTRADA",
+    "nombreEs": "Pan chapla",
+    "nombreEn": "Chapla bread",
+    "descEs": "Pan serrano calientito salido de nuestro horno de leña, acompañado de mayonesa alioli (ajo). Cuatro piezas.",
+    "descEn": "Warm bread like in the Andes (four pieces).",
+    "precio": 6,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO"
+    ],
+    "tags": [
+      "vegetariano",
+      "snack"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "pan_chapla",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-046",
+    "seccion": "HORNO_LENA",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Pizza Americana",
+    "nombreEn": "Ham and cheese pizza",
+    "descEs": "Clásica de clásicas, crujiente pizza con jamón.",
+    "descEn": "Crispy pizza with ham, mozzarella and pomodoro sauce.",
+    "precio": 30,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS"
+    ],
+    "tags": [
+      "cerdo",
+      "queso",
+      "pizza",
+      "compartir"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Gran Tinto Crianza - Malbec",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-GTC",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-GT3",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "pizza_americana",
+    "tiempoPrep": 18,
+    "rol": "PIQUEO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-047",
+    "seccion": "HORNO_LENA",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Pizza cuatro quesos",
+    "nombreEn": "Four cheeses pizza",
+    "descEs": "Mozzarella, parmesano, gouda y queso azul.",
+    "descEn": "A delicious mix of mozzarella, soft paria, gouda and blue cheese.",
+    "precio": 31,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS"
+    ],
+    "tags": [
+      "vegetariano",
+      "queso",
+      "pizza",
+      "compartir"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial \"Triunfo\" - Petit Verdot, Tannat",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SPT",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SPV",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "pizza_cuatro_quesos",
+    "tiempoPrep": 18,
+    "rol": "PIQUEO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-048",
+    "seccion": "HORNO_LENA",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Pizza Margarita",
+    "nombreEn": "Margherita pizza",
+    "descEs": "Con tomate y albahaca de nuestro huerto.",
+    "descEn": "With pomodoro sauce and basil.",
+    "precio": 30,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS"
+    ],
+    "tags": [
+      "vegetariano",
+      "queso",
+      "pizza",
+      "compartir"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Origen - Carménère, Malbec",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-ORI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SCA",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "pizza_margarita",
+    "tiempoPrep": 18,
+    "rol": "PIQUEO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-049",
+    "seccion": "HORNO_LENA",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Pizza full meat",
+    "nombreEn": "Full meat pizza",
+    "descEs": "Con tocino, salame y carne molida.",
+    "descEn": "With bacon, salami and ground beef.",
+    "precio": 40,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS"
+    ],
+    "tags": [
+      "res",
+      "cerdo",
+      "pizza",
+      "compartir"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Don Manuel - Petit Verdot",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-DMP",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SPV",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "pizza_full_meat",
+    "tiempoPrep": 18,
+    "rol": "PIQUEO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-050",
+    "seccion": "SANDWICHES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Sandwich de asado al vino",
+    "nombreEn": "Roast beef sandwich",
+    "descEs": "Servido con dulces cebollitas, crujientes papas fritas amarillas y una gran salsa de vino tinto.",
+    "descEn": "Served with caramelized onions, crunchy yellow fried potatoes and a special wine sauce.",
+    "precio": 25,
+    "esVegetariano": false,
+    "libreLactosa": true,
+    "alergenos": [
+      "GLUTEN",
+      "SULFITOS"
+    ],
+    "tags": [
+      "res",
+      "sandwich"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Gran Tinto Tres Cepas - Malbec, Petit Verdot, Tannat",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-GT3",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-GTC",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "sandwich_asado",
+    "tiempoPrep": 15,
+    "rol": "DESAYUNO",
+    "momentos": [
+      "DESAYUNO"
+    ]
+  },
+  {
+    "codigo": "TAC-051",
+    "seccion": "SANDWICHES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Pan con chicharrón",
+    "nombreEn": "Crispy pork belly sandwich",
+    "descEs": "De panceta con chips de camote y salsita criolla.",
+    "descEn": "Crispy and crunchy pork, served with fried sweet potatoes, and our unique salsa criolla.",
+    "precio": 25,
+    "esVegetariano": false,
+    "libreLactosa": true,
+    "alergenos": [
+      "GLUTEN"
+    ],
+    "tags": [
+      "cerdo",
+      "sandwich",
+      "criollo"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial \"Triunfo\" - Petit Verdot",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SPV",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-GTC",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "pan_chicharron",
+    "tiempoPrep": 15,
+    "rol": "DESAYUNO",
+    "momentos": [
+      "DESAYUNO"
+    ]
+  },
+  {
+    "codigo": "TAC-052",
+    "seccion": "SANDWICHES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Sandwich de pollo, palta y mayonesa",
+    "nombreEn": "Chicken & avocado sandwich",
+    "descEs": "Pollo deshilachado, palta iqueña y cremosa mayonesa en nuestro pan brioche de la casa.",
+    "descEn": "Light, chapla bread, filled with shredded chicken, Ica avocado and soft homemade mayonnaise.",
+    "precio": 23,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO",
+      "LACTEOS"
+    ],
+    "tags": [
+      "pollo",
+      "sandwich",
+      "ligero"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": "Gran Blanco - Sauvignon Blanc, Chenin, Chardonnay",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-GBL",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-TRI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "sandwich_pollo",
+    "tiempoPrep": 15,
+    "rol": "DESAYUNO",
+    "momentos": [
+      "DESAYUNO"
+    ]
+  },
+  {
+    "codigo": "TAC-053",
+    "seccion": "SANDWICHES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Tambo burger",
+    "nombreEn": "Tambo burger",
+    "descEs": "Blend de lomo y cerdo, cheddar en pan brioche de la casa.",
+    "descEn": "Classic, made with beef tenderloin, served with lettuce, tomato, onions, cheddar cheese, crunchy french fries, on a homemade brioche bread.",
+    "precio": 32,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "HUEVO"
+    ],
+    "tags": [
+      "res",
+      "cerdo",
+      "sandwich"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Selección Especial \"Triunfo\" - Malbec",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-SMA",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-ORI",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "tambo_burger",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-054",
+    "seccion": "SANDWICHES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Tambo royal",
+    "nombreEn": "Tambo royal",
+    "descEs": "Blend de lomo y cerdo, cheddar, tocino y huevo en pan brioche de la casa.",
+    "descEn": "Classic, made with beef tenderloin, served with lettuce, tomato, onions, cheddar cheese, bacon, fried egg, crunchy french fries, on a homemade brioche bread.",
+    "precio": 37,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "HUEVO"
+    ],
+    "tags": [
+      "res",
+      "cerdo",
+      "sandwich"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": "Origen - Malbec & Malbec",
+    "maridaje": [
+      {
+        "etiqueta": "TIN-ORI",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "TIN-SMA",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "tambo_royal",
+    "tiempoPrep": 15,
+    "rol": "FONDO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-055",
+    "seccion": "POSTRES",
+    "categoria": "POSTRE",
+    "nombreEs": "Torta de chocolate",
+    "nombreEn": "Chocolate cake",
+    "descEs": "Clásica y deliciosa.",
+    "descEn": "Classic and delicious.",
+    "precio": 24,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO",
+      "LACTEOS"
+    ],
+    "tags": [
+      "dulce",
+      "chocolate"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": "Pisco Demonio de los Andes - Quebranta",
+    "maridaje": [
+      {
+        "etiqueta": "PIS-QUE",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-ALB",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "torta_chocolate",
+    "tiempoPrep": 8,
+    "rol": "POSTRE",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-056",
+    "seccion": "POSTRES",
+    "categoria": "POSTRE",
+    "nombreEs": "Brownie \"Cerro Prieto\"",
+    "nombreEn": "\"Cerro Prieto\" brownie",
+    "descEs": "En honor al paisaje que nos acompaña. Servido con fudge y helado de vainilla.",
+    "descEn": "Served with fudge and vanilla ice cream.",
+    "precio": 24,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO",
+      "LACTEOS",
+      "NUECES"
+    ],
+    "tags": [
+      "vegetariano",
+      "dulce",
+      "chocolate",
+      "frutos_secos"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": "Pisco Demonio de los Andes - Acholado",
+    "maridaje": [
+      {
+        "etiqueta": "PIS-ACH",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-ALB",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "brownie",
+    "tiempoPrep": 8,
+    "rol": "POSTRE",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-057",
+    "seccion": "POSTRES",
+    "categoria": "POSTRE",
+    "nombreEs": "Tres leches",
+    "nombreEn": "Tres leches cake",
+    "descEs": "Esponjoso bizcocho mojadito sumergido en una perfecta combinación de tres leches. Una sutil alternativa para endulzar el paladar de nuestros invitados.",
+    "descEn": "Spongy and creamy cake moistened with three different sweet milk sauces.",
+    "precio": 24,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO",
+      "LACTEOS"
+    ],
+    "tags": [
+      "vegetariano",
+      "dulce",
+      "cremoso"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": "Pisco Demonio de los Andes - Albilla",
+    "maridaje": [
+      {
+        "etiqueta": "PIS-ALB",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-ALB",
+        "puntaje": 9
+      }
+    ],
+    "imagen": "tres_leches",
+    "tiempoPrep": 8,
+    "rol": "POSTRE",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-058",
+    "seccion": "POSTRES",
+    "categoria": "POSTRE",
+    "nombreEs": "Crocante de manzana",
+    "nombreEn": "Apple crumble",
+    "descEs": "Calentito, servido con helado de vainilla y cubierta de caramelo.",
+    "descEn": "Hot, served with vanilla ice cream and delicate caramel topping.",
+    "precio": 24,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "LACTEOS",
+      "NUECES"
+    ],
+    "tags": [
+      "vegetariano",
+      "dulce",
+      "frutal",
+      "caliente"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": "Albilla de Ica",
+    "maridaje": [
+      {
+        "etiqueta": "BLA-ALB",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "PIS-ALB",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "crocante_manzana",
+    "tiempoPrep": 10,
+    "rol": "POSTRE",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-059",
+    "seccion": "POSTRES",
+    "categoria": "POSTRE",
+    "nombreEs": "Tocino del cielo",
+    "nombreEn": "Tocino del cielo",
+    "descEs": "Hemos revelado el secreto de esta antigua receta familiar. Elaborado a base de yemas, leche y azúcar, cocido tres horas en baño María. ¡Único!",
+    "descEn": "Made with egg yolks, milk and sugar, cooked for three hours. Unique!",
+    "precio": 24,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "HUEVO",
+      "LACTEOS"
+    ],
+    "tags": [
+      "dulce",
+      "tradicional",
+      "cremoso"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": "Pisco Demonio de los Andes - Quebranta",
+    "maridaje": [
+      {
+        "etiqueta": "PIS-QUE",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-ALB",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "tocino_cielo",
+    "tiempoPrep": 8,
+    "rol": "POSTRE",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-060",
+    "seccion": "POSTRES",
+    "categoria": "POSTRE",
+    "nombreEs": "Pie de pecanas \"El Lagar\"",
+    "nombreEn": "\"El Lagar\" pecan pie",
+    "descEs": "Las pecanas de Tacama son excepcionales. Se creó para ellas el pie de pecanas \"El Lagar\", uno de los postres preferidos de nuestros visitantes.",
+    "descEn": "Pecans from Tacama are exceptional. This we created \"El Lagar\" pecan pie, one of our visitors all-time favorite.",
+    "precio": 26,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO",
+      "LACTEOS",
+      "NUECES"
+    ],
+    "tags": [
+      "dulce",
+      "frutos_secos"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": "Pisco Demonio de los Andes - Quebranta",
+    "maridaje": [
+      {
+        "etiqueta": "PIS-QUE",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-ALB",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "pie_pecanas",
+    "tiempoPrep": 8,
+    "rol": "POSTRE",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-061",
+    "seccion": "POSTRES",
+    "categoria": "POSTRE",
+    "nombreEs": "Trilogía de postres",
+    "nombreEn": "Dessert trilogy",
+    "descEs": "Disfruta de tus postres favoritos juntos: crocante de manzana, brownie y tres leches.",
+    "descEn": "A sampler of apple crumble, brownie and tres leches cake.",
+    "precio": 39,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN",
+      "HUEVO",
+      "LACTEOS",
+      "NUECES"
+    ],
+    "tags": [
+      "dulce",
+      "compartir",
+      "variado",
+      "chocolate",
+      "cremoso",
+      "frutal"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": "Pisco Gran Demonio de los Andes - Acholado",
+    "maridaje": [
+      {
+        "etiqueta": "PIS-ACH",
+        "puntaje": 10
+      },
+      {
+        "etiqueta": "BLA-ALB",
+        "puntaje": 8
+      }
+    ],
+    "imagen": "trilogia_postres",
+    "tiempoPrep": 10,
+    "rol": "POSTRE",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-062",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Salsa criolla",
+    "nombreEn": "Creole sauce",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 5,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-062",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-063",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Arroz blanco",
+    "nombreEn": "White rice",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 6,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-063",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-064",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Chips de camote",
+    "nombreEn": "Sweet potatoes chips",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 11,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-064",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-065",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Papas fritas",
+    "nombreEn": "French fries",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 12,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-065",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-066",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Palta",
+    "nombreEn": "Avocado",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 12,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-066",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-067",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Puré de papas",
+    "nombreEn": "Mashed potatoes",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 12,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS"
+    ],
+    "tags": [],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-067",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-068",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Puré de pallares verdes",
+    "nombreEn": "Green lima beans purée",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 14,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS"
+    ],
+    "tags": [
+      "tradicional_ica"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-068",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-069",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Picante de pallares",
+    "nombreEn": "Spicy lima beans",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 14,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS"
+    ],
+    "tags": [
+      "tradicional_ica"
+    ],
+    "picante": 1,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-069",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-070",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Carapulcra sin presa",
+    "nombreEn": "Carapulcra with no meat",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 14,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "tradicional_ica"
+    ],
+    "picante": 1,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-070",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-071",
+    "seccion": "GUARNICIONES",
+    "categoria": "PRINCIPAL",
+    "nombreEs": "Sopa seca",
+    "nombreEn": "Sopa seca",
+    "descEs": "Guarnición.",
+    "descEn": "Side dish.",
+    "precio": 15,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "GLUTEN"
+    ],
+    "tags": [
+      "tradicional_ica"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-071",
+    "tiempoPrep": 8,
+    "rol": "COMPLEMENTO",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-072",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Chilcano clásico",
+    "nombreEn": "Chilcano clásico",
+    "descEs": "Pisco Demonio de los Andes, zumo de limón, bitter & Ginger Ale.",
+    "descEn": "Pisco Demonio de los Andes, zumo de limón, bitter & Ginger Ale.",
+    "precio": 24,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-072",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-073",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Chilcano maracuyá",
+    "nombreEn": "Chilcano maracuyá",
+    "descEs": "Pisco Demonio de los Andes, zumo de maracuyá, bitter & Ginger Ale.",
+    "descEn": "Pisco Demonio de los Andes, zumo de maracuyá, bitter & Ginger Ale.",
+    "precio": 26,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-073",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-074",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Tambo Sour",
+    "nombreEn": "Tambo Sour",
+    "descEs": "Pisco Demonio de los Andes, zumo de limón, jarabe simple, clara de huevo & bitter.",
+    "descEn": "Pisco Demonio de los Andes, zumo de limón, jarabe simple, clara de huevo & bitter.",
+    "precio": 27,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "HUEVO"
+    ],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-074",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-075",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Maracuyá Sour",
+    "nombreEn": "Maracuyá Sour",
+    "descEs": "Pisco Demonio de los Andes, zumo de maracuyá, jarabe simple, clara de huevo & bitter.",
+    "descEn": "Pisco Demonio de los Andes, zumo de maracuyá, jarabe simple, clara de huevo & bitter.",
+    "precio": 28,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "HUEVO"
+    ],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-075",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-076",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Capitán",
+    "nombreEn": "Capitán",
+    "descEs": "Pisco Demonio de los Andes, vermouth Rosso & bitter.",
+    "descEn": "Pisco Demonio de los Andes, vermouth Rosso & bitter.",
+    "precio": 29,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "SULFITOS"
+    ],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-076",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-077",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Centenario",
+    "nombreEn": "Centenario",
+    "descEs": "Albilla d'Ica, Pisco Demonio de los Andes, zumo de piña & maracuyá y jarabe de goma.",
+    "descEn": "Albilla d'Ica, Pisco Demonio de los Andes, zumo de piña & maracuyá y jarabe de goma.",
+    "precio": 30,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "SULFITOS"
+    ],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-077",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-078",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Amore del Tambo",
+    "nombreEn": "Amore del Tambo",
+    "descEs": "Amore de Ica, Pisco Demonio de los Andes, jarabe de fresa, zumo de limón & bitter.",
+    "descEn": "Amore de Ica, Pisco Demonio de los Andes, jarabe de fresa, zumo de limón & bitter.",
+    "precio": 30,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "SULFITOS"
+    ],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-078",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-079",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Rosado de vendimia",
+    "nombreEn": "Rosado de vendimia",
+    "descEs": "Vino rosado, Pisco Demonio de los Andes Albilla, zumo de limón, jarabe de fresa, aperol & ginger ale.",
+    "descEn": "Vino rosado, Pisco Demonio de los Andes Albilla, zumo de limón, jarabe de fresa, aperol & ginger ale.",
+    "precio": 30,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "SULFITOS"
+    ],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-079",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-080",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Tinto de vendimia",
+    "nombreEn": "Tinto de vendimia",
+    "descEs": "Vino tinto, Pisco Demonio de los Andes Quebranta, cordial de naranja, zumo de limón, espumoso.",
+    "descEn": "Vino tinto, Pisco Demonio de los Andes Quebranta, cordial de naranja, zumo de limón, espumoso.",
+    "precio": 32,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "SULFITOS"
+    ],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-080",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-081",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Pisco Tonic clásico",
+    "nombreEn": "Pisco Tonic clásico",
+    "descEs": "Pisco Demonio de los Andes, pieles cítricas, romero & agua tónica.",
+    "descEn": "Pisco Demonio de los Andes, pieles cítricas, romero & agua tónica.",
+    "precio": 32,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-081",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-082",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Demonio Tonic",
+    "nombreEn": "Demonio Tonic",
+    "descEs": "Pisco Demonio de los Andes, flor de Jamaica, agua tónica.",
+    "descEn": "Pisco Demonio de los Andes, flor de Jamaica, agua tónica.",
+    "precio": 33,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-082",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-083",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Tambo Punch",
+    "nombreEn": "Tambo Punch",
+    "descEs": "Pisco Demonio de los Andes, zumo de piña ahumada, zumo de limón & miel picaronera.",
+    "descEn": "Pisco Demonio de los Andes, zumo de piña ahumada, zumo de limón & miel picaronera.",
+    "precio": 33,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-083",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-084",
+    "seccion": "COCTELERIA",
+    "categoria": "BEBIDA",
+    "nombreEs": "Negroni \"Atardecer\" (Premium)",
+    "nombreEn": "Negroni \"Atardecer\" (Premium)",
+    "descEs": "Pisco Premium Leyenda, vermouth, campari y gotas de bitter con ahumado en palo santo.",
+    "descEn": "Pisco Premium Leyenda, vermouth, campari y gotas de bitter con ahumado en palo santo.",
+    "precio": 40,
+    "esVegetariano": false,
+    "libreLactosa": false,
+    "alergenos": [
+      "SULFITOS"
+    ],
+    "tags": [
+      "coctel",
+      "pisco"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-084",
+    "tiempoPrep": 3,
+    "rol": "BEBIDA",
+    "momentos": [
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-085",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Gaseosa (600 ml)",
+    "nombreEn": "Soda (600 ml)",
+    "descEs": "Gaseosa (600 ml)",
+    "descEn": "Soda (600 ml)",
+    "precio": 8,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-085",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-086",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Agua Premium Munay (botella ecológica retornable)",
+    "nombreEn": "Munay Premium water (returnable eco bottle)",
+    "descEs": "Agua Premium Munay (botella ecológica retornable)",
+    "descEn": "Munay Premium water (returnable eco bottle)",
+    "precio": 10,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-086",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-087",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Agua Premium Munay (con botella)",
+    "nombreEn": "Munay Premium water (with bottle)",
+    "descEs": "Agua Premium Munay (con botella)",
+    "descEn": "Munay Premium water (with bottle)",
+    "precio": 40,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-087",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-088",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Chicha morada (vaso)",
+    "nombreEn": "Purple corn drink (glass)",
+    "descEs": "Chicha morada (vaso)",
+    "descEn": "Purple corn drink (glass)",
+    "precio": 6.5,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol",
+      "tradicional",
+      "desayuno_bebida"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-088",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-089",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Chicha morada (1/2 L)",
+    "nombreEn": "Purple corn drink (1/2 L)",
+    "descEs": "Chicha morada (1/2 L)",
+    "descEn": "Purple corn drink (1/2 L)",
+    "precio": 13,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol",
+      "tradicional"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-089",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-090",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Chicha morada (1 L)",
+    "nombreEn": "Purple corn drink (1 L)",
+    "descEs": "Chicha morada (1 L)",
+    "descEn": "Purple corn drink (1 L)",
+    "precio": 25,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol",
+      "tradicional"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-090",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-091",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Maracuyá (vaso)",
+    "nombreEn": "Passion fruit juice (glass)",
+    "descEs": "Maracuyá (vaso)",
+    "descEn": "Passion fruit juice (glass)",
+    "precio": 6.5,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol",
+      "desayuno_bebida"
+    ],
+    "picante": 0,
+    "estilo": "dulce",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-091",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-092",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Maracuyá (1/2 L)",
+    "nombreEn": "Passion fruit juice (1/2 L)",
+    "descEs": "Maracuyá (1/2 L)",
+    "descEn": "Passion fruit juice (1/2 L)",
+    "precio": 13,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-092",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-093",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Maracuyá (1 L)",
+    "nombreEn": "Passion fruit juice (1 L)",
+    "descEs": "Maracuyá (1 L)",
+    "descEn": "Passion fruit juice (1 L)",
+    "precio": 26,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-093",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-094",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Limonada (vaso)",
+    "nombreEn": "Lemonade (glass)",
+    "descEs": "Limonada (vaso)",
+    "descEn": "Lemonade (glass)",
+    "precio": 6.5,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-094",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-095",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Limonada (1/2 L)",
+    "nombreEn": "Lemonade (1/2 L)",
+    "descEs": "Limonada (1/2 L)",
+    "descEn": "Lemonade (1/2 L)",
+    "precio": 13,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-095",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-096",
+    "seccion": "BEBIDAS",
+    "categoria": "BEBIDA",
+    "nombreEs": "Limonada (1 L)",
+    "nombreEn": "Lemonade (1 L)",
+    "descEs": "Limonada (1 L)",
+    "descEn": "Lemonade (1 L)",
+    "precio": 26,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "bebida",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-096",
+    "tiempoPrep": 2,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-097",
+    "seccion": "CAFE",
+    "categoria": "BEBIDA",
+    "nombreEs": "Americano",
+    "nombreEn": "Americano",
+    "descEs": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponible descafeinado.",
+    "descEn": "100% Peruvian coffee from La Merced, Chanchamayo (Junín). Decaf available.",
+    "precio": 9,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "cafe",
+      "sin_alcohol",
+      "desayuno_bebida"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-097",
+    "tiempoPrep": 4,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-098",
+    "seccion": "CAFE",
+    "categoria": "BEBIDA",
+    "nombreEs": "Expresso",
+    "nombreEn": "Espresso",
+    "descEs": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponible descafeinado.",
+    "descEn": "100% Peruvian coffee from La Merced, Chanchamayo (Junín). Decaf available.",
+    "precio": 8,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "cafe",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-098",
+    "tiempoPrep": 4,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-099",
+    "seccion": "CAFE",
+    "categoria": "BEBIDA",
+    "nombreEs": "Expresso doble",
+    "nombreEn": "Double espresso",
+    "descEs": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponible descafeinado.",
+    "descEn": "100% Peruvian coffee from La Merced, Chanchamayo (Junín). Decaf available.",
+    "precio": 15,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [],
+    "tags": [
+      "cafe",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-099",
+    "tiempoPrep": 4,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-100",
+    "seccion": "CAFE",
+    "categoria": "BEBIDA",
+    "nombreEs": "Cortado",
+    "nombreEn": "Cortado",
+    "descEs": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponible descafeinado.",
+    "descEn": "100% Peruvian coffee from La Merced, Chanchamayo (Junín). Decaf available.",
+    "precio": 9.5,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS"
+    ],
+    "tags": [
+      "cafe",
+      "sin_alcohol"
+    ],
+    "picante": 0,
+    "estilo": null,
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-100",
+    "tiempoPrep": 4,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-101",
+    "seccion": "CAFE",
+    "categoria": "BEBIDA",
+    "nombreEs": "Capuccino",
+    "nombreEn": "Cappuccino",
+    "descEs": "Café 100% peruano de La Merced, Chanchamayo (Junín). Disponible descafeinado.",
+    "descEn": "100% Peruvian coffee from La Merced, Chanchamayo (Junín). Decaf available.",
+    "precio": 14,
+    "esVegetariano": true,
+    "libreLactosa": false,
+    "alergenos": [
+      "LACTEOS"
+    ],
+    "tags": [
+      "cafe",
+      "sin_alcohol",
+      "desayuno_bebida"
+    ],
+    "picante": 0,
+    "estilo": "contundente",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-101",
+    "tiempoPrep": 4,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-102",
+    "seccion": "INFUSIONES",
+    "categoria": "BEBIDA",
+    "nombreEs": "Manzanilla",
+    "nombreEn": "Chamomile",
+    "descEs": "Hierbas aromáticas de nuestro biohuerto Tacama.",
+    "descEn": "Aromatic herbs from our Tacama organic garden.",
+    "precio": 8,
+    "esVegetariano": true,
+    "libreLactosa": true,
+    "alergenos": [],
+    "tags": [
+      "infusion",
+      "sin_alcohol",
+      "desayuno_bebida"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-102",
+    "tiempoPrep": 4,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-103",
+    "seccion": "INFUSIONES",
+    "categoria": "BEBIDA",
+    "nombreEs": "Té, canela y clavo",
+    "nombreEn": "Tea, cinnamon and clove",
+    "descEs": "Hierbas aromáticas de nuestro biohuerto Tacama.",
+    "descEn": "Aromatic herbs from our Tacama organic garden.",
+    "precio": 8,
+    "esVegetariano": true,
+    "libreLactosa": true,
+    "alergenos": [],
+    "tags": [
+      "infusion",
+      "sin_alcohol",
+      "desayuno_bebida"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-103",
+    "tiempoPrep": 4,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  },
+  {
+    "codigo": "TAC-104",
+    "seccion": "INFUSIONES",
+    "categoria": "BEBIDA",
+    "nombreEs": "Infusión natural (anís, hierba luisa, menta o muña)",
+    "nombreEn": "Natural infusion (anise, lemongrass, mint or muña)",
+    "descEs": "Hierbas aromáticas de nuestro biohuerto Tacama.",
+    "descEn": "Aromatic herbs from our Tacama organic garden.",
+    "precio": 8,
+    "esVegetariano": true,
+    "libreLactosa": true,
+    "alergenos": [],
+    "tags": [
+      "infusion",
+      "sin_alcohol",
+      "desayuno_bebida"
+    ],
+    "picante": 0,
+    "estilo": "ligero",
+    "maridajeTexto": null,
+    "maridaje": [],
+    "imagen": "ilu_TAC-104",
+    "tiempoPrep": 4,
+    "rol": "BEBIDA",
+    "momentos": [
+      "DESAYUNO",
+      "ALMUERZO"
+    ]
+  }
+]

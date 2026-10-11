@@ -1,0 +1,42 @@
+# ── Dependencias ─────────────────────────
+node_modules/
+dist/
+build/
+.turbo/
+coverage/
+
+# ── Variables de entorno ──────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Prisma ───────────────────────────────
+*.db
+*.db-journal
+
+# ── Logs ─────────────────────────────────
+*.log
+logs/
+npm-debug.log*
+pnpm-debug.log*
+
+# ── IDEs ─────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ── OS ───────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# Prisma client por servicio
+services/*/generated
+logs
+
+# Fotos subidas desde administración y QR generados con la IP local (no se versionan)
+services/catalogo-i18n-service/uploads/*
+!services/catalogo-i18n-service/uploads/.gitkeep
+docs/demo/

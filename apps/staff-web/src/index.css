@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-dark: #121417;
+  --bg-panel: #1A1D23;
+  --bg-card: #22262F;
+  --wine-glow: #577A17;
+  --gold-glow: #8FB339;
+  --accent-green: #10B981;
+  --accent-rose: #F43F5E;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-dark);
+  color: #F3F4F6;
+}
+
+.font-serif-tacama {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Custom Scrollbar for Kitchen Displays */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1A1D23;
+}
+::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 4px;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
+  50% { box-shadow: 0 0 25px rgba(244, 63, 94, 0.8); }
+}
+
+.alert-pulse-danger {
+  animation: pulseGlow 1.5s infinite ease-in-out;
+}

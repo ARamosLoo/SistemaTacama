@@ -1,0 +1,38 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "/sandbox/existencias"
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "jsonBody": {
+          "bodega": "Viña Tacama S.A. — SANDBOX",
+          "nota": "Este es un ambiente simulado. No refleja stock real.",
+          "existencias": [
+            { "codigoInterno": "VIN-001", "nombre": "Tacama Blanco de Blancos", "stock": 48 },
+            { "codigoInterno": "VIN-002", "nombre": "Tacama Gran Tinto", "stock": 36 },
+            { "codigoInterno": "PIS-001", "nombre": "Pisco Tacama Puro Quebranta", "stock": 24 }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/sandbox/movimientos"
+      },
+      "response": {
+        "status": 201,
+        "headers": { "Content-Type": "application/json" },
+        "jsonBody": {
+          "mensaje": "Movimiento registrado en sandbox",
+          "id": "sandbox-mov-{{randomValue type='UUID'}}",
+          "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+// ============================================================
+// schema.prisma — catalogo-i18n-service
+// Schema: catalogo
+// Gestiona: platos, ingredientes, alérgenos, traducciones, glosario
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["catalogo"]
+}
+
+// ── Categorías de platos ──────────────────────────────────────
+enum CategoriaPlatoEnum {
+  ENTRADA
+  PRINCIPAL
+  POSTRE
+  BEBIDA
+  MARIDAJE_SUGERIDO
+  @@schema("catalogo")
+}
+
+// ── Idiomas soportados (RN08: español por defecto) ────────────
+enum IdiomaEnum {
+  es
+  en
+  fr
+  pt
+  de
+  @@schema("catalogo")
+}
+
+// ── Plato de la carta ─────────────────────────────────────────
+model Plato {
+  id            String              @id @default(uuid())
+  codigoInterno String              @unique @map("codigo_interno")
+  categoria     CategoriaPlatoEnum
+  // Nombre y descripción en español (idioma base, RN08)
+  nombreEs      String              @map("nombre_es")
+  descripcionEs String              @map("descripcion_es")
+  precioBase    Decimal             @map("precio_base") @db.Decimal(10, 2)
+  imagenUrl     String?             @map("imagen_url")
+  disponible    Boolean             @default(true)
+  tiempoPrep    Int?                @map("tiempo_prep")  // minutos estimados
+  // Carta Tambo de Tacama: sección, dietas, perfil de sabor y maridaje sugerido
+  seccion         String?           @default("ESPECIALIDADES")
+  esVegetariano   Boolean           @default(false) @map("es_vegetariano")
+  libreLactosa    Boolean           @default(false) @map("libre_lactosa")
+  picante         Int               @default(0)   // 0 suave, 1 moderado, 2 intenso
+  estilo          String?           // ligero | contundente | dulce
+  tags            String[]          @default([])
+  maridajeTexto   String?           @map("maridaje_texto")
+  rol             String?           // ENTRADA | FONDO | DESAYUNO | POSTRE | COMPLEMENTO | KIDS | BEBIDA
+  momentos        String[]          @default([]) // DESAYUNO y/o ALMUERZO
+  createdAt     DateTime            @default(now()) @map("created_at")
+  updatedAt     DateTime            @updatedAt @map("updated_at")
+
+  // Relaciones
+  ingredientes  PlatoIngrediente[]
+  alergenos     PlatoAlergeno[]
+  traducciones  Traduccion[]
+
+  @@map("platos")
+  @@schema("catalogo")
+}
+
+// ── Ingrediente ───────────────────────────────────────────────
+model Ingrediente {
+  id            String    @id @default(uuid())
+  nombreEs      String    @unique @map("nombre_es")
+  // Glosario: descripción del insumo peruano
+  glosarioEs    String?   @map("glosario_es")
+  glosarioEn    String?   @map("glosario_en")
+  glosarioFr    String?   @map("glosario_fr")
+  glosarioPt    String?   @map("glosario_pt")
+  glosarioDe    String?   @map("glosario_de")
+  esPeru        Boolean   @default(false) @map("es_peru")   // insumo peruano destacado
+
+  // Relaciones
+  platos        PlatoIngrediente[]
+  alergenos     IngredienteAlergeno[]
+
+  @@map("ingredientes")
+  @@schema("catalogo")
+}
+
+// ── Alérgeno (14 alérgenos de la Ley de Alimentos) ───────────
+model Alergeno {
+  id          String  @id @default(uuid())
+  codigo      String  @unique   // ej. "GLUTEN", "LACTEOS", "MARISCOS"
+  nombreEs    String  @map("nombre_es")
+  nombreEn    String  @map("nombre_en")
+  iconoUrl    String? @map("icono_url")
+
+  // Relaciones
+  platos        PlatoAlergeno[]
+  ingredientes  IngredienteAlergeno[]
+
+  @@map("alergenos")
+  @@schema("catalogo")
+}
+
+// ── Tabla pivote: Plato ↔ Ingrediente ─────────────────────────
+model PlatoIngrediente {
+  platoId       String      @map("plato_id")
+  ingredienteId String      @map("ingrediente_id")
+  esOpcional    Boolean     @default(false) @map("es_opcional")
+  cantidad      String?     // ej. "200g", "1 unidad"
+
+  plato         Plato       @relation(fields: [platoId], references: [id])
+  ingrediente   Ingrediente @relation(fields: [ingredienteId], references: [id])
+
+  @@id([platoId, ingredienteId])
+  @@map("plato_ingredientes")
+  @@schema("catalogo")
+}
+
+// ── Tabla pivote: Plato ↔ Alérgeno ────────────────────────────
+model PlatoAlergeno {
+  platoId     String    @map("plato_id")
+  alergenoId  String    @map("alergeno_id")
+  esTrazas    Boolean   @default(false) @map("es_trazas")  // "puede contener trazas"
+
+  plato       Plato     @relation(fields: [platoId], references: [id])
+  alergeno    Alergeno  @relation(fields: [alergenoId], references: [id])
+
+  @@id([platoId, alergenoId])
+  @@map("plato_alergenos")
+  @@schema("catalogo")
+}
+
+// ── Tabla pivote: Ingrediente ↔ Alérgeno ─────────────────────
+model IngredienteAlergeno {
+  ingredienteId String      @map("ingrediente_id")
+  alergenoId    String      @map("alergeno_id")
+
+  ingrediente   Ingrediente @relation(fields: [ingredienteId], references: [id])
+  alergeno      Alergeno    @relation(fields: [alergenoId], references: [id])
+
+  @@id([ingredienteId, alergenoId])
+  @@map("ingrediente_alergenos")
+  @@schema("catalogo")
+}
+
+// ── Traducción de platos a otros idiomas ──────────────────────
+model Traduccion {
+  id          String      @id @default(uuid())
+  platoId     String      @map("plato_id")
+  idioma      IdiomaEnum
+  nombre      String
+  descripcion String
+  // Traducción del glosario de ingredientes especiales
+  glosario    Json?
+
+  plato       Plato       @relation(fields: [platoId], references: [id])
+
+  @@unique([platoId, idioma])
+  @@map("traducciones")
+  @@schema("catalogo")
+}

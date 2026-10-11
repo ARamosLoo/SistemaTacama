@@ -1,0 +1,35 @@
+# Rutas del API Gateway hacia los microservicios que corren en el host (modo desarrollo local con `pnpm run dev:services`).
+# Cuando los servicios corren en contenedores, Traefik usa además las etiquetas del provider Docker.
+http:
+  routers:
+    auth:
+      rule: "PathPrefix(`/api/v1/auth`) || PathPrefix(`/api/v1/mesas`)"
+      entryPoints: [web]
+      service: auth
+    catalogo:
+      rule: "PathPrefix(`/api/v1/carta`) || PathPrefix(`/api/v1/platos`) || PathPrefix(`/api/v1/admin`) || PathPrefix(`/api/v1/uploads`)"
+      entryPoints: [web]
+      service: catalogo
+    maridaje:
+      rule: "PathPrefix(`/api/v1/maridajes`) || PathPrefix(`/api/v1/reglas-maridaje`) || PathPrefix(`/api/v1/etiquetas`)"
+      entryPoints: [web]
+      service: maridaje
+    comandas:
+      rule: "PathPrefix(`/api/v1/comandas`) || PathPrefix(`/api/v1/valoraciones`) || PathPrefix(`/socket.io`)"
+      entryPoints: [web]
+      service: comandas
+    inventario:
+      rule: "PathPrefix(`/api/v1/existencias`)"
+      entryPoints: [web]
+      service: inventario
+    analitica:
+      rule: "PathPrefix(`/api/v1/indicadores`) || PathPrefix(`/api/v1/auditoria`)"
+      entryPoints: [web]
+      service: analitica
+  services:
+    auth:       { loadBalancer: { servers: [ { url: "http://host.docker.internal:3001" } ] } }
+    catalogo:   { loadBalancer: { servers: [ { url: "http://host.docker.internal:3002" } ] } }
+    maridaje:   { loadBalancer: { servers: [ { url: "http://host.docker.internal:3003" } ] } }
+    comandas:   { loadBalancer: { servers: [ { url: "http://host.docker.internal:3004" } ] } }
+    inventario: { loadBalancer: { servers: [ { url: "http://host.docker.internal:3005" } ] } }
+    analitica:  { loadBalancer: { servers: [ { url: "http://host.docker.internal:3006" } ] } }
