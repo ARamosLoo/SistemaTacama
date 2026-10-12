@@ -284,7 +284,7 @@ Proyecto basado en **TOGAF ADM** (Architecture Development Method):
 ## Equipo
 
 Proyecto universitario — Curso de Arquitectura Empresarial  
-*Universidad [Tu Universidad] — [Año]*
+*Universidad Tecnológica del Perú — 2026*
 
 ---
 
