@@ -44,6 +44,18 @@ for ($i = 0; $i -lt 120; $i++) {
 if ($faltan) { Write-Warning ('No respondieron los puertos: ' + ($faltan -join ', ') + '. Revise la carpeta logs/.') }
 Start-Sleep -Seconds 5
 
+# 2b. Comprobación rápida: la carta y la sesión de mesa deben responder con datos
+$platos = -1
+try { $platos = @((Invoke-RestMethod 'http://localhost:5173/api/v1/carta' -TimeoutSec 20).data).Count } catch { }
+$mesaOk = $false
+try { $mesaOk = [bool](Invoke-RestMethod 'http://localhost:5173/api/v1/mesas/QR-MESA-004/sesion' -TimeoutSec 20) } catch { }
+if ($platos -le 0 -or -not $mesaOk) {
+  Write-Warning ("La carta o la sesión de mesa no responden bien (platos: $platos, mesa: $mesaOk). " +
+    'Revise logs/prisma-*.log, logs/seed-*.log y logs/*.err.log; si la base de datos quedó vacía, ejecute: pnpm run stop:local y luego pnpm run demo.')
+} else {
+  Write-Host "Comprobación: la carta responde ($platos platos) y la mesa se conecta."
+}
+
 # 3. Datos de demostración y QR
 if ($SinHistorial) { node scripts/demo-reset.js --sin-historial } else { node scripts/demo-reset.js }
 $salidaQr = node scripts/demo-qr.js
