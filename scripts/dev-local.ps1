@@ -34,6 +34,25 @@ $servicios = [ordered]@{
   'comandas-service' = 3004; 'inventario-service' = 3005; 'analitica-auditoria-service' = 3006
 }
 
+# Los paquetes compartidos (tipos y errores) deben compilarse antes que los servicios; en un clon nuevo
+# no existen sus carpetas dist y los servicios se caen al arrancar con "Cannot find module".
+foreach ($p in 'shared-types', 'shared-errors') {
+  if (-not (Test-Path "packages/$p/dist/index.js")) {
+    Write-Host "   compilando paquete $p..."
+    Push-Location "packages/$p"
+    pnpm exec tsc *> "$root/logs/paquete-$p.log"
+    if (-not (Test-Path 'dist/index.js')) { Write-Warning "No se pudo compilar $p. Revise logs/paquete-$p.log" }
+    Pop-Location
+  }
+}
+
+# Cada servicio necesita su propio .env con DATABASE_URL (lo genera setup-envs a partir del .env de la raíz)
+foreach ($s in $servicios.Keys) {
+  if (-not ((Test-Path "services/$s/.env") -and (Select-String -Path "services/$s/.env" -Pattern '^DATABASE_URL=' -Quiet))) {
+    Write-Warning "Falta DATABASE_URL en services/$s/.env. Revise que el .env de la raíz tenga las líneas *_DATABASE_URL (copie .env.example)."
+  }
+}
+
 Write-Host '3/5 Base de datos (esperar a Postgres, crear tablas y cargar datos si están vacías)...'
 
 # En una instalación nueva Postgres tarda en aceptar conexiones; sin esperarlo, las tablas no se crean
