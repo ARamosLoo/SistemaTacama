@@ -56,15 +56,15 @@ Conviene tener abiertas, en ventanas separadas: el celular (comensal), la cocina
 
 **E. Cuenta y pago**
 1. Con el pedido entregado, el comensal pulsa **"Pedir la cuenta"**: primero la calificación (con el mensaje "Tu opinión es muy importante para nosotros"), luego el método de pago.
-2. El mozo ve cómo va a pagar (por ejemplo, el vuelto si es efectivo, o que lleve el POS si es tarjeta), emite el comprobante y lo imprime.
-3. El comensal descarga el comprobante en **PDF** o lo **comparte** como imagen. El mozo confirma el cobro y cierra la mesa.
+2. El mozo ve cómo va a pagar (por ejemplo, el vuelto si es efectivo, o que lleve el POS si es tarjeta) y cobra en la mesa.
+3. El mozo pulsa **"Confirmar pago y liberar mesa"**: la mesa queda libre y el comensal ve "Pago confirmado". Si el cliente se retira sin pedir la cuenta, el mozo usa **"Liberar mesa sin cuenta"** (queda en la auditoría).
 
 **F. Indicadores**
 - Administrador: "KPIs y auditoría" (ticket promedio, venta cruzada, calificación). **Aclarar que el historial es de ejemplo.**
 
 ## 3. Qué decir con honestidad
 
-- Es una demo funcional, no un sistema listo para operar. Faltan, entre otras cosas, la **boleta electrónica** (hoy es un comprobante de consumo informativo), la integración con el **POS** (Izipay u otro), la publicación con HTTPS y la revisión legal de privacidad (ver `docs/PRIVACIDAD.md`).
+- Es una demo funcional, no un sistema listo para operar. Faltan, entre otras cosas, la integración con el **POS** (Izipay u otro), la publicación con HTTPS y la revisión legal de privacidad (ver `docs/PRIVACIDAD.md`).
 - Los **alérgenos** de la carta están inferidos de las descripciones: la cocina debe validarlos antes de usarlos con clientes reales.
 - Los **precios de vinos y piscos** son referenciales.
 - El **stock de la bodega** se maneja con datos de prueba, no con el sistema real del restaurante.

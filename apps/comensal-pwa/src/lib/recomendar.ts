@@ -16,7 +16,12 @@ export interface PlatoRecomendado {
 const sinAlergenos = (p: Plato, alergias: string[]) => !p.alergenos.some((a) => alergias.includes(a.codigo));
 const enMomento = (p: Plato, momento: Momento) => p.momentos.includes(momento.toUpperCase());
 
-/** Puntaje bruto de un plato contra el perfil: proteína 4, estilo 3, intensidad hasta 2, tradicional 2. */
+// Toda recomendación prioriza la cocina de Ica: un plato iqueño suma el máximo y uno criollo/tradicional, la mitad
+const PESO_ICA = 4;
+const puntosTradicion = (p: Plato) =>
+  p.tags.includes('tradicional_ica') ? PESO_ICA : p.tags.some((t) => t === 'tradicional' || t === 'criollo') ? PESO_ICA / 2 : 0;
+
+/** Puntaje bruto de un plato contra el perfil: proteína 4, estilo 3, intensidad hasta 2, tradición de Ica hasta 4. */
 function puntuar(p: Plato, perfil: PerfilComensal, estiloBuscado: string | null) {
   let pts = 0;
   const buscaProteina = perfil.proteinas.filter((x) => x !== 'cualquiera');
@@ -28,8 +33,8 @@ function puntuar(p: Plato, perfil: PerfilComensal, estiloBuscado: string | null)
     const dif = Math.abs(p.picante - perfil.intensidad);
     pts += dif === 0 ? 2 : dif === 1 ? 1 : 0;
   }
-  if (perfil.tradicional && p.tags.some((t) => t === 'tradicional' || t === 'tradicional_ica' || t === 'criollo')) pts += 2;
-  const max = 4 + 3 + 2 + (perfil.tradicional ? 2 : 0);
+  if (perfil.tradicional) pts += puntosTradicion(p);
+  const max = 4 + 3 + 2 + (perfil.tradicional ? PESO_ICA : 0);
   return { pts, coincidencia: Math.min(100, Math.round((pts / max) * 100)) };
 }
 
@@ -99,8 +104,8 @@ function puntuarCurso(p: Plato, prefs: string[], mapa: Record<string, string[]>,
     const dif = Math.abs(p.picante - perfil.intensidad);
     pts += dif === 0 ? 2 : dif === 1 ? 1 : 0;
   }
-  if (perfil.tradicional && esTradicional(p)) pts += 2;
-  const max = pesoPref + (usaIntensidad ? 2 : 0) + (perfil.tradicional ? 2 : 0);
+  if (perfil.tradicional) pts += puntosTradicion(p);
+  const max = pesoPref + (usaIntensidad ? 2 : 0) + (perfil.tradicional ? PESO_ICA : 0);
   return { pts, coincidencia: Math.min(100, Math.round((pts / max) * 100)) };
 }
 

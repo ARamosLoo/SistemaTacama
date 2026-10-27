@@ -40,14 +40,14 @@ const Portal: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#121417] text-stone-100 flex flex-col font-sans">
-      <header className="bg-[#1A1D23] border-b border-stone-800 px-6 py-3 sticky top-0 z-50 shadow-md">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <header className="bg-[#1A1D23] border-b border-stone-800 px-4 sm:px-6 py-3 sticky top-0 z-50 shadow-md">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-md">
               <HojaVid className="w-8 h-8" />
             </div>
             <div>
-              <h1 className="font-serif text-lg font-semibold tracking-wide text-stone-100 flex items-center gap-2">
+              <h1 className="font-serif text-lg font-semibold tracking-wide text-stone-100 flex flex-wrap items-center gap-x-2 gap-y-1">
                 TAMBO DE TACAMA
                 <span className="text-[10px] font-sans font-bold bg-[#577A17] text-white px-2 py-0.5 rounded">PORTAL DEL PERSONAL</span>
               </h1>
@@ -55,7 +55,7 @@ const Portal: React.FC = () => {
             </div>
           </div>
 
-          <nav className="flex items-center space-x-1 overflow-x-auto pb-1 md:pb-0" aria-label="Módulos">
+          <nav className="flex items-center space-x-1 overflow-x-auto sin-barra pb-1 lg:pb-0" aria-label="Módulos">
             {visibles.map((m) => (
               <button
                 key={m.id}
@@ -71,7 +71,7 @@ const Portal: React.FC = () => {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3 md:pl-3 md:border-l md:border-stone-700">
+          <div className="flex items-center gap-3 lg:pl-3 lg:border-l lg:border-stone-700">
             <div className="text-right leading-tight">
               <div className="text-xs font-semibold text-stone-100">{usuario.nombre}</div>
               <div className="text-[11px] text-[#B1CC72]">{NOMBRE_ROL[usuario.rol]}</div>

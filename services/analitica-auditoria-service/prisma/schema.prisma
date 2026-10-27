@@ -30,7 +30,7 @@ enum CategoriaEvento {
 }
 
 // ── Log de auditoría (RF22 - inmutable: solo INSERT) ─────────
-// ⚠️ NUNCA hacer UPDATE ni DELETE sobre esta tabla.
+// ATENCION: NUNCA hacer UPDATE ni DELETE sobre esta tabla.
 // Usa Row-Level Security en PostgreSQL para reforzarlo.
 model LogAuditoria {
   id          String          @id @default(uuid())

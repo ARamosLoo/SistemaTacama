@@ -205,6 +205,8 @@ tacamamesa/
 
 **Carta:** 104 ítems de la carta oficial del Tambo de Tacama (platos, bebidas, café, infusiones) con fotos recortadas del PDF, y 22 etiquetas de vinos y piscos con 112 reglas de maridaje. Fuente única en `infra/data/` (regenerar con `node infra/data/build-carta.js`). Los alérgenos se infieren de la descripción de cada plato y los precios de vinos y piscos son referenciales: la cocina debe validarlos.
 
+**Información nutricional:** cada plato muestra su energía (kcal y kJ) y sus macronutrientes por porción, y el carrito y la recomendación suman el total de lo que se está eligiendo. Son valores **referenciales**, calculados con las Tablas Peruanas de Composición de Alimentos (CENAN / INS, Minsa) como referencia y recetas estándar; regenerar con `node infra/data/build-nutricion.js`. La cocina o un nutricionista debe validarlos con las recetas reales.
+
 **Personal (http://localhost:5174):** login con JWT; cada rol ve solo sus módulos.
 
 | Rol | Correo | Contraseña | Módulos |
@@ -212,21 +214,19 @@ tacamamesa/
 | Administrador | admin@tacama.pe | Admin2024! | Todos (incluye Carta y precios) |
 | Jefe de salón | jefe@tacama.pe | JefeSalon2024! | Mesas, Cocina, Carta y precios, KPIs, Inventario |
 | Mozo | mozo1@tacama.pe, mozo2@tacama.pe, mozo3@tacama.pe | Mozo2024! | Mesas |
-| Anfitrión | anfitrion@tacama.pe | Anfitrion2024! | Mesas |
-| Caja | caja@tacama.pe | Caja2024! | Mesas |
 | Cocina | cocina@tacama.pe | Cocina2024! | Cocina (KDS) |
 | Sommelier | sommelier@tacama.pe | Sommelier2024! | Sommelier, Inventario |
 | Almacén | almacen@tacama.pe | Almacen2024! | Inventario |
 
 > Solo desarrollo. NUNCA usar estas credenciales en producción.
 
-**Mozos y mesas:** los pedidos llegan a todos los mozos. Un mozo toma una mesa sin atender con "Atender esta mesa" y queda como responsable de ella (y de las comandas nuevas de esa mesa) hasta que cierre la última y la mesa quede libre. Solo el responsable (o el jefe de salón y el administrador) confirma la entrega, emite el comprobante y cierra la mesa. Cocina solo prepara.
+**Mozos y mesas:** los pedidos llegan a todos los mozos. Un mozo toma una mesa sin atender con "Atender esta mesa" y queda como responsable de ella (y de las comandas nuevas de esa mesa) hasta que cierre la última y la mesa quede libre. Solo el responsable (o el jefe de salón y el administrador) confirma la entrega, cobra y libera la mesa. Cocina solo prepara.
 
 **Cambiar o anular platos:** durante los 5 minutos posteriores a confirmar el pedido (y mientras no esté lista), el comensal puede cambiar un plato por otro o anularlo; los vinos y piscos solo se anulan (el stock se devuelve). Cocina ve la comanda marcada como "Modificada". Si se anula el único plato, se anula la comanda.
 
 **Administración de la carta (jefe de salón y administrador):** módulo "Carta y precios" para marcar platos agotados, cambiar precios y subir fotos. Los comensales ven el cambio en menos de un minuto. En el módulo de Inventario (sommelier, almacén, jefe y administrador) se ajusta el stock y el umbral y se marcan etiquetas como agotadas. Al comensal se le muestra un aviso dinámico ("¡Últimas 2 botellas! · se agota en ~2 h") calculado con el stock y la frecuencia real de pedidos de cada etiqueta.
 
-**Cuenta y pago:** con el pedido entregado, el comensal pide la cuenta (primero califica, luego elige efectivo, tarjeta o transferencia); el mozo ve cómo va a pagar, emite el comprobante de consumo y cierra la mesa. El comensal descarga el comprobante en PDF o lo comparte como imagen.
+**Cuenta y pago:** con el pedido entregado, el comensal pide la cuenta (primero califica, luego elige efectivo, tarjeta o transferencia); el mozo ve cómo va a pagar, cobra en la mesa y confirma el pago, con lo que la mesa queda libre. El sistema no emite comprobantes de pago.
 
 **Demo (sin publicar):** `pnpm run demo` levanta el sistema, lo deja en estado inicial con un historial de ejemplo y genera los QR de las mesas. Ver [docs/DEMO.md](docs/DEMO.md). Privacidad y protección de datos (Ley 29733): [docs/PRIVACIDAD.md](docs/PRIVACIDAD.md).
 

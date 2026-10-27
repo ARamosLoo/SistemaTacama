@@ -151,12 +151,12 @@ export const CartaPage: React.FC<{ onEditarGustos: () => void }> = ({ onEditarGu
       {/* Recomendaciones por gusto */}
       {mostrarRecomendados && (
         <section className="space-y-3 bg-[#F4F8EA] border border-[#CFE1A5] rounded-2xl p-4" aria-labelledby="t-rec">
-          <div className="flex items-start justify-between gap-3">
-            <div>
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+            <div className="min-w-0">
               <h3 id="t-rec" className="font-serif text-lg font-semibold text-[#2E4310]">{t('recomendados')}</h3>
               <p className="text-xs text-[#466212]">{t('recomendadosSub')}</p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+            <div className="flex flex-row flex-wrap gap-2 sm:shrink-0">
               <button
                 type="button"
                 onClick={() => setMostrarRecomendacion(true)}

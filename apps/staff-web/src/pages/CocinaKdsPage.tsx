@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { io } from 'socket.io-client';
 import { api, nombreMesa } from '../lib/api';
 import { ComandaCocina } from '../types';
-import { ChefHat, Clock, ShieldAlert, CheckCircle, Flame, Bell, Filter } from 'lucide-react';
+import { ChefHat, Clock, ShieldAlert, CheckCircle, Bell, Filter } from 'lucide-react';
 
 const BACK_A_UI: Record<string, ComandaCocina['estado']> = {
   PENDIENTE: 'CONFIRMADA', EN_PREPARACION: 'EN_PREPARACION', LISTA: 'LISTA', ENTREGADA: 'SERVIDA', ANULADA: 'ANULADA',
@@ -86,15 +86,15 @@ export const CocinaKdsPage: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6 animate-fade-in p-6">
+    <div className="space-y-6 animate-fade-in p-4 sm:p-6">
       {/* Header Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#1A1D23] p-5 rounded-2xl border border-stone-800 shadow-md">
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-amber-600 to-rose-700 flex items-center justify-center text-white shadow-md">
+        <div className="flex items-center space-x-3 min-w-0">
+          <div className="w-12 h-12 shrink-0 rounded-xl bg-gradient-to-tr from-amber-600 to-rose-700 flex items-center justify-center text-white shadow-md">
             <ChefHat className="w-7 h-7" />
           </div>
           <div>
-            <h2 className="font-serif-tacama text-xl font-bold text-stone-100 flex items-center gap-2">
+            <h2 className="font-serif-tacama text-xl font-bold text-stone-100 flex flex-wrap items-center gap-2">
               KDS · Pantalla de Cocina en Tiempo Real
               <span className="text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full flex items-center gap-1 font-sans">
                 <span className={`w-2 h-2 rounded-full ${conectado ? "bg-emerald-400 animate-ping" : "bg-rose-400"}`} />
@@ -108,7 +108,7 @@ export const CocinaKdsPage: React.FC = () => {
         </div>
 
         {/* Filter controls */}
-        <div className="flex items-center space-x-2 bg-stone-900 p-1 rounded-xl border border-stone-800">
+        <div className="flex flex-wrap items-center gap-1 bg-stone-900 p-1 rounded-xl border border-stone-800">
           {['TODOS', 'CONFIRMADA', 'EN_PREPARACION', 'LISTA'].map((est) => (
             <button
               key={est}
@@ -261,7 +261,6 @@ export const CocinaKdsPage: React.FC = () => {
                     onClick={() => cambiarEstado(cmd.id, 'EN_PREPARACION')}
                     className="flex-1 py-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white rounded-xl text-xs font-bold shadow flex items-center justify-center space-x-1 transition"
                   >
-                    <Flame className="w-3.5 h-3.5" />
                     <span>Iniciar Preparación</span>
                   </button>
                 )}

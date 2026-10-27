@@ -22,7 +22,6 @@ export interface ComandaMesa {
   codigo: string;
   estado: string; // PENDIENTE | EN_PREPARACION | LISTA | ENTREGADA
   cuentaSolicitada: boolean;
-  boletaEmitida: boolean;
   puntuacion?: number; // calificación del comensal, si la dio
   sinCalificar: boolean; // el comensal prefirió pedir la cuenta sin calificar
   total: number;

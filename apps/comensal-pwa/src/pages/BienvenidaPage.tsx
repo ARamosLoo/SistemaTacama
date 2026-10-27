@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { MarcaTambo } from '../components/Logo';
 import { ClaveTexto, ALERGENOS_NOMBRE } from '../lib/i18n';
@@ -86,7 +86,6 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
   const [proteinas, setProteinas] = useState<string[]>(perfil?.proteinas ?? []);
   const [intensidad, setIntensidad] = useState<0 | 1 | 2 | null>(perfil?.intensidad ?? null);
   const [estilo, setEstilo] = useState<PerfilComensal['estilo']>(perfil?.estilo ?? null);
-  const [tradicional, setTradicional] = useState<boolean | null>(perfil?.tradicional ?? null);
   const [alergias, setAlergias] = useState<string[]>(alergiasDeclaradas);
   const [sinAlergias, setSinAlergias] = useState<boolean>(!!perfil?.alergiasRespondidas && alergiasDeclaradas.length === 0);
   const [quiereEntrada, setQuiereEntrada] = useState<boolean | null>(perfil?.quiereEntrada ?? null);
@@ -115,6 +114,12 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
 
   const alternar = (lista: string[], set: (v: string[]) => void, k: string) =>
     set(lista.includes(k) ? lista.filter((x) => x !== k) : [...lista, k]);
+
+  // Con alergia a mariscos o a pescado no se ofrece la opción "Pescados y mariscos" entre los gustos
+  const sinPescado = alergias.includes('MARISCOS') || alergias.includes('PESCADO');
+  useEffect(() => {
+    if (sinPescado) setProteinas((prev) => prev.filter((x) => x !== 'pescado'));
+  }, [sinPescado]);
 
   const toggleAlergia = (codigo: string) => {
     setSinAlergias(false);
@@ -158,7 +163,8 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
     setAlergiasDeclaradas(alergias); // las alergias declaradas aquí se aplican a toda la carta y a la comanda
     guardarPerfil({
       origen: origen!, proteinas,
-      intensidad: detallado ? intensidad : null, estilo: detallado ? estilo : null, tradicional: detallado ? tradicional : null,
+      intensidad: detallado ? intensidad : null, estilo: detallado ? estilo : null,
+      tradicional: true, // toda recomendación prioriza la cocina tradicional de Ica
       // Respuesta rápida: entrada y postre se recomiendan sin gustos específicos (los más pedidos)
       quiereEntrada: esDesayuno ? false : detallado ? quiereEntrada : true, entradaPref: detallado && !esDesayuno && quiereEntrada ? entradaPref : [],
       quierePostre: esDesayuno ? false : detallado ? quierePostre : true, postrePref: detallado && !esDesayuno && quierePostre ? postrePref : [],
@@ -179,7 +185,7 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
     }
     setAlergiasDeclaradas(alergias);
     guardarPerfil({
-      origen: 'peruano', proteinas: [], intensidad: null, estilo: null, tradicional: null,
+      origen: 'peruano', proteinas: [], intensidad: null, estilo: null, tradicional: true,
       quiereEntrada: null, entradaPref: [], quierePostre: null, postrePref: [], alergiasRespondidas: true, omitido: true, esNino,
     });
     if (sigueOtro) avanzarComensal();
@@ -315,7 +321,7 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
 
               {!esNino && (<>
               <Pregunta titulo={t('qProteina')} obligatoria={obligatorio}>
-                {PROTEINAS.map((k) => (
+                {PROTEINAS.filter((k) => !(k === 'pescado' && sinPescado)).map((k) => (
                   <Chip key={k} activo={proteinas.includes(k)} onClick={() => toggleProteina(k)}>{t(k)}</Chip>
                 ))}
               </Pregunta>
@@ -331,11 +337,6 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
                 {ESTILOS.map((k) => (
                   <Chip key={k} activo={estilo === k} onClick={() => setEstilo(k as PerfilComensal['estilo'])}>{t(k)}</Chip>
                 ))}
-              </Pregunta>
-
-              <Pregunta titulo={t('qTradicional')} obligatoria={false}>
-                <Chip activo={tradicional === true} onClick={() => setTradicional(true)}>{t('si')}</Chip>
-                <Chip activo={tradicional === false} onClick={() => setTradicional(false)}>{t('igual')}</Chip>
               </Pregunta>
 
               {!esDesayuno && (<>

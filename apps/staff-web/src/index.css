@@ -49,3 +49,13 @@ body {
 .alert-pulse-danger {
   animation: pulseGlow 1.5s infinite ease-in-out;
 }
+
+/* Barras de desplazamiento ocultas en filas que se deslizan con el dedo (los datos siguen accesibles) */
+.sin-barra { scrollbar-width: none; -ms-overflow-style: none; }
+.sin-barra::-webkit-scrollbar { display: none; }
+
+/* Pantallas táctiles: los controles tienen al menos 36 px de alto para pulsarlos con el dedo */
+@media (pointer: coarse) {
+  button, select, summary { min-height: 36px; }
+  input[type="checkbox"], input[type="radio"] { min-width: 22px; min-height: 22px; }
+}

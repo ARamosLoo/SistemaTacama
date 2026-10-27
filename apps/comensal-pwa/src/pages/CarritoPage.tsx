@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { HojaVid } from '../components/Logo';
 import { useApp } from '../context/AppContext';
 import { ClaveTexto } from '../lib/i18n';
+import { NutriLinea, NutriTotal, sumarNutricion } from '../components/NutricionInfo';
 import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, ShieldAlert, CheckCircle2, Sparkles } from 'lucide-react';
 
 interface CarritoPageProps {
@@ -24,6 +25,8 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
     nombreComensal,
     reasignarItem,
     itemAgotado,
+    platos,
+    idioma,
   } = useApp();
 
   const [enviando, setEnviando] = useState<boolean>(false);
@@ -34,6 +37,13 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
   const alergiasDe = (comensalId?: string) => comensales.find((c) => c.id === comensalId)?.alergias ?? alergiasDeclaradas;
   const itemsConConflicto = carrito.filter((item) => item.alergenos?.some((a) => alergiasDe(item.comensalId).includes(a)));
   const alergenosEnConflicto = [...new Set(itemsConConflicto.flatMap((i) => (i.alergenos ?? []).filter((a) => alergiasDe(i.comensalId).includes(a))))];
+
+  // Información nutricional de lo que se está pidiendo (los ítems de bebida alcohólica por copa/botella no tienen ficha)
+  const codigoDe = (id: string) => platos.find((p) => p.id === id)?.codigo;
+  const itemsNutri = carrito.map((i) => ({ codigo: codigoDe(i.id), cantidad: i.cantidad, comensalId: i.comensalId }));
+  const energiaPorComensal = comensales.length > 1
+    ? comensales.map((c) => ({ c, tot: sumarNutricion(itemsNutri.filter((i) => i.comensalId === c.id)) })).filter((x) => x.tot)
+    : [];
 
   const [errorEnvio, setErrorEnvio] = useState<string | null>(null);
 
@@ -112,18 +122,19 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
         {carrito.map((item) => (
           <div
             key={item.lineaId ?? item.id}
-            className="flex items-center justify-between pb-4 border-b border-stone-100 last:border-0 last:pb-0"
+            className="flex flex-wrap items-center gap-x-3 gap-y-3 pb-4 border-b border-stone-100 last:border-0 last:pb-0"
           >
-            <div className="w-16 h-16 mr-3 shrink-0 rounded-xl overflow-hidden bg-[#F4F8EA] flex items-center justify-center">
+            <div className="w-16 h-16 shrink-0 rounded-xl overflow-hidden bg-[#F4F8EA] flex items-center justify-center">
               {item.imagenUrl ? <img src={item.imagenUrl} alt="" className="w-full h-full object-cover" /> : <HojaVid className="w-7 h-7 opacity-30" />}
             </div>
-            <div className="flex-grow pr-4">
+            <div className="flex-1 min-w-[140px]">
               <span className="text-[10px] uppercase font-bold text-stone-400">
                 {t(('t' + item.tipo) as ClaveTexto)}
               </span>
               <h4 className="font-serif-tacama text-sm font-bold text-stone-900">
                 {item.nombre}
               </h4>
+              <NutriLinea codigo={codigoDe(item.id)} />
               {itemAgotado(item) && (
                 <p role="alert" className="text-[11px] font-bold text-rose-700">{t('agotado')}: {t('platoAgotadoCarrito', { n: item.nombre })}</p>
               )}
@@ -149,11 +160,11 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="ml-auto flex items-center space-x-3">
               <div className="flex items-center bg-stone-100 rounded-xl p-1 border border-stone-200">
                 <button
                   onClick={() => actualizarCantidad(item.lineaId ?? item.id, -1)}
-                  className="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-stone-600 hover:bg-stone-200 shadow-xs"
+                  className="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-stone-600 hover:bg-stone-200 shadow-xs"
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
@@ -162,7 +173,7 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
                 </span>
                 <button
                   onClick={() => actualizarCantidad(item.lineaId ?? item.id, 1)}
-                  className="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-stone-600 hover:bg-stone-200 shadow-xs"
+                  className="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-stone-600 hover:bg-stone-200 shadow-xs"
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </button>
@@ -170,7 +181,7 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
 
               <button
                 onClick={() => eliminarDelCarrito(item.lineaId ?? item.id)}
-                className="text-stone-300 hover:text-rose-500 p-1"
+                className="text-stone-400 hover:text-rose-500 p-2"
                 aria-label={t('eliminar')}
               >
                 <Trash2 className="w-4 h-4" />
@@ -179,6 +190,20 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
           </div>
         ))}
       </div>
+
+      {/* Información nutricional de la selección */}
+      <NutriTotal items={itemsNutri} />
+      {energiaPorComensal.length > 0 && (
+        <div className="bg-white rounded-2xl p-4 border border-stone-200/80 space-y-1.5">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-[#466212]">{t('nutriPorComensal')}</p>
+          {energiaPorComensal.map(({ c, tot }) => (
+            <div key={c.id} className="flex flex-wrap items-baseline justify-between gap-x-3 text-xs text-stone-700">
+              <span className="font-medium">{nombreComensal(c)}</span>
+              <span><strong className="text-stone-900">{Math.round(tot!.kcal).toLocaleString(idioma)} kcal</strong> · {Math.round(tot!.kj).toLocaleString(idioma)} kJ</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Bill summary */}
       <div className="bg-stone-50 rounded-3xl p-5 border border-stone-200/80 space-y-2.5 text-xs text-stone-600">

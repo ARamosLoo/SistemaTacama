@@ -105,7 +105,7 @@ export const CartaAdminPage: React.FC = () => {
     .filter((p) => !busqueda.trim() || (p.nombreEs + ' ' + p.codigoInterno).toLowerCase().includes(busqueda.trim().toLowerCase()));
 
   return (
-    <div className="space-y-6 animate-fade-in p-6">
+    <div className="space-y-6 animate-fade-in p-4 sm:p-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#1A1D23] p-5 rounded-2xl border border-stone-800 shadow-md">
         <div className="flex items-center space-x-3">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#577A17] to-[#2E4310] flex items-center justify-center text-white shadow-md">

@@ -68,9 +68,8 @@ interface AppContextType {
   itemAgotado: (item: ItemCarrito) => boolean;
   /** Aviso dinámico de stock de una etiqueta ("¡Últimas 3 botellas!"), o null */
   avisoStock: (codigoEtiqueta: string) => string | null;
-  cuenta: { solicitada: boolean; boletaLista: boolean; metodoPago: string | null };
+  cuenta: { solicitada: boolean; metodoPago: string | null };
   solicitarCuenta: (omitirCalificacion: boolean, metodoPago: string, efectivoPagaCon?: number) => Promise<void>;
-  obtenerBoleta: () => Promise<import('../lib/boleta').BoletaDatos>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -228,7 +227,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [csatEnviado, setCsatEnviado] = useState<boolean>(false);
   const [comandaServidor, setComandaServidor] = useState<ComandaServidor | null>(null);
   const sincronizarRef = useRef<() => Promise<void>>(async () => undefined);
-  const [cuenta, setCuenta] = useState<{ solicitada: boolean; boletaLista: boolean; metodoPago: string | null }>({ solicitada: false, boletaLista: false, metodoPago: null });
+  const [cuenta, setCuenta] = useState<{ solicitada: boolean; metodoPago: string | null }>({ solicitada: false, metodoPago: null });
   const [platos, setPlatos] = useState<Plato[]>([]);
   const [etiquetas, setEtiquetas] = useState<EtiquetaTacama[]>([]);
   const [cargandoCarta, setCargandoCarta] = useState<boolean>(true);
@@ -345,13 +344,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // ── Estado de la comanda en tiempo real (WebSocket + sondeo de respaldo) ──
   useEffect(() => {
     const socket: Socket = io('/cocina', { query: { rol: 'comensal' } });
-    // Lee la comanda: estado, si pidió la cuenta, si el comprobante ya fue emitido y si ya calificó
+    // Lee la comanda: estado, si pidió la cuenta y si ya calificó
     const sincronizar = async () => {
       if (!comandaRef.current) return;
       try {
-        const { data } = await api<{ data: { estado: string; cuentaSolicitadaEn?: string | null; boletaEmitidaEn?: string | null; valoracion?: unknown; metodoPago?: string | null; items?: any[]; ventanaCambioHasta?: string | null; ahoraServidor?: string } }>(`/comandas/${comandaRef.current}`);
+        const { data } = await api<{ data: { estado: string; cuentaSolicitadaEn?: string | null; valoracion?: unknown; metodoPago?: string | null; items?: any[]; ventanaCambioHasta?: string | null; ahoraServidor?: string } }>(`/comandas/${comandaRef.current}`);
         setEstadoComanda(ESTADO_UI[data.estado] ?? null);
-        setCuenta({ solicitada: !!data.cuentaSolicitadaEn, boletaLista: !!data.boletaEmitidaEn, metodoPago: data.metodoPago ?? null });
+        setCuenta({ solicitada: !!data.cuentaSolicitadaEn, metodoPago: data.metodoPago ?? null });
         if (data.valoracion) setCsatEnviado(true);
         // Reloj del servidor: la hora límite de cambios no depende de la hora del celular
         const desfase = data.ahoraServidor ? Date.parse(data.ahoraServidor) - Date.now() : 0;
@@ -513,7 +512,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setComandaActivaId(comanda.id.slice(0, 8).toUpperCase());
     setEstadoComanda('CONFIRMADA');
     setCsatEnviado(false);
-    setCuenta({ solicitada: false, boletaLista: false, metodoPago: null });
+    setCuenta({ solicitada: false, metodoPago: null });
     sincronizarRef.current();
     setTimeout(cargarEtiquetas, 1500); // refleja el descuento de stock
   };
@@ -559,11 +558,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCuenta((c) => ({ ...c, solicitada: true, metodoPago }));
   };
 
-  const obtenerBoleta = async () => {
-    const { data } = await api<{ data: any }>(`/comandas/${comandaRef.current}/boleta`);
-    return { ...data, mesa } as import('../lib/boleta').BoletaDatos;
-  };
-
   return (
     <AppContext.Provider
       value={{
@@ -573,7 +567,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         momento, setMomento, perfil, guardarPerfil, recomendados, menuRecomendado, mostrarRecomendacion, setMostrarRecomendacion, t, nombreAlergeno,
         modalAlergenosAbierto, setModalAlergenosAbierto, platos, etiquetas, cargandoCarta, errorCarta,
         carrito, agregarAlCarrito, eliminarDelCarrito, actualizarCantidad, limpiarCarrito, totalPEN,
-        comandaActivaId, estadoComanda, confirmarComanda, obtenerMaridajes, csatEnviado, enviarCsat, cuenta, solicitarCuenta, obtenerBoleta,
+        comandaActivaId, estadoComanda, confirmarComanda, obtenerMaridajes, csatEnviado, enviarCsat, cuenta, solicitarCuenta,
         comandaServidor, anularItem, cambiarItem, itemAgotado, avisoStock,
       }}
     >

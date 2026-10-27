@@ -69,18 +69,6 @@ async function main() {
       password: 'Almacen2024!',
       rol: 'ALMACEN' as const,
     },
-    {
-      nombre: 'Juan Cajero',
-      email: 'caja@tacama.pe',
-      password: 'Caja2024!',
-      rol: 'CAJA' as const,
-    },
-    {
-      nombre: 'Sofía Anfitriona',
-      email: 'anfitrion@tacama.pe',
-      password: 'Anfitrion2024!',
-      rol: 'ANFITRION' as const,
-    },
   ];
 
   for (const u of usuarios) {

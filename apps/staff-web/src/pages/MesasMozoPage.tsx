@@ -3,10 +3,15 @@ import { io } from 'socket.io-client';
 import { api, nombreMesa } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { MesaStatus } from '../types';
-import { BoletaDatos, BoletaTextos, imprimirBoleta } from '../lib/boleta';
-import { Users, Clock, Receipt, Wine, CheckCircle2, Star, Printer, DoorClosed, Banknote, CreditCard, Landmark, HandPlatter, UserCheck } from 'lucide-react';
+import { Users, Clock, Wine, CheckCircle2, Star, DoorClosed, Banknote, CreditCard, Landmark, HandPlatter, UserCheck } from 'lucide-react';
 
-const zonaDe = (numero: number): MesaStatus['zona'] =>
+const MOTIVOS_LIBERAR = [
+  'El cliente se retiró sin pedir la cuenta',
+  'El cliente pagó directamente en caja',
+  'Mesa abierta por error',
+];
+
+const zonaDe =(numero: number): MesaStatus['zona'] =>
   numero <= 2 ? 'Terraza Principal' : numero <= 4 ? 'Jardín de Viñedos' : 'Salón Bodega 1540';
 
 export const MesasMozoPage: React.FC = () => {
@@ -15,10 +20,10 @@ export const MesasMozoPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [zonaFiltro, setZonaFiltro] = useState<string>('TODAS');
   const [vista, setVista] = useState<'TODAS' | 'SIN_ATENDER' | 'MIAS'>('TODAS');
+  const [liberando, setLiberando] = useState<{ id: string; motivo: string } | null>(null);
 
   const esJefatura = usuario?.rol === 'JEFE_SALON' || usuario?.rol === 'ADMINISTRADOR';
   const esMozo = usuario?.rol === 'MOZO';
-  const esCaja = usuario?.rol === 'CAJA';
 
   const cargar = useCallback(async () => {
     try {
@@ -36,11 +41,11 @@ export const MesasMozoPage: React.FC = () => {
             numero: m.numero,
             zona: zonaDe(m.numero),
             capacidad: m.capacidad,
-            estado: activa ? (deMesa.some((c) => c.cuentaSolicitadaEn && !c.boletaEmitidaEn) ? 'PIDIENDO_CUENTA' : 'OCUPADA') : 'LIBRE',
+            estado: activa ? (deMesa.some((c) => c.cuentaSolicitadaEn) ? 'PIDIENDO_CUENTA' : 'OCUPADA') : 'LIBRE',
             comandaActivaId: activa ? 'CMD-' + activa.id.slice(0, 4).toUpperCase() : undefined,
             comandas: deMesa.map((c) => ({
               id: c.id, codigo: 'CMD-' + c.id.slice(0, 4).toUpperCase(), estado: c.estado,
-              cuentaSolicitada: !!c.cuentaSolicitadaEn, boletaEmitida: !!c.boletaEmitidaEn,
+              cuentaSolicitada: !!c.cuentaSolicitadaEn,
               puntuacion: c.valoracion?.puntuacion, sinCalificar: !!c.calificacionOmitida,
               total: (c.items ?? []).reduce((a: number, i: any) => a + Number(i.subtotal), 0),
               metodoPago: c.metodoPago ?? undefined, pagaCon: c.efectivoPagaCon != null ? Number(c.efectivoPagaCon) : undefined,
@@ -89,25 +94,12 @@ export const MesasMozoPage: React.FC = () => {
   const confirmarEntrega = (comandaId: string) =>
     ejecutar(() => api(`/comandas/${comandaId}`, { method: 'PATCH', body: { estado: 'ENTREGADA' } }), 'No se pudo confirmar la entrega');
 
-  // Comprobante de consumo: se emite cuando el comensal pidió la cuenta; se imprime para la mesa
-  const TEXTOS_BOLETA: BoletaTextos = {
-    pago: 'Pago', metodos: { EFECTIVO: 'Efectivo', TARJETA: 'Tarjeta', TRANSFERENCIA: 'Transferencia bancaria' },
-    titulo: 'Comprobante de consumo', mesa: 'Mesa', fecha: 'Fecha', detalle: 'Detalle', subtotal: 'Subtotal', igv: 'IGV (18%)', total: 'Total',
-    nota: 'Documento informativo de consumo. La boleta de venta electrónica la emite caja. Los precios incluyen 10% de servicio y 18% de IGV.',
-    gracias: 'Gracias por visitarnos.',
-  };
-  const emitirComprobante = (comandaId: string, mesaNumero: number) =>
-    ejecutar(async () => {
-      const { data } = await api<{ data: BoletaDatos }>(`/comandas/${comandaId}/boleta`, { method: 'POST' });
-      imprimirBoleta({ ...data, mesa: nombreMesa(mesaNumero) }, TEXTOS_BOLETA);
-    }, 'No se pudo emitir el comprobante');
-  const reimprimir = (comandaId: string, mesaNumero: number) =>
-    ejecutar(async () => {
-      const { data } = await api<{ data: BoletaDatos }>(`/comandas/${comandaId}/boleta`);
-      imprimirBoleta({ ...data, mesa: nombreMesa(mesaNumero) }, TEXTOS_BOLETA);
-    }, 'No se pudo cargar el comprobante');
+  // El mozo cobra con el método que eligió el comensal y confirma el pago: la mesa queda libre
   const cerrarMesa = (comandaId: string) =>
     ejecutar(() => api(`/comandas/${comandaId}/cerrar`, { method: 'POST' }), 'No se pudo cerrar la mesa');
+
+  const liberarMesa = (comandaId: string, motivo: string) =>
+    ejecutar(() => api(`/comandas/${comandaId}/liberar`, { method: 'POST', body: { motivo } }), 'No se pudo liberar la mesa');
 
   const sinAtender = mesas.filter((m) => m.comandas?.length && !m.mozoId);
   const mias = mesas.filter((m) => m.comandas?.length && m.mozoId === usuario?.id);
@@ -117,7 +109,7 @@ export const MesasMozoPage: React.FC = () => {
     .filter((m) => vista === 'TODAS' || (vista === 'SIN_ATENDER' ? sinAtender.includes(m) : mias.includes(m)));
 
   return (
-    <div className="space-y-6 animate-fade-in p-6">
+    <div className="space-y-6 animate-fade-in p-4 sm:p-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#1A1D23] p-5 rounded-2xl border border-stone-800 shadow-md">
         <div>
@@ -130,7 +122,7 @@ export const MesasMozoPage: React.FC = () => {
         </div>
 
         {/* Zona Filters */}
-        <div className="flex items-center space-x-2 bg-stone-900 p-1 rounded-xl border border-stone-800 overflow-x-auto">
+        <div className="flex items-center space-x-2 bg-stone-900 p-1 rounded-xl border border-stone-800 overflow-x-auto sin-barra">
           {['TODAS', 'Terraza Principal', 'Jardín de Viñedos', 'Salón Bodega 1540'].map((z) => (
             <button
               key={z}
@@ -183,7 +175,7 @@ export const MesasMozoPage: React.FC = () => {
           const soyResponsable = !!m.mozoId && m.mozoId === usuario?.id;
           const libreDeMozo = ocupada && !m.mozoId;
           const puedeEntregar = esJefatura || (esMozo && soyResponsable);
-          const puedeCobrar = esJefatura || esCaja || (esMozo && soyResponsable);
+          const puedeCobrar = esJefatura || (esMozo && soyResponsable);
           const puedeTomar = ocupada && (esMozo || esJefatura) && !soyResponsable && (libreDeMozo || esJefatura);
 
           let badgeColor = 'bg-stone-800 text-stone-400 border-stone-700';
@@ -250,7 +242,7 @@ export const MesasMozoPage: React.FC = () => {
                     {libreDeMozo ? 'Atender esta mesa' : 'Tomar la mesa (reasignar)'}
                   </button>
                 )}
-                {ocupada && !puedeEntregar && !puedeTomar && !esCaja && (
+                {ocupada && !puedeEntregar && !puedeTomar && (
                   <p className="mt-3 text-[11px] text-stone-500 flex items-center gap-1.5">
                     <UserCheck className="w-3.5 h-3.5" /> La mesa la atiende {m.mozoAsignado ?? 'otro mozo'}.
                   </p>
@@ -269,7 +261,6 @@ export const MesasMozoPage: React.FC = () => {
                             {c.estado === 'LISTA' ? 'Lista en cocina: recójala y llévela a la mesa'
                               : c.estado === 'EN_PREPARACION' ? 'En cocina'
                               : c.estado === 'PENDIENTE' ? 'Confirmada, pendiente de cocina'
-                              : c.boletaEmitida ? 'Comprobante emitido'
                               : c.cuentaSolicitada ? 'Cuenta solicitada por el comensal'
                               : 'Entregada · el comensal está comiendo'}
                           </span>
@@ -299,43 +290,57 @@ export const MesasMozoPage: React.FC = () => {
                               </>
                             )}
                             {c.metodoPago === 'TARJETA' && <><strong>Tarjeta</strong> · lleve el POS (Izipay u otro) · total S/ {c.total.toFixed(2)}</>}
-                            {c.metodoPago === 'TRANSFERENCIA' && <><strong>Transferencia bancaria</strong> · indique los datos de la cuenta y confirme el abono de S/ {c.total.toFixed(2)} antes de cerrar la mesa</>}
+                            {c.metodoPago === 'TRANSFERENCIA' && <><strong>Transferencia bancaria</strong> · indique los datos de la cuenta y confirme el abono de S/ {c.total.toFixed(2)} antes de confirmar el pago</>}
                           </span>
                         </div>
                       )}
 
                       {c.estado === 'ENTREGADA' && c.cuentaSolicitada && (
-                        <div className="flex items-center justify-between gap-3 bg-stone-900/60 rounded-xl px-3 py-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2 bg-stone-900/60 rounded-xl px-3 py-2">
                           <span className="text-[11px] text-stone-300 flex items-center gap-1">
                             {c.puntuacion ? (<><Star className="w-3 h-3 text-amber-400 fill-amber-400" /> Calificó {c.puntuacion}/5</>) : 'Prefirió no calificar'}
                           </span>
-                          {puedeCobrar && (!c.boletaEmitida ? (
+                          {puedeCobrar && (
                             <button
-                              onClick={() => emitirComprobante(c.id, m.numero)}
-                              className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold rounded-xl shadow flex items-center space-x-1 shrink-0"
+                              onClick={() => cerrarMesa(c.id)}
+                              className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow flex items-center space-x-1 shrink-0"
                             >
-                              <Receipt className="w-3 h-3" />
-                              <span>Emitir comprobante</span>
+                              <DoorClosed className="w-3 h-3" />
+                              <span>Confirmar pago y liberar mesa</span>
                             </button>
-                          ) : (
-                            <div className="flex gap-2 shrink-0">
+                          )}
+                        </div>
+                      )}
+
+                      {c.estado === 'ENTREGADA' && !c.cuentaSolicitada && puedeCobrar && (
+                        liberando?.id === c.id ? (
+                          <div className="bg-stone-900/60 border border-stone-700 rounded-xl px-3 py-2 space-y-2">
+                            <p className="text-[11px] text-stone-300">Libera la mesa sin cuenta. Queda registrado en la auditoría.</p>
+                            <select
+                              value={liberando.motivo}
+                              onChange={(e) => setLiberando({ id: c.id, motivo: e.target.value })}
+                              className="w-full bg-stone-800 border border-stone-600 text-stone-100 text-xs rounded-lg px-2 py-1.5"
+                            >
+                              {MOTIVOS_LIBERAR.map((mo) => <option key={mo} value={mo}>{mo}</option>)}
+                            </select>
+                            <div className="flex justify-end gap-2">
+                              <button onClick={() => setLiberando(null)} className="px-2.5 py-1.5 bg-stone-700 hover:bg-stone-600 text-stone-100 text-xs font-semibold rounded-xl">Cancelar</button>
                               <button
-                                onClick={() => reimprimir(c.id, m.numero)}
-                                className="px-2.5 py-1.5 bg-stone-700 hover:bg-stone-600 text-stone-100 text-xs font-semibold rounded-xl flex items-center space-x-1"
+                                onClick={() => { const motivo = liberando.motivo; setLiberando(null); liberarMesa(c.id, motivo); }}
+                                className="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-xl"
                               >
-                                <Printer className="w-3 h-3" />
-                                <span>Imprimir</span>
-                              </button>
-                              <button
-                                onClick={() => cerrarMesa(c.id)}
-                                className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center space-x-1"
-                              >
-                                <DoorClosed className="w-3 h-3" />
-                                <span>Cobro confirmado · cerrar mesa</span>
+                                Liberar mesa
                               </button>
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setLiberando({ id: c.id, motivo: MOTIVOS_LIBERAR[0] })}
+                            className="text-[11px] text-stone-400 hover:text-stone-200 underline underline-offset-2 flex items-center gap-1"
+                          >
+                            <DoorClosed className="w-3 h-3" /> Liberar mesa sin cuenta
+                          </button>
+                        )
                       )}
                     </div>
                   ))

@@ -68,7 +68,7 @@ export const SommelierPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in p-6">
+    <div className="space-y-6 animate-fade-in p-4 sm:p-6">
       {error && <div className="bg-rose-950/60 border border-rose-500/50 rounded-xl p-3 text-xs text-rose-300">{error}</div>}
 
       {/* Header */}

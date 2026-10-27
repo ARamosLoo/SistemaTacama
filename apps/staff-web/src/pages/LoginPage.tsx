@@ -5,7 +5,7 @@ import { Creditos } from '../components/Creditos';
 import { LogIn, Lock, Mail, KeyRound } from 'lucide-react';
 
 const NOMBRE_MODULO: Record<string, string> = {
-  kds: 'Cocina', mesas: 'Mesas', sommelier: 'Sommelier', inventario: 'Inventario', analitica: 'KPIs',
+  kds: 'Cocina', mesas: 'Mesas', carta: 'Carta', sommelier: 'Sommelier', inventario: 'Inventario', analitica: 'KPIs',
 };
 
 export const LoginPage: React.FC = () => {

@@ -3,6 +3,7 @@ import { rotuloFoto } from '../lib/fotos';
 import { Plato } from '../types';
 import { useApp } from '../context/AppContext';
 import { HojaVid } from './Logo';
+import { NutriLinea, NutriDetalle } from './NutricionInfo';
 import { Wine, Plus, ShieldAlert, Leaf } from 'lucide-react';
 
 interface PlatoCardProps {
@@ -66,8 +67,10 @@ export const PlatoCard: React.FC<PlatoCardProps> = ({ plato, onAbrirMaridaje, co
             <span className="shrink-0 text-sm font-bold text-[#466212]">S/ {plato.precioPEN.toFixed(2)}</span>
           </div>
 
+          <NutriLinea codigo={plato.codigo} className="mt-1" />
+
           {(plato.esVegetariano || plato.libreLactosa) && (
-            <div className="flex gap-1.5 mt-1.5">
+            <div className="flex flex-wrap gap-1.5 mt-1.5">
               {plato.esVegetariano && (
                 <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-[#E6F0D0] text-[#384F0F] px-2 py-0.5 rounded-full">
                   <Leaf className="w-3 h-3" /> {t('vegetariano_b')}
@@ -107,6 +110,8 @@ export const PlatoCard: React.FC<PlatoCardProps> = ({ plato, onAbrirMaridaje, co
               ))}
             </div>
           )}
+
+          <NutriDetalle codigo={plato.codigo} />
         </div>
 
         {/* Acciones */}

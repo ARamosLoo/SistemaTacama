@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Modal } from './Modal';
 import { HojaVid } from './Logo';
+import { NutriLinea, NutriTotal } from './NutricionInfo';
 import { TIPO_ETIQUETA, ClaveTexto } from '../lib/i18n';
 import { fotoEtiqueta, rotuloFoto } from '../lib/fotos';
 import { motivosDeRecomendacion, Motivo } from '../lib/motivos';
@@ -327,6 +328,7 @@ export const RecomendacionModal: React.FC<{ onIrAlCarrito: () => void }> = ({ on
               {c.plato && (
                 <div className="space-y-2">
                   <p className="text-xs text-stone-600 leading-relaxed">{c.plato.descripcion}</p>
+                  <NutriLinea codigo={c.plato.codigo} />
                   <div className="flex flex-wrap gap-1.5">
                     {c.plato.esVegetariano && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#E6F0D0] text-[#384F0F]">{t('vegetariano')}</span>}
                     {c.plato.alergenos.length > 0 && (
@@ -377,6 +379,7 @@ export const RecomendacionModal: React.FC<{ onIrAlCarrito: () => void }> = ({ on
         </div>
 
         <div className="pt-4 border-t border-stone-100 flex flex-col gap-2">
+          <NutriTotal compacto titulo={t('nutriTotalComida')} items={tarjetas.filter((c) => c.plato && !c.opcional).map((c) => ({ codigo: c.plato!.codigo }))} />
           {todoAgregado ? (
             <button
               type="button"

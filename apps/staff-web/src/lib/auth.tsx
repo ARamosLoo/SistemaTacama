@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import { api, TOKEN_KEY } from './api';
 
 export type Rol =
-  | 'ADMINISTRADOR' | 'JEFE_SALON' | 'MOZO' | 'ANFITRION' | 'CAJA' | 'COCINA' | 'SOMMELIER' | 'ALMACEN';
+  | 'ADMINISTRADOR' | 'JEFE_SALON' | 'MOZO' | 'COCINA' | 'SOMMELIER' | 'ALMACEN';
 
 export type Modulo = 'kds' | 'mesas' | 'carta' | 'sommelier' | 'inventario' | 'analitica';
 
@@ -18,8 +18,6 @@ export const ACCESO_POR_ROL: Record<Rol, Modulo[]> = {
   ADMINISTRADOR: ['analitica', 'kds', 'mesas', 'carta', 'sommelier', 'inventario'],
   JEFE_SALON: ['mesas', 'kds', 'carta', 'analitica', 'inventario'],
   MOZO: ['mesas'],
-  ANFITRION: ['mesas'],
-  CAJA: ['mesas'],
   COCINA: ['kds'],
   SOMMELIER: ['sommelier', 'inventario'],
   ALMACEN: ['inventario'],
@@ -29,8 +27,6 @@ export const NOMBRE_ROL: Record<Rol, string> = {
   ADMINISTRADOR: 'Administrador',
   JEFE_SALON: 'Jefe de salón',
   MOZO: 'Mozo',
-  ANFITRION: 'Anfitrión',
-  CAJA: 'Caja',
   COCINA: 'Cocina',
   SOMMELIER: 'Sommelier',
   ALMACEN: 'Almacén',
@@ -41,8 +37,6 @@ export const CUENTAS_DEMO: { rol: Rol; email: string; password: string }[] = [
   { rol: 'ADMINISTRADOR', email: 'admin@tacama.pe', password: 'Admin2024!' },
   { rol: 'JEFE_SALON', email: 'jefe@tacama.pe', password: 'JefeSalon2024!' },
   { rol: 'MOZO', email: 'mozo1@tacama.pe', password: 'Mozo2024!' },
-  { rol: 'ANFITRION', email: 'anfitrion@tacama.pe', password: 'Anfitrion2024!' },
-  { rol: 'CAJA', email: 'caja@tacama.pe', password: 'Caja2024!' },
   { rol: 'COCINA', email: 'cocina@tacama.pe', password: 'Cocina2024!' },
   { rol: 'SOMMELIER', email: 'sommelier@tacama.pe', password: 'Sommelier2024!' },
   { rol: 'ALMACEN', email: 'almacen@tacama.pe', password: 'Almacen2024!' },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { HojaVid } from './Logo';
-import { ShieldAlert, ShoppingBag, Sparkles } from 'lucide-react';
+import { ShieldAlert, ShoppingBag } from 'lucide-react';
 
 interface HeaderProps {
   vistaActiva: 'carta' | 'carrito' | 'seguimiento' | 'csat';
@@ -44,7 +44,7 @@ export const Header: React.FC<HeaderProps> = ({ setVistaActiva }) => {
               onClick={() => setVistaActiva('seguimiento')}
               className="flex items-center space-x-1.5 bg-[#577A17] text-white px-3 py-1.5 rounded-full text-xs font-medium shadow hover:bg-[#466212] transition"
             >
-              <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" aria-hidden="true" />
               <span>{t('pedidoCurso')}</span>
             </button>
           ) : (

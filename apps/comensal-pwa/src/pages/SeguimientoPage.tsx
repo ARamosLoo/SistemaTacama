@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { BoletaModal } from '../components/BoletaModal';
 import { CambiarPlatoModal } from '../components/CambiarPlatoModal';
 import type { ItemServidor } from '../context/AppContext';
 import { useApp } from '../context/AppContext';
-import { Clock, ChefHat, CheckCircle, Bell, Star, Wine, ArrowRight, Receipt, FileText } from 'lucide-react';
+import { Clock, ChefHat, CheckCircle, Bell, Star, Wine, ArrowRight, Receipt } from 'lucide-react';
 
 interface SeguimientoPageProps {
   onIrACsat: () => void;
@@ -12,7 +11,6 @@ interface SeguimientoPageProps {
 
 export const SeguimientoPage: React.FC<SeguimientoPageProps> = ({ onIrACsat, onVolverACarta }) => {
   const { comandaActivaId, estadoComanda, mesa, carrito, totalPEN, cuenta, comandaServidor, anularItem, t } = useApp();
-  const [verBoleta, setVerBoleta] = useState(false);
   const [cambiando, setCambiando] = useState<ItemServidor | null>(null);
   const [anulando, setAnulando] = useState<string | null>(null);
   const [errorCambio, setErrorCambio] = useState<string | null>(null);
@@ -217,7 +215,7 @@ export const SeguimientoPage: React.FC<SeguimientoPageProps> = ({ onIrACsat, onV
           </div>
         )}
 
-        {estadoComanda === 'SERVIDA' && cuenta.solicitada && !cuenta.boletaLista && (
+        {estadoComanda === 'SERVIDA' && cuenta.solicitada && (
           <div className="bg-white border border-stone-200 rounded-2xl p-4 text-center space-y-1">
             <div className="text-sm font-bold text-[#466212]">{t('cuentaSolicitada')}</div>
             {cuenta.metodoPago && (
@@ -229,20 +227,12 @@ export const SeguimientoPage: React.FC<SeguimientoPageProps> = ({ onIrACsat, onV
           </div>
         )}
 
-        {(estadoComanda === 'SERVIDA' || estadoComanda === 'CERRADA') && cuenta.boletaLista && (
-          <div className="bg-white border border-[#CFE1A5] rounded-2xl p-4 space-y-3 text-center">
-            <div className="text-sm font-bold text-[#466212]">{t('boletaLista')}</div>
-            <p className="text-xs text-stone-600 leading-relaxed">{t('boletaListaDesc')}</p>
-            <button
-              onClick={() => setVerBoleta(true)}
-              className="w-full py-3 bg-[#577A17] hover:bg-[#466212] text-white rounded-2xl font-semibold text-xs shadow transition flex items-center justify-center space-x-2"
-            >
-              <FileText className="w-4 h-4" />
-              <span>{t('verBoleta')}</span>
-            </button>
+        {estadoComanda === 'CERRADA' && (
+          <div className="bg-white border border-[#CFE1A5] rounded-2xl p-4 text-center space-y-1">
+            <div className="text-sm font-bold text-[#466212]">{t('pagoConfirmado')}</div>
+            <p className="text-xs text-stone-600 leading-relaxed">{t('pagoConfirmadoDesc')}</p>
           </div>
         )}
-        {verBoleta && <BoletaModal onClose={() => setVerBoleta(false)} />}
 
         <button
           onClick={onVolverACarta}

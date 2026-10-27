@@ -15,7 +15,7 @@ import {
   ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse,
 } from '@nestjs/swagger';
 import { IsString, IsArray, IsBoolean, IsOptional, IsIn,
-         IsNumber, IsPositive, ValidateNested, ArrayMinSize } from 'class-validator';
+         IsNumber, IsPositive, ValidateNested, ArrayMinSize, MinLength, MaxLength } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { ComandasService } from './comandas.service';
@@ -53,6 +53,11 @@ class CrearComandaDto {
   @ApiProperty({ required: false }) @IsOptional() @IsString() observaciones?: string;
 }
 
+class LiberarMesaDto {
+  @ApiProperty({ example: 'El cliente se retiró sin pedir la cuenta' })
+  @IsString() @MinLength(3) @MaxLength(200) motivo: string;
+}
+
 class ConfirmarComandaDto {
   @ApiProperty({ example: 'PENDIENTE' }) @IsString() estado: string;
   @ApiProperty({ required: false }) @IsOptional() @IsString() motivo?: string;
@@ -83,7 +88,7 @@ function rolDelToken(authorization?: string): string | null {
 }
 
 // ── Controller ────────────────────────────────────────────────
-/** Quien puede emitir el comprobante y cerrar la mesa: personal de salón y caja. */
+/** Quien puede confirmar el pago y cerrar la mesa: personal de salón. */
 const ROLES_QUE_COBRAN = ['MOZO', 'JEFE_SALON', 'ADMINISTRADOR', 'CAJA'];
 
 export class CambiarItemDto {
@@ -196,31 +201,24 @@ export class ComandasController {
     return { data: await this.comandasService.solicitarCuenta(id, !!dto.omitirCalificacion, dto.metodoPago, dto.efectivoPagaCon) };
   }
 
-  /** POST /api/v1/comandas/:id/boleta — el personal emite el comprobante de consumo */
-  @Post('comandas/:id/boleta')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Emitir comprobante de consumo' })
-  async emitirBoleta(@Param('id') id: string, @Headers('authorization') authorization?: string) {
-    const sesion = this.exigirPersonalDeSalon(authorization);
-    await this.comandasService.exigirResponsable(id, sesion);
-    return { data: await this.comandasService.emitirBoleta(id) };
-  }
-
-  /** GET /api/v1/comandas/:id/boleta — detalle del comprobante emitido (comensal y personal) */
-  @Get('comandas/:id/boleta')
-  @ApiOperation({ summary: 'Obtener comprobante de consumo emitido' })
-  async obtenerBoleta(@Param('id') id: string) {
-    return { data: await this.comandasService.obtenerBoleta(id) };
-  }
-
-  /** POST /api/v1/comandas/:id/cerrar — el personal cierra la mesa tras el comprobante */
+  /** POST /api/v1/comandas/:id/cerrar — el mozo confirma el pago y la mesa queda libre */
   @Post('comandas/:id/cerrar')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Cerrar comanda y liberar la mesa' })
+  @ApiOperation({ summary: 'Confirmar el pago, cerrar la comanda y liberar la mesa' })
   async cerrar(@Param('id') id: string, @Headers('authorization') authorization?: string) {
     const sesion = this.exigirPersonalDeSalon(authorization);
     await this.comandasService.exigirResponsable(id, sesion);
     return { data: await this.comandasService.cerrar(id) };
+  }
+
+  /** POST /api/v1/comandas/:id/liberar — libera la mesa sin cuenta, con motivo (queda en auditoría) */
+  @Post('comandas/:id/liberar')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Liberar la mesa sin cuenta' })
+  async liberar(@Param('id') id: string, @Body() dto: LiberarMesaDto, @Headers('authorization') authorization?: string) {
+    const sesion = this.exigirPersonalDeSalon(authorization);
+    await this.comandasService.exigirResponsable(id, sesion);
+    return { data: await this.comandasService.liberarSinCuenta(id, sesion, dto.motivo.trim()) };
   }
 
   private exigirPersonalDeSalon(authorization?: string) {

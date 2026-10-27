@@ -301,54 +301,41 @@ export class ComandasService {
     return actualizada;
   }
 
-  /** Comprobante de consumo: solo con la cuenta solicitada. Marca la emisión y devuelve el detalle. */
-  async emitirBoleta(id: string) {
-    const comanda = await this.prisma.comanda.findUnique({ where: { id } });
-    if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
-    if (!comanda.cuentaSolicitadaEn) {
-      throw new ForbiddenException({ mensaje: 'El comensal aún no pidió la cuenta', codigo: 'CMD_008' });
-    }
-    if (!comanda.boletaEmitidaEn) {
-      await this.prisma.comanda.update({ where: { id }, data: { boletaEmitidaEn: new Date() } });
-      this.cocinaGateway.emitirCambioEstado(id, 'BOLETA_EMITIDA');
-    }
-    return this.obtenerBoleta(id);
-  }
-
-  /** Detalle del comprobante (los precios de la carta ya incluyen 10% de servicio y 18% de IGV). */
-  async obtenerBoleta(id: string) {
-    const c = await this.prisma.comanda.findUnique({ where: { id }, include: { items: true } });
-    if (!c) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
-    if (!c.boletaEmitidaEn) {
-      throw new ForbiddenException({ mensaje: 'El comprobante aún no fue emitido', codigo: 'CMD_009' });
-    }
-    const total = c.items.reduce((acc, i) => acc + Number(i.subtotal), 0);
-    const base = Math.round((total / 1.18) * 100) / 100;
-    return {
-      comandaId: c.id,
-      codigo: 'CMD-' + c.id.slice(0, 4).toUpperCase(),
-      mesaId: c.mesaId,
-      emitidaEn: c.boletaEmitidaEn,
-      metodoPago: c.metodoPago,
-      items: c.items.map((i) => ({
-        nombre: i.platoNombre, cantidad: i.cantidad, precioUnit: Number(i.precioUnit), subtotal: Number(i.subtotal), notas: i.notas,
-      })),
-      subtotal: base,
-      igv: Math.round((total - base) * 100) / 100,
-      total: Math.round(total * 100) / 100,
-    };
-  }
-
-  /** El mozo cierra la comanda una vez emitido el comprobante: la mesa queda libre. */
+  /** El mozo confirma el pago y cierra la comanda: la mesa queda libre. Requiere que el comensal haya pedido la cuenta. */
   async cerrar(id: string) {
     const comanda = await this.prisma.comanda.findUnique({ where: { id } });
     if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
-    if (!comanda.boletaEmitidaEn) {
-      throw new ForbiddenException({ mensaje: 'Emite el comprobante antes de cerrar la mesa', codigo: 'CMD_010' });
+    if (!comanda.cuentaSolicitadaEn) {
+      throw new ForbiddenException({ mensaje: 'El comensal aún no pidió la cuenta', codigo: 'CMD_010' });
     }
     const cerrada = await this.prisma.comanda.update({ where: { id }, data: { estado: 'CERRADA', cerradaEn: new Date() } });
     this.cocinaGateway.emitirCambioEstado(id, 'CERRADA');
     return cerrada;
+  }
+
+  /**
+   * Libera la mesa sin pasar por la cuenta (el cliente se retiró, pagó en caja, mesa abierta por error).
+   * Solo con el pedido entregado y sin cuenta solicitada; queda el motivo y un evento de auditoría.
+   */
+  async liberarSinCuenta(id: string, sesion: SesionPersonal, motivo: string) {
+    const comanda = await this.prisma.comanda.findUnique({ where: { id } });
+    if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
+    if (comanda.estado !== 'ENTREGADA' || comanda.cuentaSolicitadaEn) {
+      throw new ForbiddenException({
+        mensaje: comanda.cuentaSolicitadaEn ? 'El comensal ya pidió la cuenta: confirma el pago para liberar la mesa' : 'Solo se puede liberar una mesa con el pedido entregado',
+        codigo: 'CMD_018',
+      });
+    }
+    const liberada = await this.prisma.comanda.update({
+      where: { id },
+      data: { estado: 'CERRADA', cerradaEn: new Date(), motivoAnulacion: `Liberada sin cuenta: ${motivo}` },
+    });
+    this.cocinaGateway.emitirCambioEstado(id, 'CERRADA');
+    await this.mqProducer.publicar('comanda.liberada', {
+      id, comandaId: id, mesaId: comanda.mesaId, usuarioId: sesion.id, usuario: sesion.nombre, rol: sesion.rol,
+      motivo, origen: 'comandas-service',
+    });
+    return liberada;
   }
 
   /**
