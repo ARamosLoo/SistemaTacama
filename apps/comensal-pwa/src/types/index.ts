@@ -80,6 +80,7 @@ export interface ItemCarrito {
   precioPEN: number;
   cantidad: number;
   notas?: string;
+  sinIngredientes?: string[]; // claves de ingredientes que el comensal NO desea (ver lib/ingredientes.ts)
   alergenos?: string[];
   imagenUrl?: string; // miniatura del ítem en la comanda
   etiquetaId?: string;

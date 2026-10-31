@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { rotuloFoto } from '../lib/fotos';
 import { Plato } from '../types';
 import { useApp } from '../context/AppContext';
 import { HojaVid } from './Logo';
 import { NutriLinea, NutriDetalle } from './NutricionInfo';
-import { Wine, Plus, ShieldAlert, Leaf } from 'lucide-react';
+import { PersonalizarModal } from './PersonalizarModal';
+import { quitablesDe } from '../lib/ingredientes';
+import { Wine, Plus, ShieldAlert, Leaf, SlidersHorizontal } from 'lucide-react';
 
 interface PlatoCardProps {
   plato: Plato;
@@ -14,6 +16,19 @@ interface PlatoCardProps {
 
 export const PlatoCard: React.FC<PlatoCardProps> = ({ plato, onAbrirMaridaje, coincidencia }) => {
   const { agregarAlCarrito, alergiasDeclaradas, t, nombreAlergeno } = useApp();
+  const [personalizando, setPersonalizando] = useState(false);
+  const quitables = quitablesDe(plato.codigo);
+
+  const agregar = (sinIngredientes?: string[]) =>
+    agregarAlCarrito({
+      id: plato.id,
+      tipo: 'PLATO',
+      nombre: plato.nombre,
+      precioPEN: plato.precioPEN,
+      alergenos: plato.alergenos.map((a) => a.codigo),
+      imagenUrl: plato.imagenUrl,
+      ...(sinIngredientes?.length ? { sinIngredientes } : {}),
+    });
 
   // Comprobar si el plato contiene algún alérgeno declarado por el usuario
   const conflictoAlergeno = plato.alergenos.filter((a) => alergiasDeclaradas.includes(a.codigo));
@@ -126,18 +141,19 @@ export const PlatoCard: React.FC<PlatoCardProps> = ({ plato, onAbrirMaridaje, co
               <span>{t('verMaridaje')}</span>
             </button>
           )}
+          {quitables.length > 0 && plato.disponible && (
+            <button
+              type="button"
+              onClick={() => setPersonalizando(true)}
+              className="flex-1 flex items-center justify-center space-x-1 px-3 py-2 bg-white hover:bg-stone-50 text-stone-700 rounded-xl text-xs font-semibold border border-stone-300 transition"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <span>{t('personalizar')}</span>
+            </button>
+          )}
           <button
             type="button"
-            onClick={() =>
-              agregarAlCarrito({
-                id: plato.id,
-                tipo: 'PLATO',
-                nombre: plato.nombre,
-                precioPEN: plato.precioPEN,
-                alergenos: plato.alergenos.map((a) => a.codigo),
-                imagenUrl: plato.imagenUrl,
-              })
-            }
+            onClick={() => agregar()}
             disabled={!plato.disponible}
             className="flex-1 flex items-center justify-center space-x-1 px-4 py-2 bg-[#577A17] hover:bg-[#466212] text-white rounded-xl text-xs font-semibold shadow transition disabled:bg-stone-300 disabled:shadow-none disabled:cursor-not-allowed"
           >
@@ -146,6 +162,18 @@ export const PlatoCard: React.FC<PlatoCardProps> = ({ plato, onAbrirMaridaje, co
           </button>
         </div>
       </div>
+      {personalizando && (
+        <PersonalizarModal
+          nombrePlato={plato.nombre}
+          quitables={quitables}
+          textoConfirmar={t('persAgregar')}
+          onClose={() => setPersonalizando(false)}
+          onConfirmar={(sin) => {
+            setPersonalizando(false);
+            agregar(sin);
+          }}
+        />
+      )}
     </article>
   );
 };

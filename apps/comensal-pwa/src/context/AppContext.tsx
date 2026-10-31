@@ -7,6 +7,7 @@ import { api } from '../lib/api';
 import { mensajeStock } from '../lib/stock';
 import { VERSION_TERMINOS } from '../lib/legal';
 import { recomendarPlatos, armarMenuRecomendado, armarMenuPopular, PlatoRecomendado, MenuRecomendado } from '../lib/recomendar';
+import { notaSin } from '../lib/ingredientes';
 import { texto, ClaveTexto, Idioma, detectarIdioma, ALERGENOS_NOMBRE } from '../lib/i18n';
 
 interface AppContextType {
@@ -51,6 +52,8 @@ interface AppContextType {
   carrito: ItemCarrito[];
   agregarAlCarrito: (item: Omit<ItemCarrito, 'cantidad'>, cantidad?: number) => void;
   eliminarDelCarrito: (id: string) => void;
+  /** Cambia los ingredientes que el comensal no desea en una línea del carrito */
+  actualizarIngredientes: (lineaId: string, sin: string[]) => void;
   actualizarCantidad: (id: string, delta: number) => void;
   limpiarCarrito: () => void;
   totalPEN: number;
@@ -374,7 +377,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const agregarAlCarrito = (item: Omit<ItemCarrito, 'cantidad'>, cantidad: number = 1) => {
     // El ítem se asigna al comensal activo (se puede reasignar desde la comanda)
     const comensalId = item.comensalId ?? activo?.id;
-    const lineaId = item.id + '::' + comensalId;
+    // Dos líneas del mismo plato con distintos ingredientes quitados son pedidos distintos
+    const sinClave = item.sinIngredientes?.length ? '::sin:' + [...item.sinIngredientes].sort().join(',') : '';
+    const lineaId = item.id + '::' + comensalId + sinClave;
     const quien = comensales.length > 1 && activo ? ' ' + texto(idioma, 'toastPara', { c: nombreComensal(activo) }) : '';
     mostrarAviso(texto(idioma, 'toastAgregado', { n: item.nombre }) + quien);
     setCarrito((prev) => {
@@ -390,6 +395,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const clave = (i: ItemCarrito) => i.lineaId ?? i.id;
   const eliminarDelCarrito = (lineaId: string) => setCarrito((prev) => prev.filter((i) => clave(i) !== lineaId));
+
+  const actualizarIngredientes = (lineaId: string, sin: string[]) => {
+    setCarrito((prev) => {
+      const origen = prev.find((i) => clave(i) === lineaId);
+      if (!origen) return prev;
+      const sinClave = sin.length ? '::sin:' + [...sin].sort().join(',') : '';
+      const nuevaLinea = origen.id + '::' + origen.comensalId + sinClave;
+      const resto = prev.filter((i) => clave(i) !== lineaId);
+      const existente = resto.findIndex((i) => clave(i) === nuevaLinea);
+      if (existente >= 0) {
+        // si ya había la misma versión del plato, se suman las cantidades
+        const copy = [...resto];
+        copy[existente] = { ...copy[existente], cantidad: copy[existente].cantidad + origen.cantidad };
+        return copy;
+      }
+      return prev.map((i) => (clave(i) === lineaId ? { ...i, sinIngredientes: sin, lineaId: nuevaLinea } : i));
+    });
+  };
 
   const actualizarCantidad = (lineaId: string, delta: number) => {
     setCarrito((prev) =>
@@ -407,7 +430,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCarrito((prev) => {
       const origen = prev.find((i) => clave(i) === lineaId);
       if (!origen) return prev;
-      const nuevaLinea = origen.id + '::' + comensalId;
+      const sinClave = origen.sinIngredientes?.length ? '::sin:' + [...origen.sinIngredientes].sort().join(',') : '';
+      const nuevaLinea = origen.id + '::' + comensalId + sinClave;
       const resto = prev.filter((i) => clave(i) !== lineaId);
       const existente = resto.findIndex((i) => clave(i) === nuevaLinea);
       if (existente >= 0) {
@@ -481,6 +505,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const partes: string[] = [];
       if (varios && com) partes.push(nombreComensal(com));
       if (com && com.alergias.length) partes.push('ALERGIA: ' + com.alergias.map((a) => ALERGENOS_NOMBRE[a]?.es ?? a).join(', '));
+      if (i.sinIngredientes?.length) partes.push(notaSin(i.sinIngredientes));
       if (i.notas) partes.push(i.notas);
       const nota = partes.join(' | ');
       const codigo = i.etiquetaId ?? (esBebida ? i.id.replace(/-(copa|botella)$/, '') : undefined);
@@ -566,7 +591,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         renombrarComensal, nombreComensal, reasignarItem,
         momento, setMomento, perfil, guardarPerfil, recomendados, menuRecomendado, mostrarRecomendacion, setMostrarRecomendacion, t, nombreAlergeno,
         modalAlergenosAbierto, setModalAlergenosAbierto, platos, etiquetas, cargandoCarta, errorCarta,
-        carrito, agregarAlCarrito, eliminarDelCarrito, actualizarCantidad, limpiarCarrito, totalPEN,
+        carrito, agregarAlCarrito, eliminarDelCarrito, actualizarIngredientes, actualizarCantidad, limpiarCarrito, totalPEN,
         comandaActivaId, estadoComanda, confirmarComanda, obtenerMaridajes, csatEnviado, enviarCsat, cuenta, solicitarCuenta,
         comandaServidor, anularItem, cambiarItem, itemAgotado, avisoStock,
       }}

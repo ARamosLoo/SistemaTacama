@@ -3,7 +3,9 @@ import { HojaVid } from '../components/Logo';
 import { useApp } from '../context/AppContext';
 import { ClaveTexto } from '../lib/i18n';
 import { NutriLinea, NutriTotal, sumarNutricion } from '../components/NutricionInfo';
-import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, ShieldAlert, CheckCircle2, Sparkles } from 'lucide-react';
+import { PersonalizarModal } from '../components/PersonalizarModal';
+import { quitablesDe, nombreIngrediente } from '../lib/ingredientes';
+import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, ShieldAlert, CheckCircle2, Sparkles, SlidersHorizontal } from 'lucide-react';
 
 interface CarritoPageProps {
   onVolver: () => void;
@@ -15,6 +17,7 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
     carrito,
     actualizarCantidad,
     eliminarDelCarrito,
+    actualizarIngredientes,
     limpiarCarrito,
     totalPEN,
     alergiasDeclaradas,
@@ -30,6 +33,7 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
   } = useApp();
 
   const [enviando, setEnviando] = useState<boolean>(false);
+  const [editandoLinea, setEditandoLinea] = useState<string | null>(null);
   const hayAgotados = carrito.some(itemAgotado);
 
   // Comprobar si algún item tiene conflicto con alergias declaradas
@@ -152,6 +156,20 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
                   </select>
                 </label>
               )}
+              {!!item.sinIngredientes?.length && (
+                <p className="text-[11px] font-semibold text-rose-700">
+                  {item.sinIngredientes.map((c) => `${t('sinIngr')} ${nombreIngrediente(c, idioma)}`).join(' · ')}
+                </p>
+              )}
+              {item.tipo === 'PLATO' && quitablesDe(codigoDe(item.id)).length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setEditandoLinea(item.lineaId ?? item.id)}
+                  className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-[#466212] hover:underline"
+                >
+                  <SlidersHorizontal className="w-3 h-3" /> {t('personalizar')}
+                </button>
+              )}
               {item.notas && (
                 <p className="text-[11px] text-amber-700 italic">{item.notas}</p>
               )}
@@ -234,6 +252,24 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
         <Sparkles className="w-4 h-4 text-amber-300" />
         <span>{enviando ? t('enviando') : t('confirmarEnviar')}</span>
       </button>
+
+      {editandoLinea && (() => {
+        const it = carrito.find((i) => (i.lineaId ?? i.id) === editandoLinea);
+        if (!it) return null;
+        return (
+          <PersonalizarModal
+            nombrePlato={it.nombre}
+            quitables={quitablesDe(codigoDe(it.id))}
+            inicial={it.sinIngredientes}
+            textoConfirmar={t('persGuardar')}
+            onClose={() => setEditandoLinea(null)}
+            onConfirmar={(sin) => {
+              actualizarIngredientes(editandoLinea, sin);
+              setEditandoLinea(null);
+            }}
+          />
+        );
+      })()}
     </div>
   );
 };
