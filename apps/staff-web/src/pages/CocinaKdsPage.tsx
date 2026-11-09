@@ -61,7 +61,7 @@ export const CocinaKdsPage: React.FC = () => {
   useEffect(() => {
     cargar();
     // WebSocket de cocina: nuevas comandas, alertas de alérgenos y cambios de estado
-    const socket = io('/cocina', { query: { rol: 'cocina' } });
+    const socket = io(`${import.meta.env.VITE_SOCKET_URL ?? ''}/cocina`, { query: { rol: 'cocina' } });
     socket.on('connect', () => setConectado(true));
     socket.on('disconnect', () => setConectado(false));
     socket.on('cocina:nueva_comanda', cargar);

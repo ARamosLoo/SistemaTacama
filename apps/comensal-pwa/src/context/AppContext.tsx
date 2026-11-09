@@ -343,7 +343,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // ── Estado de la comanda en tiempo real (WebSocket + sondeo de respaldo) ──
   useEffect(() => {
-    const socket: Socket = io('/cocina', { query: { rol: 'comensal' } });
+    const socket: Socket = io(`${import.meta.env.VITE_SOCKET_URL ?? ''}/cocina`, { query: { rol: 'comensal' } });
     // Lee la comanda: estado, si pidió la cuenta y si ya calificó
     const sincronizar = async () => {
       if (!comandaRef.current) return;

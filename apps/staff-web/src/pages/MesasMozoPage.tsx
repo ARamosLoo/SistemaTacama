@@ -67,7 +67,7 @@ export const MesasMozoPage: React.FC = () => {
 
   useEffect(() => {
     cargar();
-    const socket = io('/cocina', { query: { rol: 'jefe_salon' } });
+    const socket = io(`${import.meta.env.VITE_SOCKET_URL ?? ''}/cocina`, { query: { rol: 'jefe_salon' } });
     socket.on('cocina:estado_cambiado', cargar);
     socket.on('cocina:nueva_comanda', cargar);
     const t = setInterval(cargar, 8000);
