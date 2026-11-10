@@ -111,18 +111,18 @@ export const MesasMozoPage: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in p-4 sm:p-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#1A1D23] p-5 rounded-2xl border border-stone-800 shadow-md">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] p-5 rounded-2xl border border-stone-200 shadow-md">
         <div>
-          <h2 className="font-serif-tacama text-xl font-bold text-stone-100 flex items-center gap-2">
+          <h2 className="font-serif-tacama text-xl font-bold text-stone-900 flex items-center gap-2">
             Gestión de Mesas y Salón
           </h2>
-          <p className="text-xs text-stone-400">
+          <p className="text-xs text-stone-600">
             Los pedidos llegan a todos los mozos. Quien toma una mesa libre queda como responsable hasta cerrarla.
           </p>
         </div>
 
         {/* Zona Filters */}
-        <div className="flex items-center space-x-2 bg-stone-900 p-1 rounded-xl border border-stone-800 overflow-x-auto sin-barra">
+        <div className="flex items-center space-x-2 bg-stone-100 p-1 rounded-xl border border-stone-200 overflow-x-auto sin-barra">
           {['TODAS', 'Terraza Principal', 'Jardín de Viñedos', 'Salón Bodega 1540'].map((z) => (
             <button
               key={z}
@@ -130,7 +130,7 @@ export const MesasMozoPage: React.FC = () => {
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition whitespace-nowrap ${
                 zonaFiltro === z
                   ? 'bg-[#577A17] text-white shadow'
-                  : 'text-stone-400 hover:text-stone-200'
+                  : 'text-stone-600 hover:text-stone-800'
               }`}
             >
               {z === 'TODAS' ? 'Todas las Zonas' : z}
@@ -150,18 +150,18 @@ export const MesasMozoPage: React.FC = () => {
             key={id}
             onClick={() => setVista(id)}
             className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition flex items-center gap-1.5 ${
-              vista === id ? 'bg-stone-100 text-stone-900 border-stone-100' : 'text-stone-300 border-stone-700 hover:border-stone-500'
+              vista === id ? 'bg-stone-900 text-white border-stone-900' : 'text-stone-700 border-stone-300 hover:border-stone-500'
             }`}
           >
             {etiqueta}
             {n !== null && (
-              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${id === 'SIN_ATENDER' && n > 0 ? 'bg-amber-500 text-stone-900' : 'bg-stone-700 text-stone-200'}`}>{n}</span>
+              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${id === 'SIN_ATENDER' && n > 0 ? 'bg-amber-600 text-white' : 'bg-stone-300 text-stone-800'}`}>{n}</span>
             )}
           </button>
         ))}
       </div>
 
-      {error && <div className="bg-rose-950/60 border border-rose-500/50 rounded-xl p-3 text-xs text-rose-300">{error}</div>}
+      {error && <div className="bg-rose-50/60 border border-rose-500/50 rounded-xl p-3 text-xs text-rose-700">{error}</div>}
 
       {/* Mesas Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -178,25 +178,25 @@ export const MesasMozoPage: React.FC = () => {
           const puedeCobrar = esJefatura || (esMozo && soyResponsable);
           const puedeTomar = ocupada && (esMozo || esJefatura) && !soyResponsable && (libreDeMozo || esJefatura);
 
-          let badgeColor = 'bg-stone-800 text-stone-400 border-stone-700';
-          if (m.estado === 'OCUPADA') badgeColor = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
-          if (m.estado === 'LIBRE') badgeColor = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-          if (m.estado === 'PIDIENDO_CUENTA') badgeColor = 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse';
+          let badgeColor = 'bg-stone-200 text-stone-600 border-stone-300';
+          if (m.estado === 'OCUPADA') badgeColor = 'bg-rose-500/20 text-rose-700 border-rose-500/40';
+          if (m.estado === 'LIBRE') badgeColor = 'bg-emerald-500/20 text-emerald-700 border-emerald-500/40';
+          if (m.estado === 'PIDIENDO_CUENTA') badgeColor = 'bg-amber-500/20 text-amber-700 border-amber-500/40 animate-pulse';
 
           return (
             <div
               key={m.id}
-              className={`bg-[#22262F] rounded-2xl p-5 border shadow-lg flex flex-col justify-between space-y-4 transition ${
-                libreDeMozo ? 'border-amber-500/60 ring-1 ring-amber-500/30' : soyResponsable ? 'border-[#577A17]' : 'border-stone-800 hover:border-stone-700'
+              className={`bg-[#FFFFFF] rounded-2xl p-5 border shadow-lg flex flex-col justify-between space-y-4 transition ${
+                libreDeMozo ? 'border-amber-500/60 ring-1 ring-amber-500/30' : soyResponsable ? 'border-[#577A17]' : 'border-stone-200 hover:border-stone-300'
               }`}
             >
               <div>
                 <div className="flex justify-between items-start">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-stone-400 tracking-wider">
+                    <span className="text-[10px] uppercase font-bold text-stone-600 tracking-wider">
                       {m.zona}
                     </span>
-                    <h3 className="font-serif-tacama text-lg font-bold text-stone-100">
+                    <h3 className="font-serif-tacama text-lg font-bold text-stone-900">
                       Mesa {m.numero < 10 ? `0${m.numero}` : m.numero}
                     </h3>
                   </div>
@@ -206,20 +206,20 @@ export const MesasMozoPage: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="mt-3 space-y-1.5 text-xs text-stone-400">
+                <div className="mt-3 space-y-1.5 text-xs text-stone-600">
                   <div className="flex items-center space-x-2">
                     <Users className="w-3.5 h-3.5 text-stone-500" />
                     <span>Capacidad: {m.capacidad} personas</span>
                   </div>
                   {ocupada && (
                     <div className="flex items-center space-x-2">
-                      <Wine className="w-3.5 h-3.5 text-amber-400" />
+                      <Wine className="w-3.5 h-3.5 text-amber-600" />
                       {m.mozoAsignado ? (
                         <span>
-                          Atiende: <strong className="text-stone-200">{soyResponsable ? 'Tú' : m.mozoAsignado}</strong>
+                          Atiende: <strong className="text-stone-800">{soyResponsable ? 'Tú' : m.mozoAsignado}</strong>
                         </span>
                       ) : (
-                        <span className="text-amber-300 font-semibold">Sin mozo asignado</span>
+                        <span className="text-amber-700 font-semibold">Sin mozo asignado</span>
                       )}
                     </div>
                   )}
@@ -235,7 +235,7 @@ export const MesasMozoPage: React.FC = () => {
                   <button
                     onClick={() => atenderMesa(m.comandas![0].id)}
                     className={`mt-3 w-full py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition shadow ${
-                      libreDeMozo ? 'bg-amber-500 hover:bg-amber-400 text-stone-900' : 'bg-stone-700 hover:bg-stone-600 text-stone-100'
+                      libreDeMozo ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-stone-300 hover:bg-stone-400 text-stone-900'
                     }`}
                   >
                     <HandPlatter className="w-4 h-4" />
@@ -250,14 +250,14 @@ export const MesasMozoPage: React.FC = () => {
               </div>
 
               {/* Comandas activas de la mesa: el mozo confirma la entrega cuando cocina la deja lista */}
-              <div className="pt-3 border-t border-stone-800 space-y-2">
+              <div className="pt-3 border-t border-stone-200 space-y-2">
                 {m.comandas && m.comandas.length > 0 ? (
                   m.comandas.map((c) => (
                     <div key={c.id} className="space-y-1.5">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex flex-col">
-                          <span className="text-xs font-semibold text-amber-400">Comanda #{c.codigo}</span>
-                          <span className="text-[11px] text-stone-400">
+                          <span className="text-xs font-semibold text-amber-600">Comanda #{c.codigo}</span>
+                          <span className="text-[11px] text-stone-600">
                             {c.estado === 'LISTA' ? 'Lista en cocina: recójala y llévela a la mesa'
                               : c.estado === 'EN_PREPARACION' ? 'En cocina'
                               : c.estado === 'PENDIENTE' ? 'Confirmada, pendiente de cocina'
@@ -275,12 +275,12 @@ export const MesasMozoPage: React.FC = () => {
                           </button>
                         )}
                         {c.estado === 'LISTA' && !puedeEntregar && esMozo && libreDeMozo && (
-                          <span className="text-[10px] text-amber-300 text-right shrink-0">Toma la mesa para llevarla</span>
+                          <span className="text-[10px] text-amber-700 text-right shrink-0">Toma la mesa para llevarla</span>
                         )}
                       </div>
 
                       {c.estado === 'ENTREGADA' && c.cuentaSolicitada && c.metodoPago && (
-                        <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2 text-[11px] text-amber-200">
+                        <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2 text-[11px] text-amber-800">
                           {c.metodoPago === 'EFECTIVO' ? <Banknote className="w-4 h-4 shrink-0 mt-0.5" /> : c.metodoPago === 'TARJETA' ? <CreditCard className="w-4 h-4 shrink-0 mt-0.5" /> : <Landmark className="w-4 h-4 shrink-0 mt-0.5" />}
                           <span>
                             {c.metodoPago === 'EFECTIVO' && (
@@ -296,9 +296,9 @@ export const MesasMozoPage: React.FC = () => {
                       )}
 
                       {c.estado === 'ENTREGADA' && c.cuentaSolicitada && (
-                        <div className="flex flex-wrap items-center justify-between gap-2 bg-stone-900/60 rounded-xl px-3 py-2">
-                          <span className="text-[11px] text-stone-300 flex items-center gap-1">
-                            {c.puntuacion ? (<><Star className="w-3 h-3 text-amber-400 fill-amber-400" /> Calificó {c.puntuacion}/5</>) : 'Prefirió no calificar'}
+                        <div className="flex flex-wrap items-center justify-between gap-2 bg-stone-100/60 rounded-xl px-3 py-2">
+                          <span className="text-[11px] text-stone-700 flex items-center gap-1">
+                            {c.puntuacion ? (<><Star className="w-3 h-3 text-amber-600 fill-amber-600" /> Calificó {c.puntuacion}/5</>) : 'Prefirió no calificar'}
                           </span>
                           {puedeCobrar && (
                             <button
@@ -314,17 +314,17 @@ export const MesasMozoPage: React.FC = () => {
 
                       {c.estado === 'ENTREGADA' && !c.cuentaSolicitada && puedeCobrar && (
                         liberando?.id === c.id ? (
-                          <div className="bg-stone-900/60 border border-stone-700 rounded-xl px-3 py-2 space-y-2">
-                            <p className="text-[11px] text-stone-300">Libera la mesa sin cuenta. Queda registrado en la auditoría.</p>
+                          <div className="bg-stone-100/60 border border-stone-300 rounded-xl px-3 py-2 space-y-2">
+                            <p className="text-[11px] text-stone-700">Libera la mesa sin cuenta. Queda registrado en la auditoría.</p>
                             <select
                               value={liberando.motivo}
                               onChange={(e) => setLiberando({ id: c.id, motivo: e.target.value })}
-                              className="w-full bg-stone-800 border border-stone-600 text-stone-100 text-xs rounded-lg px-2 py-1.5"
+                              className="w-full bg-stone-200 border border-stone-400 text-stone-900 text-xs rounded-lg px-2 py-1.5"
                             >
                               {MOTIVOS_LIBERAR.map((mo) => <option key={mo} value={mo}>{mo}</option>)}
                             </select>
                             <div className="flex justify-end gap-2">
-                              <button onClick={() => setLiberando(null)} className="px-2.5 py-1.5 bg-stone-700 hover:bg-stone-600 text-stone-100 text-xs font-semibold rounded-xl">Cancelar</button>
+                              <button onClick={() => setLiberando(null)} className="px-2.5 py-1.5 bg-stone-300 hover:bg-stone-400 text-stone-900 text-xs font-semibold rounded-xl">Cancelar</button>
                               <button
                                 onClick={() => { const motivo = liberando.motivo; setLiberando(null); liberarMesa(c.id, motivo); }}
                                 className="px-2.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-xl"
@@ -336,7 +336,7 @@ export const MesasMozoPage: React.FC = () => {
                         ) : (
                           <button
                             onClick={() => setLiberando({ id: c.id, motivo: MOTIVOS_LIBERAR[0] })}
-                            className="text-[11px] text-stone-400 hover:text-stone-200 underline underline-offset-2 flex items-center gap-1"
+                            className="text-[11px] text-stone-600 hover:text-stone-800 underline underline-offset-2 flex items-center gap-1"
                           >
                             <DoorClosed className="w-3 h-3" /> Liberar mesa sin cuenta
                           </button>

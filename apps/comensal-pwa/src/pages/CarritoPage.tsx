@@ -3,7 +3,11 @@ import { HojaVid } from '../components/Logo';
 import { useApp } from '../context/AppContext';
 import { ClaveTexto } from '../lib/i18n';
 import { NutriLinea, NutriTotal, sumarNutricion } from '../components/NutricionInfo';
-import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, ShieldAlert, CheckCircle2, Sparkles } from 'lucide-react';
+import { otrosQueCoinciden } from '../lib/alergias';
+import { PersonalizarModal } from '../components/PersonalizarModal';
+import { nombreIngrediente } from '../lib/ingredientes';
+import { esPersonalizable, hayPersonalizacion } from '../lib/personalizar';
+import { ShoppingBag, Trash2, Plus, Minus, ArrowLeft, ShieldAlert, CheckCircle2 } from 'lucide-react';
 
 interface CarritoPageProps {
   onVolver: () => void;
@@ -27,7 +31,9 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
     itemAgotado,
     platos,
     idioma,
+    personalizarItem,
   } = useApp();
+  const [personalizando, setPersonalizando] = useState<string | null>(null);
 
   const [enviando, setEnviando] = useState<boolean>(false);
   const hayAgotados = carrito.some(itemAgotado);
@@ -35,12 +41,17 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
   // Comprobar si algún item tiene conflicto con alergias declaradas
   // Cada ítem se compara con las alergias del comensal para quien se pidió
   const alergiasDe = (comensalId?: string) => comensales.find((c) => c.id === comensalId)?.alergias ?? alergiasDeclaradas;
-  const itemsConConflicto = carrito.filter((item) => item.alergenos?.some((a) => alergiasDe(item.comensalId).includes(a)));
-  const alergenosEnConflicto = [...new Set(itemsConConflicto.flatMap((i) => (i.alergenos ?? []).filter((a) => alergiasDe(i.comensalId).includes(a))))];
+  // Alergias estándar (por código del plato) y "Otros" (por las palabras que el comensal escribió)
+  const conflictosDeItem = (i: (typeof carrito)[number]) => [
+    ...(i.alergenos ?? []).filter((a) => alergiasDe(i.comensalId).includes(a)),
+    ...otrosQueCoinciden(i.nombre, alergiasDe(i.comensalId)),
+  ];
+  const itemsConConflicto = carrito.filter((item) => conflictosDeItem(item).length > 0);
+  const alergenosEnConflicto = [...new Set(itemsConConflicto.flatMap(conflictosDeItem))];
 
   // Información nutricional de lo que se está pidiendo (los ítems de bebida alcohólica por copa/botella no tienen ficha)
   const codigoDe = (id: string) => platos.find((p) => p.id === id)?.codigo;
-  const itemsNutri = carrito.map((i) => ({ codigo: codigoDe(i.id), cantidad: i.cantidad, comensalId: i.comensalId }));
+  const itemsNutri = carrito.map((i) => ({ codigo: codigoDe(i.id), cantidad: i.cantidad, comensalId: i.comensalId, sin: i.sin }));
   const energiaPorComensal = comensales.length > 1
     ? comensales.map((c) => ({ c, tot: sumarNutricion(itemsNutri.filter((i) => i.comensalId === c.id)) })).filter((x) => x.tot)
     : [];
@@ -135,6 +146,25 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
                 {item.nombre}
               </h4>
               <NutriLinea codigo={codigoDe(item.id)} />
+              {hayPersonalizacion(item) && (
+                <div className="mt-1 space-y-0.5">
+                  {item.sin && item.sin.length > 0 && (
+                    <p className={`text-[11px] font-semibold ${item.sinAlergia ? 'text-rose-700' : 'text-amber-700'}`}>
+                      {t('perSin', { n: item.sin.map((id) => nombreIngrediente(id, idioma)).join(', ') })}
+                    </p>
+                  )}
+                  {item.pedido && <p className="text-[11px] text-amber-700 italic">{t('perPedidoEtq', { n: item.pedido })}</p>}
+                </div>
+              )}
+              {item.tipo === 'PLATO' && esPersonalizable(codigoDe(item.id)) && (
+                <button
+                  type="button"
+                  onClick={() => setPersonalizando(item.lineaId ?? item.id)}
+                  className="mt-1.5 px-3 py-1 rounded-lg text-[11px] font-semibold text-[#466212] bg-white border border-[#CFE1A5] hover:border-[#577A17]"
+                >
+                  {t('perBoton')}
+                </button>
+              )}
               {itemAgotado(item) && (
                 <p role="alert" className="text-[11px] font-bold text-rose-700">{t('agotado')}: {t('platoAgotadoCarrito', { n: item.nombre })}</p>
               )}
@@ -221,6 +251,21 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
         </div>
       </div>
 
+      {personalizando && (() => {
+        const it = carrito.find((x) => (x.lineaId ?? x.id) === personalizando);
+        const cod = it ? codigoDe(it.id) : undefined;
+        return it && cod ? (
+          <PersonalizarModal
+            codigo={cod}
+            plato={it.nombre}
+            cantidad={it.cantidad}
+            inicial={{ sin: it.sin ?? [], sinAlergia: !!it.sinAlergia, pedido: it.pedido ?? '' }}
+            onGuardar={(p) => personalizarItem(personalizando, p)}
+            onClose={() => setPersonalizando(null)}
+          />
+        ) : null;
+      })()}
+
       {errorEnvio && (
         <p className="text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded-xl p-3">{errorEnvio}</p>
       )}
@@ -231,7 +276,6 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
         disabled={enviando || hayAgotados}
         className="w-full py-4 bg-gradient-to-r from-[#2E4310] via-[#577A17] to-[#466212] text-white rounded-2xl font-serif-tacama text-sm font-bold tracking-wider shadow-lg hover:shadow-xl transition disabled:opacity-50 flex items-center justify-center space-x-2"
       >
-        <Sparkles className="w-4 h-4 text-amber-300" />
         <span>{enviando ? t('enviando') : t('confirmarEnviar')}</span>
       </button>
     </div>

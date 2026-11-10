@@ -106,26 +106,26 @@ export const CartaAdminPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in p-4 sm:p-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#1A1D23] p-5 rounded-2xl border border-stone-800 shadow-md">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] p-5 rounded-2xl border border-stone-200 shadow-md">
         <div className="flex items-center space-x-3">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#577A17] to-[#2E4310] flex items-center justify-center text-white shadow-md">
             <BookOpen className="w-7 h-7" />
           </div>
           <div>
-            <h2 className="font-serif-tacama text-xl font-bold text-stone-100">Administración de la carta</h2>
-            <p className="text-xs text-stone-400">
+            <h2 className="font-serif-tacama text-xl font-bold text-stone-900">Administración de la carta</h2>
+            <p className="text-xs text-stone-600">
               Marca platos agotados, cambia precios y sube fotos. Los comensales ven el cambio al instante.
             </p>
           </div>
         </div>
-        <div className="text-xs text-stone-400 flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-full bg-stone-800 border border-stone-700">{platos.length} platos</span>
-          <span className={`px-2.5 py-1 rounded-full border ${agotados ? 'bg-rose-500/20 text-rose-300 border-rose-500/40' : 'bg-stone-800 border-stone-700'}`}>{agotados} agotados</span>
+        <div className="text-xs text-stone-600 flex items-center gap-2">
+          <span className="px-2.5 py-1 rounded-full bg-stone-200 border border-stone-300">{platos.length} platos</span>
+          <span className={`px-2.5 py-1 rounded-full border ${agotados ? 'bg-rose-500/20 text-rose-700 border-rose-500/40' : 'bg-stone-200 border-stone-300'}`}>{agotados} agotados</span>
         </div>
       </div>
 
-      {error && <div className="bg-rose-950/60 border border-rose-500/50 rounded-xl p-3 text-xs text-rose-300 flex items-center gap-2"><AlertTriangle className="w-4 h-4" />{error}</div>}
-      {aviso && <div role="status" className="bg-emerald-950/60 border border-emerald-500/50 rounded-xl p-3 text-xs text-emerald-300 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />{aviso}</div>}
+      {error && <div className="bg-rose-50/60 border border-rose-500/50 rounded-xl p-3 text-xs text-rose-700 flex items-center gap-2"><AlertTriangle className="w-4 h-4" />{error}</div>}
+      {aviso && <div role="status" className="bg-emerald-50/60 border border-emerald-500/50 rounded-xl p-3 text-xs text-emerald-700 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />{aviso}</div>}
 
       <div className="flex flex-col md:flex-row gap-3 md:items-center">
         <div className="relative flex-grow max-w-md">
@@ -134,10 +134,10 @@ export const CartaAdminPage: React.FC = () => {
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar plato o código"
-            className="w-full bg-stone-900 border border-stone-700 rounded-xl pl-9 pr-3 py-2 text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:border-[#577A17]"
+            className="w-full bg-stone-100 border border-stone-300 rounded-xl pl-9 pr-3 py-2 text-sm text-stone-900 placeholder-stone-500 focus:outline-none focus:border-[#577A17]"
           />
         </div>
-        <label className="flex items-center gap-2 text-xs text-stone-300 cursor-pointer select-none">
+        <label className="flex items-center gap-2 text-xs text-stone-700 cursor-pointer select-none">
           <input type="checkbox" checked={soloAgotados} onChange={(e) => setSoloAgotados(e.target.checked)} className="accent-[#577A17] w-4 h-4" />
           Solo agotados
         </label>
@@ -149,7 +149,7 @@ export const CartaAdminPage: React.FC = () => {
             key={s}
             onClick={() => setSeccion(s)}
             className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
-              seccion === s ? 'bg-[#577A17] text-white border-[#577A17]' : 'text-stone-300 border-stone-700 hover:border-stone-500'
+              seccion === s ? 'bg-[#577A17] text-white border-[#577A17]' : 'text-stone-700 border-stone-300 hover:border-stone-500'
             }`}
           >
             {s === 'TODAS' ? 'Todas' : NOMBRE_SECCION(s)}
@@ -165,17 +165,17 @@ export const CartaAdminPage: React.FC = () => {
           return (
             <div
               key={p.id}
-              className={`bg-[#22262F] rounded-2xl border p-4 flex gap-4 transition ${p.disponible ? 'border-stone-800' : 'border-rose-500/40 bg-rose-950/10'}`}
+              className={`bg-[#FFFFFF] rounded-2xl border p-4 flex gap-4 transition ${p.disponible ? 'border-stone-200' : 'border-rose-500/40 bg-rose-50/10'}`}
             >
-              <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-stone-900 flex items-center justify-center relative">
+              <div className="w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-stone-100 flex items-center justify-center relative">
                 {p.imagenUrl ? (
                   <img src={p.imagenUrl} alt="" className={`w-full h-full object-cover ${p.disponible ? '' : 'grayscale opacity-60'}`} />
                 ) : (
-                  <ImageUp className="w-7 h-7 text-stone-600" />
+                  <ImageUp className="w-7 h-7 text-stone-500" />
                 )}
                 <label
                   title="Cambiar foto"
-                  className="absolute inset-x-0 bottom-0 bg-black/65 hover:bg-black/80 text-[10px] text-stone-100 text-center py-1 cursor-pointer flex items-center justify-center gap-1"
+                  className="absolute inset-x-0 bottom-0 bg-black/65 hover:bg-black/80 text-[10px] text-white text-center py-1 cursor-pointer flex items-center justify-center gap-1"
                 >
                   <ImageUp className="w-3 h-3" /> Cambiar foto
                   <input
@@ -195,12 +195,12 @@ export const CartaAdminPage: React.FC = () => {
                     <span>·</span>
                     <span>{NOMBRE_SECCION(p.seccion)}</span>
                   </div>
-                  <h3 className="font-serif-tacama text-sm font-bold text-stone-100 leading-snug">{p.nombreEs}</h3>
+                  <h3 className="font-serif-tacama text-sm font-bold text-stone-900 leading-snug">{p.nombreEs}</h3>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                  <div className="flex items-center gap-1 bg-stone-900 border border-stone-700 rounded-xl px-2.5 py-1.5">
-                    <span className="text-xs text-stone-400">S/</span>
+                  <div className="flex items-center gap-1 bg-stone-100 border border-stone-300 rounded-xl px-2.5 py-1.5">
+                    <span className="text-xs text-stone-600">S/</span>
                     <input
                       type="number"
                       min={0}
@@ -208,7 +208,7 @@ export const CartaAdminPage: React.FC = () => {
                       value={edicion ?? p.precioBase.toFixed(2)}
                       onChange={(e) => setPrecios((x) => ({ ...x, [p.id]: e.target.value }))}
                       aria-label={`Precio de ${p.nombreEs}`}
-                      className="w-20 bg-transparent text-sm font-bold text-amber-300 focus:outline-none"
+                      className="w-20 bg-transparent text-sm font-bold text-amber-700 focus:outline-none"
                     />
                   </div>
                   {modificado && (
@@ -225,8 +225,8 @@ export const CartaAdminPage: React.FC = () => {
                     disabled={ocupado === p.id}
                     className={`ml-auto px-3 py-1.5 text-xs font-bold rounded-xl flex items-center gap-1.5 border transition disabled:opacity-60 ${
                       p.disponible
-                        ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/25'
-                        : 'bg-rose-500/20 text-rose-300 border-rose-500/50 hover:bg-rose-500/30'
+                        ? 'bg-emerald-500/15 text-emerald-700 border-emerald-500/40 hover:bg-emerald-500/25'
+                        : 'bg-rose-500/20 text-rose-700 border-rose-500/50 hover:bg-rose-500/30'
                     }`}
                   >
                     {p.disponible ? <><CheckCircle2 className="w-3.5 h-3.5" /> Disponible</> : <><PackageX className="w-3.5 h-3.5" /> Agotado</>}

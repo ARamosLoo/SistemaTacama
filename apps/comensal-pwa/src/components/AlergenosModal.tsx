@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { Modal } from './Modal';
 import { ALERGENOS_NOMBRE } from '../lib/i18n';
 import { ShieldAlert, X, Check, AlertCircle } from 'lucide-react';
+import { OtrasAlergias } from './OtrasAlergias';
 
 export const AlergenosModal: React.FC = () => {
   const {
@@ -133,6 +134,7 @@ export const AlergenosModal: React.FC = () => {
               </button>
             );
           })}
+          <OtrasAlergias variante="tarjeta" alergias={seleccionadas} onCambio={setSeleccionadas} />
         </div>
 
         {/* Footer Actions */}

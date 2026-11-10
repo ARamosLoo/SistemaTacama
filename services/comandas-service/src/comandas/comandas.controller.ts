@@ -40,7 +40,7 @@ class ItemDto {
   @ApiProperty({ default: 1 }) @IsNumber() @IsPositive() cantidad: number;
   @ApiProperty({ required: false }) @IsOptional() @IsString() etiquetaId?: string;
   @ApiProperty({ required: false }) @IsOptional() @IsString() etiquetaNombre?: string;
-  @ApiProperty({ required: false }) @IsOptional() @IsString() notas?: string;
+  @ApiProperty({ required: false }) @IsOptional() @IsString() @MaxLength(600) notas?: string;
 }
 
 class CrearComandaDto {
@@ -56,6 +56,11 @@ class CrearComandaDto {
 class LiberarMesaDto {
   @ApiProperty({ example: 'El cliente se retiró sin pedir la cuenta' })
   @IsString() @MinLength(3) @MaxLength(200) motivo: string;
+}
+
+class NotasItemDto {
+  @ApiProperty({ example: 'SIN: cebolla, ají | PEDIDO: poco picante' })
+  @IsString() @MaxLength(600) notas: string;
 }
 
 class ConfirmarComandaDto {
@@ -253,6 +258,13 @@ export class ComandasController {
   @ApiOperation({ summary: 'Cambiar un plato de la comanda', description: 'Solo dentro de los 5 minutos posteriores a la confirmación.' })
   async cambiarItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() dto: CambiarItemDto) {
     return { data: await this.comandasService.cambiarItem(id, itemId, dto) };
+  }
+
+  /** PATCH /api/v1/comandas/:id/items/:itemId/notas — el comensal personaliza un plato (primeros 5 minutos) */
+  @Patch('comandas/:id/items/:itemId/notas')
+  @ApiOperation({ summary: 'Personalizar un plato de la comanda', description: 'Cambia las notas para cocina; solo dentro de los 5 minutos posteriores a la confirmación.' })
+  async personalizarItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() dto: NotasItemDto) {
+    return { data: await this.comandasService.personalizarItem(id, itemId, dto.notas) };
   }
 
   /** POST /api/v1/valoraciones — CSAT del comensal */

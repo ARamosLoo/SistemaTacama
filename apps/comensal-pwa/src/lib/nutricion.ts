@@ -1174,3 +1174,822 @@ export const NUTRICION: Record<string, InfoNutricional> = {
     "fibra": 0
   }
 };
+
+/** Energía y macronutrientes que se descuentan al quitar cada ingrediente de un plato. */
+export interface AhorroIngrediente { kcal: number; kj: number; proteinas: number; grasas: number; carbohidratos: number }
+export const QUITAR: Record<string, Record<string, AhorroIngrediente>> = {
+  "TAC-002": {
+    "guacamole": {
+      "kcal": 60,
+      "kj": 251,
+      "proteinas": 1,
+      "grasas": 5,
+      "carbohidratos": 3
+    }
+  },
+  "TAC-003": {
+    "guacamole": {
+      "kcal": 60,
+      "kj": 251,
+      "proteinas": 1,
+      "grasas": 5,
+      "carbohidratos": 3
+    }
+  },
+  "TAC-004": {
+    "huancaina": {
+      "kcal": 85,
+      "kj": 356,
+      "proteinas": 2,
+      "grasas": 8,
+      "carbohidratos": 3
+    }
+  },
+  "TAC-005": {
+    "guacamole": {
+      "kcal": 60,
+      "kj": 251,
+      "proteinas": 1,
+      "grasas": 5,
+      "carbohidratos": 3
+    }
+  },
+  "TAC-006": {
+    "guacamole": {
+      "kcal": 50,
+      "kj": 209,
+      "proteinas": 1,
+      "grasas": 4,
+      "carbohidratos": 2
+    },
+    "huancaina": {
+      "kcal": 75,
+      "kj": 314,
+      "proteinas": 2,
+      "grasas": 7,
+      "carbohidratos": 2
+    }
+  },
+  "TAC-007": {
+    "pasas": {
+      "kcal": 65,
+      "kj": 272,
+      "proteinas": 1,
+      "grasas": 0,
+      "carbohidratos": 16
+    },
+    "pecanas": {
+      "kcal": 185,
+      "kj": 774,
+      "proteinas": 2,
+      "grasas": 18,
+      "carbohidratos": 4
+    },
+    "alioli": {
+      "kcal": 130,
+      "kj": 544,
+      "proteinas": 0,
+      "grasas": 14,
+      "carbohidratos": 0
+    },
+    "pan": {
+      "kcal": 170,
+      "kj": 711,
+      "proteinas": 5,
+      "grasas": 2,
+      "carbohidratos": 34
+    }
+  },
+  "TAC-008": {
+    "huancaina": {
+      "kcal": 115,
+      "kj": 481,
+      "proteinas": 2,
+      "grasas": 10,
+      "carbohidratos": 4
+    }
+  },
+  "TAC-009": {
+    "ensalada": {
+      "kcal": 50,
+      "kj": 209,
+      "proteinas": 1,
+      "grasas": 4,
+      "carbohidratos": 2
+    }
+  },
+  "TAC-010": {
+    "salsaCriolla": {
+      "kcal": 40,
+      "kj": 167,
+      "proteinas": 1,
+      "grasas": 2,
+      "carbohidratos": 4
+    },
+    "huancaina": {
+      "kcal": 115,
+      "kj": 481,
+      "proteinas": 2,
+      "grasas": 10,
+      "carbohidratos": 4
+    },
+    "choclo": {
+      "kcal": 130,
+      "kj": 544,
+      "proteinas": 4,
+      "grasas": 1,
+      "carbohidratos": 25
+    }
+  },
+  "TAC-011": {
+    "palta": {
+      "kcal": 60,
+      "kj": 251,
+      "proteinas": 1,
+      "grasas": 5,
+      "carbohidratos": 3
+    },
+    "mayonesa": {
+      "kcal": 170,
+      "kj": 711,
+      "proteinas": 0,
+      "grasas": 19,
+      "carbohidratos": 0
+    },
+    "huevo": {
+      "kcal": 30,
+      "kj": 126,
+      "proteinas": 3,
+      "grasas": 2,
+      "carbohidratos": 0
+    }
+  },
+  "TAC-012": {
+    "huevo": {
+      "kcal": 65,
+      "kj": 272,
+      "proteinas": 6,
+      "grasas": 5,
+      "carbohidratos": 0
+    },
+    "aceitunas": {
+      "kcal": 15,
+      "kj": 63,
+      "proteinas": 0,
+      "grasas": 1,
+      "carbohidratos": 1
+    },
+    "lechuga": {
+      "kcal": 5,
+      "kj": 21,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 0
+    }
+  },
+  "TAC-013": {
+    "mayonesa": {
+      "kcal": 205,
+      "kj": 858,
+      "proteinas": 0,
+      "grasas": 23,
+      "carbohidratos": 0
+    },
+    "verduras": {
+      "kcal": 40,
+      "kj": 167,
+      "proteinas": 2,
+      "grasas": 0,
+      "carbohidratos": 8
+    }
+  },
+  "TAC-014": {
+    "mayonesa": {
+      "kcal": 205,
+      "kj": 858,
+      "proteinas": 0,
+      "grasas": 23,
+      "carbohidratos": 0
+    },
+    "verduras": {
+      "kcal": 35,
+      "kj": 146,
+      "proteinas": 2,
+      "grasas": 0,
+      "carbohidratos": 7
+    }
+  },
+  "TAC-015": {
+    "cebolla": {
+      "kcal": 15,
+      "kj": 63,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 3
+    },
+    "tomate": {
+      "kcal": 15,
+      "kj": 63,
+      "proteinas": 1,
+      "grasas": 0,
+      "carbohidratos": 2
+    }
+  },
+  "TAC-016": {
+    "crutones": {
+      "kcal": 145,
+      "kj": 607,
+      "proteinas": 2,
+      "grasas": 9,
+      "carbohidratos": 14
+    },
+    "anchoas": {
+      "kcal": 5,
+      "kj": 21,
+      "proteinas": 1,
+      "grasas": 0,
+      "carbohidratos": 0
+    },
+    "parmesano": {
+      "kcal": 65,
+      "kj": 272,
+      "proteinas": 5,
+      "grasas": 4,
+      "carbohidratos": 1
+    },
+    "huevo": {
+      "kcal": 45,
+      "kj": 188,
+      "proteinas": 4,
+      "grasas": 3,
+      "carbohidratos": 0
+    }
+  },
+  "TAC-017": {
+    "crutones": {
+      "kcal": 145,
+      "kj": 607,
+      "proteinas": 2,
+      "grasas": 9,
+      "carbohidratos": 14
+    },
+    "anchoas": {
+      "kcal": 5,
+      "kj": 21,
+      "proteinas": 1,
+      "grasas": 0,
+      "carbohidratos": 0
+    },
+    "parmesano": {
+      "kcal": 65,
+      "kj": 272,
+      "proteinas": 5,
+      "grasas": 4,
+      "carbohidratos": 1
+    },
+    "huevo": {
+      "kcal": 45,
+      "kj": 188,
+      "proteinas": 4,
+      "grasas": 3,
+      "carbohidratos": 0
+    }
+  },
+  "TAC-018": {
+    "palta": {
+      "kcal": 105,
+      "kj": 439,
+      "proteinas": 1,
+      "grasas": 9,
+      "carbohidratos": 5
+    },
+    "cebolla": {
+      "kcal": 10,
+      "kj": 42,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 2
+    },
+    "esparragos": {
+      "kcal": 10,
+      "kj": 42,
+      "proteinas": 1,
+      "grasas": 0,
+      "carbohidratos": 1
+    },
+    "choclo": {
+      "kcal": 45,
+      "kj": 188,
+      "proteinas": 1,
+      "grasas": 0,
+      "carbohidratos": 8
+    },
+    "tomate": {
+      "kcal": 10,
+      "kj": 42,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 2
+    },
+    "zanahoria": {
+      "kcal": 10,
+      "kj": 42,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 2
+    }
+  },
+  "TAC-019": {
+    "salsaCriolla": {
+      "kcal": 30,
+      "kj": 126,
+      "proteinas": 1,
+      "grasas": 2,
+      "carbohidratos": 3
+    }
+  },
+  "TAC-020": {
+    "salsaCriolla": {
+      "kcal": 30,
+      "kj": 126,
+      "proteinas": 1,
+      "grasas": 2,
+      "carbohidratos": 3
+    }
+  },
+  "TAC-022": {
+    "pasas": {
+      "kcal": 35,
+      "kj": 146,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 8
+    },
+    "aceitunas": {
+      "kcal": 15,
+      "kj": 63,
+      "proteinas": 0,
+      "grasas": 1,
+      "carbohidratos": 1
+    },
+    "huevo": {
+      "kcal": 70,
+      "kj": 293,
+      "proteinas": 6,
+      "grasas": 5,
+      "carbohidratos": 1
+    },
+    "cebolla": {
+      "kcal": 15,
+      "kj": 63,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 4
+    },
+    "queso": {
+      "kcal": 55,
+      "kj": 230,
+      "proteinas": 4,
+      "grasas": 4,
+      "carbohidratos": 1
+    }
+  },
+  "TAC-023": {
+    "salsaBBQ": {
+      "kcal": 90,
+      "kj": 377,
+      "proteinas": 1,
+      "grasas": 0,
+      "carbohidratos": 21
+    }
+  },
+  "TAC-024": {
+    "huevo": {
+      "kcal": 35,
+      "kj": 146,
+      "proteinas": 3,
+      "grasas": 3,
+      "carbohidratos": 0
+    },
+    "aceitunas": {
+      "kcal": 10,
+      "kj": 42,
+      "proteinas": 0,
+      "grasas": 1,
+      "carbohidratos": 0
+    },
+    "papa": {
+      "kcal": 90,
+      "kj": 377,
+      "proteinas": 2,
+      "grasas": 0,
+      "carbohidratos": 20
+    },
+    "arroz": {
+      "kcal": 195,
+      "kj": 816,
+      "proteinas": 4,
+      "grasas": 3,
+      "carbohidratos": 38
+    }
+  },
+  "TAC-025": {
+    "salsaCriolla": {
+      "kcal": 40,
+      "kj": 167,
+      "proteinas": 1,
+      "grasas": 2,
+      "carbohidratos": 4
+    },
+    "arveja": {
+      "kcal": 25,
+      "kj": 105,
+      "proteinas": 2,
+      "grasas": 0,
+      "carbohidratos": 4
+    },
+    "zanahoria": {
+      "kcal": 10,
+      "kj": 42,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 2
+    }
+  },
+  "TAC-028": {
+    "salsaCriolla": {
+      "kcal": 45,
+      "kj": 188,
+      "proteinas": 1,
+      "grasas": 3,
+      "carbohidratos": 4
+    },
+    "chipsCamote": {
+      "kcal": 345,
+      "kj": 1443,
+      "proteinas": 1,
+      "grasas": 20,
+      "carbohidratos": 41
+    }
+  },
+  "TAC-029": {
+    "pure": {
+      "kcal": 140,
+      "kj": 586,
+      "proteinas": 3,
+      "grasas": 5,
+      "carbohidratos": 21
+    },
+    "pallares": {
+      "kcal": 90,
+      "kj": 377,
+      "proteinas": 6,
+      "grasas": 0,
+      "carbohidratos": 16
+    },
+    "arroz": {
+      "kcal": 195,
+      "kj": 816,
+      "proteinas": 4,
+      "grasas": 3,
+      "carbohidratos": 38
+    }
+  },
+  "TAC-030": {
+    "sopaSeca": {
+      "kcal": 260,
+      "kj": 1088,
+      "proteinas": 7,
+      "grasas": 8,
+      "carbohidratos": 39
+    }
+  },
+  "TAC-031": {
+    "salsaVino": {
+      "kcal": 35,
+      "kj": 146,
+      "proteinas": 1,
+      "grasas": 2,
+      "carbohidratos": 4
+    }
+  },
+  "TAC-033": {
+    "cebolla": {
+      "kcal": 25,
+      "kj": 105,
+      "proteinas": 1,
+      "grasas": 0,
+      "carbohidratos": 6
+    },
+    "tomate": {
+      "kcal": 10,
+      "kj": 42,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 2
+    },
+    "papasFritas": {
+      "kcal": 350,
+      "kj": 1464,
+      "proteinas": 4,
+      "grasas": 18,
+      "carbohidratos": 43
+    },
+    "arroz": {
+      "kcal": 180,
+      "kj": 753,
+      "proteinas": 3,
+      "grasas": 3,
+      "carbohidratos": 35
+    }
+  },
+  "TAC-034": {
+    "pure": {
+      "kcal": 175,
+      "kj": 732,
+      "proteinas": 3,
+      "grasas": 6,
+      "carbohidratos": 26
+    },
+    "arroz": {
+      "kcal": 195,
+      "kj": 816,
+      "proteinas": 4,
+      "grasas": 3,
+      "carbohidratos": 38
+    },
+    "salsaVino": {
+      "kcal": 60,
+      "kj": 251,
+      "proteinas": 2,
+      "grasas": 3,
+      "carbohidratos": 7
+    }
+  },
+  "TAC-035": {
+    "arroz": {
+      "kcal": 195,
+      "kj": 816,
+      "proteinas": 4,
+      "grasas": 3,
+      "carbohidratos": 38
+    }
+  },
+  "TAC-036": {
+    "arroz": {
+      "kcal": 195,
+      "kj": 816,
+      "proteinas": 4,
+      "grasas": 3,
+      "carbohidratos": 38
+    },
+    "salsaVino": {
+      "kcal": 60,
+      "kj": 251,
+      "proteinas": 2,
+      "grasas": 3,
+      "carbohidratos": 7
+    }
+  },
+  "TAC-037": {
+    "huevo": {
+      "kcal": 80,
+      "kj": 335,
+      "proteinas": 7,
+      "grasas": 6,
+      "carbohidratos": 1
+    },
+    "platano": {
+      "kcal": 165,
+      "kj": 690,
+      "proteinas": 1,
+      "grasas": 8,
+      "carbohidratos": 22
+    }
+  },
+  "TAC-038": {
+    "salsaCriolla": {
+      "kcal": 40,
+      "kj": 167,
+      "proteinas": 1,
+      "grasas": 2,
+      "carbohidratos": 4
+    },
+    "tartara": {
+      "kcal": 170,
+      "kj": 711,
+      "proteinas": 0,
+      "grasas": 18,
+      "carbohidratos": 2
+    },
+    "papasFritas": {
+      "kcal": 410,
+      "kj": 1715,
+      "proteinas": 5,
+      "grasas": 21,
+      "carbohidratos": 50
+    }
+  },
+  "TAC-040": {
+    "arroz": {
+      "kcal": 280,
+      "kj": 1172,
+      "proteinas": 5,
+      "grasas": 4,
+      "carbohidratos": 55
+    }
+  },
+  "TAC-041": {
+    "papasFritas": {
+      "kcal": 350,
+      "kj": 1464,
+      "proteinas": 4,
+      "grasas": 18,
+      "carbohidratos": 43
+    }
+  },
+  "TAC-042": {
+    "queso": {
+      "kcal": 80,
+      "kj": 335,
+      "proteinas": 5,
+      "grasas": 7,
+      "carbohidratos": 0
+    },
+    "papasFritas": {
+      "kcal": 350,
+      "kj": 1464,
+      "proteinas": 4,
+      "grasas": 18,
+      "carbohidratos": 43
+    }
+  },
+  "TAC-043": {
+    "pure": {
+      "kcal": 110,
+      "kj": 460,
+      "proteinas": 2,
+      "grasas": 4,
+      "carbohidratos": 16
+    },
+    "arroz": {
+      "kcal": 130,
+      "kj": 544,
+      "proteinas": 2,
+      "grasas": 2,
+      "carbohidratos": 25
+    },
+    "salsaVino": {
+      "kcal": 35,
+      "kj": 146,
+      "proteinas": 1,
+      "grasas": 2,
+      "carbohidratos": 4
+    }
+  },
+  "TAC-046": {
+    "jamon": {
+      "kcal": 100,
+      "kj": 418,
+      "proteinas": 14,
+      "grasas": 4,
+      "carbohidratos": 1
+    }
+  },
+  "TAC-047": {
+    "quesoAzul": {
+      "kcal": 140,
+      "kj": 586,
+      "proteinas": 8,
+      "grasas": 12,
+      "carbohidratos": 1
+    },
+    "gouda": {
+      "kcal": 175,
+      "kj": 732,
+      "proteinas": 13,
+      "grasas": 14,
+      "carbohidratos": 1
+    },
+    "parmesano": {
+      "kcal": 125,
+      "kj": 523,
+      "proteinas": 11,
+      "grasas": 9,
+      "carbohidratos": 1
+    }
+  },
+  "TAC-049": {
+    "tocino": {
+      "kcal": 215,
+      "kj": 900,
+      "proteinas": 15,
+      "grasas": 17,
+      "carbohidratos": 1
+    },
+    "salame": {
+      "kcal": 200,
+      "kj": 837,
+      "proteinas": 11,
+      "grasas": 17,
+      "carbohidratos": 1
+    },
+    "carneMolida": {
+      "kcal": 150,
+      "kj": 628,
+      "proteinas": 14,
+      "grasas": 11,
+      "carbohidratos": 0
+    }
+  },
+  "TAC-050": {
+    "cebolla": {
+      "kcal": 15,
+      "kj": 63,
+      "proteinas": 0,
+      "grasas": 0,
+      "carbohidratos": 4
+    },
+    "papasFritas": {
+      "kcal": 320,
+      "kj": 1339,
+      "proteinas": 4,
+      "grasas": 17,
+      "carbohidratos": 40
+    },
+    "salsaVino": {
+      "kcal": 35,
+      "kj": 146,
+      "proteinas": 1,
+      "grasas": 2,
+      "carbohidratos": 4
+    }
+  },
+  "TAC-051": {
+    "chipsCamote": {
+      "kcal": 295,
+      "kj": 1234,
+      "proteinas": 1,
+      "grasas": 17,
+      "carbohidratos": 35
+    },
+    "salsaCriolla": {
+      "kcal": 30,
+      "kj": 126,
+      "proteinas": 1,
+      "grasas": 2,
+      "carbohidratos": 3
+    }
+  },
+  "TAC-052": {
+    "palta": {
+      "kcal": 105,
+      "kj": 439,
+      "proteinas": 1,
+      "grasas": 9,
+      "carbohidratos": 5
+    },
+    "mayonesa": {
+      "kcal": 170,
+      "kj": 711,
+      "proteinas": 0,
+      "grasas": 19,
+      "carbohidratos": 0
+    }
+  },
+  "TAC-053": {
+    "queso": {
+      "kcal": 100,
+      "kj": 418,
+      "proteinas": 6,
+      "grasas": 8,
+      "carbohidratos": 0
+    }
+  },
+  "TAC-054": {
+    "queso": {
+      "kcal": 100,
+      "kj": 418,
+      "proteinas": 6,
+      "grasas": 8,
+      "carbohidratos": 0
+    },
+    "tocino": {
+      "kcal": 105,
+      "kj": 439,
+      "proteinas": 7,
+      "grasas": 8,
+      "carbohidratos": 0
+    },
+    "huevo": {
+      "kcal": 80,
+      "kj": 335,
+      "proteinas": 7,
+      "grasas": 6,
+      "carbohidratos": 1
+    }
+  }
+};
+
+/** Códigos de los platos a los que se puede personalizar el pedido (entradas, principales, desayunos, kids y piqueos). */
+export const PERSONALIZABLES: string[] = ["TAC-001","TAC-002","TAC-003","TAC-004","TAC-005","TAC-006","TAC-007","TAC-008","TAC-009","TAC-010","TAC-011","TAC-012","TAC-013","TAC-014","TAC-015","TAC-016","TAC-017","TAC-018","TAC-019","TAC-020","TAC-021","TAC-022","TAC-023","TAC-024","TAC-025","TAC-026","TAC-027","TAC-028","TAC-029","TAC-030","TAC-031","TAC-032","TAC-033","TAC-034","TAC-035","TAC-036","TAC-037","TAC-038","TAC-039","TAC-040","TAC-041","TAC-042","TAC-043","TAC-046","TAC-047","TAC-048","TAC-049","TAC-050","TAC-051","TAC-052","TAC-053","TAC-054"];

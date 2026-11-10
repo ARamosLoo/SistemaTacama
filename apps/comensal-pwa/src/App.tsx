@@ -44,7 +44,7 @@ const MainContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA] text-stone-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F6F8F0] text-stone-900 flex flex-col font-sans">
       <Header vistaActiva={vistaActiva} setVistaActiva={setVistaActiva} />
       <AlergenosModal />
       {mostrarRecomendacion && <RecomendacionModal onIrAlCarrito={() => setVistaActiva('carrito')} />}

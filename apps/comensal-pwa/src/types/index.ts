@@ -85,6 +85,9 @@ export interface ItemCarrito {
   etiquetaId?: string;
   comensalId?: string; // comensal de la mesa para quien se pide el ítem
   lineaId?: string; // identifica la línea del pedido (ítem + comensal)
+  sin?: string[]; // ingredientes que el comensal pide quitar (ids de lib/ingredientes)
+  sinAlergia?: boolean; // lo pide por alergia (la cocina lo confirma)
+  pedido?: string; // pedido especial en sus palabras
 }
 
 export type EstadoComanda = 'CREADA' | 'CONFIRMADA' | 'EN_PREPARACION' | 'LISTA' | 'SERVIDA' | 'CERRADA' | 'ANULADA';

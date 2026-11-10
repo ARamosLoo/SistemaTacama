@@ -444,6 +444,30 @@ export class ComandasService {
     return actualizada;
   }
 
+  /**
+   * Personalización de un plato ya pedido (ingredientes que se quitan, alergia, pedido especial): solo cambia las
+   * notas que ve la cocina, dentro de los 5 minutos posteriores a la confirmación. La comanda queda marcada como modificada.
+   */
+  async personalizarItem(id: string, itemId: string, notas: string) {
+    const comanda = await this.prisma.comanda.findUnique({ where: { id }, include: { items: true } });
+    if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
+    this.validarVentanaDeCambio(comanda);
+    const item = comanda.items.find((i) => i.id === itemId);
+    if (!item) throw new NotFoundException({ mensaje: 'Plato no encontrado en la comanda', codigo: 'CMD_017' });
+    if (item.etiquetaId) {
+      throw new BadRequestException({ mensaje: 'Los vinos y piscos no se personalizan', codigo: 'CMD_019' });
+    }
+    // El comensal solo puede cambiar las partes "SIN:" y "PEDIDO:". El resto de la nota (comensal, ALERGIA, maridaje) se
+    // conserva tal como la guardó el servidor: así no se puede borrar el aviso de alergia al personalizar.
+    const esPersonalizacion = (p: string) => p.startsWith('SIN: ') || p.startsWith('SIN (ALERGIA): ') || p.startsWith('PEDIDO: ');
+    const partes = (t?: string | null) => (t ?? '').split(' | ').map((p) => p.trim()).filter(Boolean);
+    const nuevas = [...partes(item.notas).filter((p) => !esPersonalizacion(p)), ...partes(notas).filter(esPersonalizacion)].join(' | ');
+    await this.prisma.detalleComanda.update({ where: { id: itemId }, data: { notas: nuevas.slice(0, 600) || null } });
+    const actualizada = await this.prisma.comanda.update({ where: { id }, data: { modificadaEn: new Date() }, include: { items: true } });
+    this.cocinaGateway.emitirCambioEstado(id, 'COMANDA_MODIFICADA');
+    return actualizada;
+  }
+
   async findById(id: string) {
     const comanda = await this.prisma.comanda.findUnique({
       where: { id },

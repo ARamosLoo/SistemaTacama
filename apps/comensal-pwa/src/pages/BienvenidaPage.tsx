@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { OtrasAlergias } from '../components/OtrasAlergias';
+import { excluyeProteina } from '../lib/alergias';
 import { useApp } from '../context/AppContext';
 import { MarcaTambo } from '../components/Logo';
 import { ClaveTexto, ALERGENOS_NOMBRE } from '../lib/i18n';
 import { Origen, PerfilComensal, Momento } from '../types';
-import { Globe2, MapPin, ArrowLeft, Check, ChevronRight, Sparkles } from 'lucide-react';
+import { Globe2, MapPin, ArrowLeft, Check, ChevronRight } from 'lucide-react';
 
 const PROTEINAS: ClaveTexto[] = ['res', 'cerdo', 'pollo', 'pescado', 'vegetariano', 'cualquiera'];
 const INTENSIDADES: { v: 0 | 1 | 2; k: ClaveTexto }[] = [
@@ -115,11 +117,18 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
   const alternar = (lista: string[], set: (v: string[]) => void, k: string) =>
     set(lista.includes(k) ? lista.filter((x) => x !== k) : [...lista, k]);
 
-  // Con alergia a mariscos o a pescado no se ofrece la opción "Pescados y mariscos" entre los gustos
-  const sinPescado = alergias.includes('MARISCOS') || alergias.includes('PESCADO');
+  // Una alergia limita lo que se ofrece en "¿Qué le gusta comer?": con alergia a pescado o mariscos (o escrita en
+  // "Otros", por ejemplo "pollo") ese gusto no aparece y, si ya estaba marcado, se desmarca.
+  const gustosOcultos = PROTEINAS.filter((k) => excluyeProteina(k, alergias));
   useEffect(() => {
-    if (sinPescado) setProteinas((prev) => prev.filter((x) => x !== 'pescado'));
-  }, [sinPescado]);
+    if (gustosOcultos.length) setProteinas((prev) => prev.filter((x) => !gustosOcultos.includes(x as ClaveTexto)));
+  }, [gustosOcultos.join('|')]);
+
+  const cambiarOtros = (lista: string[]) => {
+    setSinAlergias(false);
+    setErrorAlergias(false);
+    setAlergias(lista);
+  };
 
   const toggleAlergia = (codigo: string) => {
     setSinAlergias(false);
@@ -280,11 +289,25 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
               </fieldset>
               )}
 
-              <Pregunta titulo={t('qNino')} obligatoria={false}>
-                <Chip activo={esNino} onClick={() => setEsNino(true)}>{t('siSimple')}</Chip>
-                <Chip activo={!esNino} onClick={() => setEsNino(false)}>{t('noSimple')}</Chip>
-              </Pregunta>
-              {esNino && <p className="text-xs text-stone-500 -mt-4">{t('ninoAyuda')}</p>}
+              <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 bg-[#F6F8F0] border border-stone-200 rounded-2xl p-4">
+                <div className="min-w-0 flex-1 basis-32">
+                  <h2 className="font-serif text-lg text-[#1F1F1F]">{t('qNino')}</h2>
+                  {esNino && <p className="text-xs text-stone-500 mt-1 leading-relaxed">{t('ninoAyuda')}</p>}
+                </div>
+                <label className="flex items-center gap-3 cursor-pointer select-none">
+                  <span className="text-xs font-semibold text-[#384F0F] leading-tight">{t('activarKids')}</span>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={esNino}
+                    aria-label={t('activarKids')}
+                    onClick={() => setEsNino(!esNino)}
+                    className={`relative shrink-0 w-12 h-7 rounded-full transition-colors ${esNino ? 'bg-[#577A17]' : 'bg-stone-300'}`}
+                  >
+                    <span className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${esNino ? 'translate-x-5' : ''}`} />
+                  </button>
+                </label>
+              </div>
 
               {!obligatorio && (
                 <button
@@ -303,7 +326,7 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
               )}
 
               {!esNino && (
-              <div className="bg-[#F7F8FA] border border-stone-200 rounded-2xl p-4">
+              <div className="bg-[#F6F8F0] border border-stone-200 rounded-2xl p-4">
                 <h2 id="t-gustos" className="font-serif text-xl text-[#1F1F1F]">{t('gustoTitulo')}</h2>
                 <p className="text-sm text-stone-600 mt-1">{obligatorio ? t('gustoObligatorio') : t('gustoOpcional')}</p>
               </div>
@@ -315,13 +338,14 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
                   {CODIGOS_ALERGENO.filter((c) => !(esNino && c === 'SULFITOS')).map((c) => (
                     <Chip key={c} activo={alergias.includes(c)} onClick={() => toggleAlergia(c)}>{nombreAlergeno(c)}</Chip>
                   ))}
+                  <OtrasAlergias alergias={alergias} onCambio={cambiarOtros} />
                 </Pregunta>
                 <p className="text-xs text-stone-500">{t('alergiaAyuda')}</p>
               </div>
 
               {!esNino && (<>
               <Pregunta titulo={t('qProteina')} obligatoria={obligatorio}>
-                {PROTEINAS.filter((k) => !(k === 'pescado' && sinPescado)).map((k) => (
+                {PROTEINAS.filter((k) => !gustosOcultos.includes(k)).map((k) => (
                   <Chip key={k} activo={proteinas.includes(k)} onClick={() => toggleProteina(k)}>{t(k)}</Chip>
                 ))}
               </Pregunta>
@@ -406,7 +430,7 @@ const FormularioComensal: React.FC<FormularioProps> = ({ multi, indice, total, e
                     completo ? 'bg-[#577A17] hover:bg-[#466212]' : 'bg-stone-400'
                   }`}
                 >
-                  <Sparkles className="w-4 h-4" /> {t('continuar')}
+                  {t('continuar')}
                 </button>
                 <button
                   type="button"

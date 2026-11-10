@@ -4,7 +4,7 @@ import { Plato, MaridajeRecomendacion } from '../types';
 import { useApp } from '../context/AppContext';
 import { Modal } from './Modal';
 import { TIPO_ETIQUETA } from '../lib/i18n';
-import { Wine, Sparkles, X, Plus, Check } from 'lucide-react';
+import { Wine, X, Plus, Check } from 'lucide-react';
 
 interface MaridajeModalProps {
   plato: Plato | null;
@@ -105,7 +105,6 @@ export const MaridajeModal: React.FC<MaridajeModalProps> = ({ plato, onClose }) 
                     </div>
 
                     <div className="flex items-center space-x-1 bg-amber-50 text-amber-800 text-xs font-bold px-2 py-1 rounded-full border border-amber-200">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                       <span>{rec.puntuacionAfinidad}% {t('afinidad')}</span>
                     </div>
                   </div>

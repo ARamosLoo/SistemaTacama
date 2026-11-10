@@ -1,4 +1,5 @@
 import { Plato, PerfilComensal, Momento } from '../types';
+import { contieneAlergia } from './alergias';
 
 export const PROTEINA_TAGS: Record<string, string[]> = {
   res: ['res'],
@@ -13,7 +14,7 @@ export interface PlatoRecomendado {
   coincidencia: number; // 0-100
 }
 
-const sinAlergenos = (p: Plato, alergias: string[]) => !p.alergenos.some((a) => alergias.includes(a.codigo));
+const sinAlergenos = (p: Plato, alergias: string[]) => !contieneAlergia(p, alergias);
 const enMomento = (p: Plato, momento: Momento) => p.momentos.includes(momento.toUpperCase());
 
 // Toda recomendación prioriza la cocina de Ica: un plato iqueño suma el máximo y uno criollo/tradicional, la mitad

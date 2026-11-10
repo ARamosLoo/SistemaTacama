@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { api } from '../lib/api';
 import { Modal } from '../components/Modal';
 import { ReglaMaridaje } from '../types';
-import { Wine, Sparkles, Plus, Check, RefreshCw, BookOpen } from 'lucide-react';
+import { Wine, Plus, Check, RefreshCw, BookOpen } from 'lucide-react';
 
 export const SommelierPage: React.FC = () => {
   const [reglas, setReglas] = useState<ReglaMaridaje[]>([]);
@@ -69,19 +69,19 @@ export const SommelierPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in p-4 sm:p-6">
-      {error && <div className="bg-rose-950/60 border border-rose-500/50 rounded-xl p-3 text-xs text-rose-300">{error}</div>}
+      {error && <div className="bg-rose-50/60 border border-rose-500/50 rounded-xl p-3 text-xs text-rose-700">{error}</div>}
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#1A1D23] p-5 rounded-2xl border border-stone-800 shadow-md">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FFFFFF] p-5 rounded-2xl border border-stone-200 shadow-md">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#577A17] to-[#8FB339] flex items-center justify-center text-white shadow-md">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#577A17] to-[#577A17] flex items-center justify-center text-white shadow-md">
             <Wine className="w-7 h-7" />
           </div>
           <div>
-            <h2 className="font-serif-tacama text-xl font-bold text-stone-100 flex items-center gap-2">
+            <h2 className="font-serif-tacama text-xl font-bold text-stone-900 flex items-center gap-2">
               Gestión de Reglas de Maridaje (Sommelier)
             </h2>
-            <p className="text-xs text-stone-400">
+            <p className="text-xs text-stone-600">
               Administración de afinidad enológica, notas de cata y recomendaciones para el comensal.
             </p>
           </div>
@@ -97,10 +97,10 @@ export const SommelierPage: React.FC = () => {
       </div>
 
       {/* Rules Table */}
-      <div className="bg-[#22262F] rounded-2xl border border-stone-800 overflow-hidden shadow-lg">
+      <div className="bg-[#FFFFFF] rounded-2xl border border-stone-200 overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-stone-300">
-            <thead className="bg-stone-900/80 text-stone-400 font-semibold uppercase text-[10px] tracking-wider border-b border-stone-800">
+          <table className="tabla-tarjetas w-full text-left text-xs text-stone-700">
+            <thead className="bg-stone-100/80 text-stone-600 font-semibold uppercase text-[10px] tracking-wider border-b border-stone-200">
               <tr>
                 <th className="p-4">Plato Criollo</th>
                 <th className="p-4">Etiqueta Tacama</th>
@@ -110,22 +110,21 @@ export const SommelierPage: React.FC = () => {
                 <th className="p-4">Autor</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-800">
+            <tbody className="divide-y divide-stone-200">
               {reglas.map((reg) => (
-                <tr key={reg.id} className="hover:bg-stone-800/40 transition">
-                  <td className="p-4 font-bold text-stone-100">{reg.platoNombre}</td>
-                  <td className="p-4 font-semibold text-amber-300">{reg.etiquetaNombre}</td>
-                  <td className="p-4 text-stone-400">{reg.linea}</td>
-                  <td className="p-4 text-center">
-                    <span className="inline-flex items-center space-x-1 bg-amber-500/15 text-amber-300 px-2 py-0.5 rounded-full font-bold">
-                      <Sparkles className="w-3 h-3 text-amber-400" />
+                <tr key={reg.id} className="hover:bg-stone-200/40 transition">
+                  <td data-label="Plato criollo" className="p-4 font-bold text-stone-900">{reg.platoNombre}</td>
+                  <td data-label="Etiqueta Tacama" className="p-4 font-semibold text-amber-700">{reg.etiquetaNombre}</td>
+                  <td data-label="Línea" className="p-4 text-stone-600">{reg.linea}</td>
+                  <td data-label="Afinidad" className="p-4 text-center">
+                    <span className="inline-flex items-center space-x-1 bg-amber-500/15 text-amber-700 px-2 py-0.5 rounded-full font-bold">
                       <span>{reg.afinidad}%</span>
                     </span>
                   </td>
-                  <td className="p-4 text-stone-300 italic max-w-md">
+                  <td data-label="Fundamentación" className="p-4 text-stone-700 italic max-w-md">
                     "{reg.explicacion}"
                   </td>
-                  <td className="p-4 text-stone-400 text-[11px]">{reg.creadoPor}</td>
+                  <td data-label="Autor" className="p-4 text-stone-600 text-[11px]">{reg.creadoPor}</td>
                 </tr>
               ))}
             </tbody>
@@ -136,28 +135,28 @@ export const SommelierPage: React.FC = () => {
       {/* Modal Nueva Regla */}
       {modalNuevo && (
         <Modal onClose={() => setModalNuevo(false)} etiqueta="Crear nueva regla de maridaje">
-          <div className="bg-[#1A1D23] rounded-3xl max-w-lg w-full p-6 border border-stone-800 shadow-2xl space-y-4">
-            <h3 className="font-serif-tacama text-lg font-bold text-stone-100">
+          <div className="bg-[#FFFFFF] rounded-3xl max-w-lg w-full p-6 border border-stone-200 shadow-2xl space-y-4">
+            <h3 className="font-serif-tacama text-lg font-bold text-stone-900">
               Crear Nueva Regla de Maridaje
             </h3>
 
             <form onSubmit={handleCrearRegla} className="space-y-4 text-xs">
               <div>
-                <label className="text-stone-300 font-semibold block mb-1">Plato de la Carta</label>
-                <select value={nuevoPlato} onChange={(e) => setNuevoPlato(e.target.value)} className="w-full bg-stone-900 border border-stone-800 rounded-xl p-2.5 text-stone-200 focus:outline-none focus:border-amber-500" required>
+                <label className="text-stone-700 font-semibold block mb-1">Plato de la Carta</label>
+                <select value={nuevoPlato} onChange={(e) => setNuevoPlato(e.target.value)} className="w-full bg-stone-100 border border-stone-200 rounded-xl p-2.5 text-stone-800 focus:outline-none focus:border-amber-500" required>
                   {platosCarta.map((p) => <option key={p.codigo} value={p.codigo}>{p.nombre}</option>)}
                 </select>
               </div>
 
               <div>
-                <label className="text-stone-300 font-semibold block mb-1">Etiqueta o Pisco Tacama</label>
-                <select value={nuevoVino} onChange={(e) => setNuevoVino(e.target.value)} className="w-full bg-stone-900 border border-stone-800 rounded-xl p-2.5 text-stone-200 focus:outline-none focus:border-amber-500" required>
+                <label className="text-stone-700 font-semibold block mb-1">Etiqueta o Pisco Tacama</label>
+                <select value={nuevoVino} onChange={(e) => setNuevoVino(e.target.value)} className="w-full bg-stone-100 border border-stone-200 rounded-xl p-2.5 text-stone-800 focus:outline-none focus:border-amber-500" required>
                   {etiquetasCat.map((e) => <option key={e.id} value={e.id}>{e.nombre}</option>)}
                 </select>
               </div>
 
               <div>
-                <label className="text-stone-300 font-semibold block mb-1">Porcentaje de Afinidad ({afinidad}%)</label>
+                <label className="text-stone-700 font-semibold block mb-1">Porcentaje de Afinidad ({afinidad}%)</label>
                 <input
                   type="range"
                   min="50"
@@ -169,13 +168,13 @@ export const SommelierPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-stone-300 font-semibold block mb-1">Nota de Maridaje / Fundamentación Enológica</label>
+                <label className="text-stone-700 font-semibold block mb-1">Nota de Maridaje / Fundamentación Enológica</label>
                 <textarea
                   rows={3}
                   value={nuevaExplicacion}
                   onChange={(e) => setNuevaExplicacion(e.target.value)}
                   placeholder="Explique el balance de taninos, acidez o aromas..."
-                  className="w-full bg-stone-900 border border-stone-800 rounded-xl p-2.5 text-stone-200 focus:outline-none focus:border-amber-500"
+                  className="w-full bg-stone-100 border border-stone-200 rounded-xl p-2.5 text-stone-800 focus:outline-none focus:border-amber-500"
                   required
                 />
               </div>
@@ -184,7 +183,7 @@ export const SommelierPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setModalNuevo(false)}
-                  className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-xl font-semibold"
+                  className="px-4 py-2 bg-stone-200 hover:bg-stone-300 text-stone-700 rounded-xl font-semibold"
                 >
                   Cancelar
                 </button>

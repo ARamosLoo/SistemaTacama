@@ -3,11 +3,12 @@ import { useApp } from '../context/AppContext';
 import { Modal } from './Modal';
 import { HojaVid } from './Logo';
 import { NutriLinea, NutriTotal } from './NutricionInfo';
+import { contieneAlergia } from '../lib/alergias';
 import { TIPO_ETIQUETA, ClaveTexto } from '../lib/i18n';
 import { fotoEtiqueta, rotuloFoto } from '../lib/fotos';
 import { motivosDeRecomendacion, Motivo } from '../lib/motivos';
 import { MaridajeRecomendacion, Plato } from '../types';
-import { X, Check, Wine, Coffee, Plus, ChevronRight, Sparkles, ShoppingBag } from 'lucide-react';
+import { X, Check, Wine, Coffee, Plus, ChevronRight, ShoppingBag } from 'lucide-react';
 
 // Si hay empate de afinidad entre los maridajes del plato, se prefiere el tipo de bebida
 // que va con el estilo de comida elegido por el comensal.
@@ -154,7 +155,7 @@ export const RecomendacionModal: React.FC<{ onIrAlCarrito: () => void }> = ({ on
   if (esNino && fondo) {
     const ORDEN = ['TAC-088', 'TAC-094', 'TAC-091', 'TAC-085'];
     const ok = ORDEN.map((c) => platos.find((p) => p.codigo === c)).filter(
-      (p): p is Plato => !!p && p.disponible && !p.alergenos.some((a) => alergiasDeclaradas.includes(a.codigo)),
+      (p): p is Plato => !!p && p.disponible && !contieneAlergia(p, alergiasDeclaradas),
     );
     const i = sel.bebida < ok.length ? sel.bebida : 0;
     const b = ok[i];
@@ -173,12 +174,22 @@ export const RecomendacionModal: React.FC<{ onIrAlCarrito: () => void }> = ({ on
     }
   }
 
-  // Bebida de desayuno (adultos): café, infusión o jugo, según el estilo de comida; sin alérgenos declarados
+  // Bebida de desayuno (adultos): café, mate o infusión, o jugo/refresco. La principal sigue el estilo de comida elegido
+  // (contundente: café; ligero: mate o infusión; dulce: jugo o refresco) y las otras dos clases quedan como alternativas.
   if (esDesayuno && !esNino && fondo) {
-    const candidatas = platos
-      .filter((p) => p.disponible && p.tags.includes('desayuno_bebida') && !p.alergenos.some((a) => alergiasDeclaradas.includes(a.codigo)))
-      .sort((a, b) => (b.estilo === perfil?.estilo ? 1 : 0) - (a.estilo === perfil?.estilo ? 1 : 0) || b.precioPEN - a.precioPEN);
-    const b = candidatas[0];
+    const libres = platos.filter((p) => p.disponible && p.tags.includes('sin_alcohol') && !contieneAlergia(p, alergiasDeclaradas));
+    // Se prefieren las que llevan la marca de desayuno (vaso individual, americano, capuccino) sobre las presentaciones de jarra
+    const porGrupo = (esDeGrupo: (p: Plato) => boolean) =>
+      libres.filter(esDeGrupo).sort((x, y) => (y.tags.includes('desayuno_bebida') ? 1 : 0) - (x.tags.includes('desayuno_bebida') ? 1 : 0) || y.precioPEN - x.precioPEN);
+    const grupos = {
+      cafe: porGrupo((p) => p.tags.includes('cafe')).slice(0, 2),
+      infusion: porGrupo((p) => p.tags.includes('infusion')).slice(0, 3),
+      jugo: porGrupo((p) => p.tags.includes('desayuno_bebida') && !p.tags.includes('cafe') && !p.tags.includes('infusion')).slice(0, 2),
+    };
+    const orden = perfil?.estilo === 'ligero' ? ['infusion', 'cafe', 'jugo'] : perfil?.estilo === 'dulce' ? ['jugo', 'cafe', 'infusion'] : ['cafe', 'infusion', 'jugo'];
+    const ok = orden.flatMap((g) => grupos[g as keyof typeof grupos]);
+    const i = sel.bebida < ok.length ? sel.bebida : 0;
+    const b = ok[i];
     if (b) {
       tarjetas.push({
         id: b.id,
@@ -188,6 +199,8 @@ export const RecomendacionModal: React.FC<{ onIrAlCarrito: () => void }> = ({ on
         precio: b.precioPEN,
         imagen: b.imagenUrl,
         icono: <Coffee className="w-8 h-8 text-[#577A17]" />,
+        alternativas: ok.map((o, j) => ({ o, j })).filter(({ j }) => j !== i).map(({ o, j }) => ({ id: o.id, nombre: o.nombre, coincidencia: 0, elegir: () => setSel((x) => ({ ...x, bebida: j })) })),
+        plato: b,
         agregar: platoCarta(b),
       });
     }
@@ -241,9 +254,6 @@ export const RecomendacionModal: React.FC<{ onIrAlCarrito: () => void }> = ({ on
       <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-[#CFE1A5] relative max-h-[90vh] flex flex-col">
         <div className="flex items-start justify-between pb-4 border-b border-stone-100">
           <div className="flex items-center space-x-3">
-            <div className="w-11 h-11 rounded-2xl bg-[#577A17] flex items-center justify-center text-white shadow-md">
-              <Sparkles className="w-6 h-6" />
-            </div>
             <div>
               <h3 className="font-serif text-xl font-semibold text-[#1F1F1F]">{t('recTitulo')}</h3>
               {varios && comensalActivo ? (
@@ -291,7 +301,7 @@ export const RecomendacionModal: React.FC<{ onIrAlCarrito: () => void }> = ({ on
             </div>
           )}
           {tarjetas.map((c) => (
-            <div key={c.clave} className="bg-[#F7F8FA] border border-stone-200 rounded-2xl p-3 space-y-2">
+            <div key={c.clave} className="bg-[#F6F8F0] border border-stone-200 rounded-2xl p-3 space-y-2">
               <div className="flex gap-3">
                 <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden bg-[#F4F8EA] flex items-center justify-center">
                   {c.imagen ? <img src={c.imagen} alt="" className="w-full h-full object-cover" /> : c.icono ?? <HojaVid className="w-9 h-9 opacity-40" />}
@@ -327,7 +337,7 @@ export const RecomendacionModal: React.FC<{ onIrAlCarrito: () => void }> = ({ on
 
               {c.plato && (
                 <div className="space-y-2">
-                  <p className="text-xs text-stone-600 leading-relaxed">{c.plato.descripcion}</p>
+                  {c.plato.descripcion && c.plato.descripcion !== c.plato.nombre && <p className="text-xs text-stone-600 leading-relaxed">{c.plato.descripcion}</p>}
                   <NutriLinea codigo={c.plato.codigo} />
                   <div className="flex flex-wrap gap-1.5">
                     {c.plato.esVegetariano && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#E6F0D0] text-[#384F0F]">{t('vegetariano')}</span>}

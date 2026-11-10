@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { CambiarPlatoModal } from '../components/CambiarPlatoModal';
+import { PersonalizarModal } from '../components/PersonalizarModal';
+import { nombreIngrediente } from '../lib/ingredientes';
+import { esPersonalizable, leerPersonalizacion, hayPersonalizacion } from '../lib/personalizar';
 import type { ItemServidor } from '../context/AppContext';
 import { useApp } from '../context/AppContext';
 import { Clock, ChefHat, CheckCircle, Bell, Star, Wine, ArrowRight, Receipt } from 'lucide-react';
@@ -10,8 +13,9 @@ interface SeguimientoPageProps {
 }
 
 export const SeguimientoPage: React.FC<SeguimientoPageProps> = ({ onIrACsat, onVolverACarta }) => {
-  const { comandaActivaId, estadoComanda, mesa, carrito, totalPEN, cuenta, comandaServidor, anularItem, t } = useApp();
+  const { comandaActivaId, estadoComanda, mesa, carrito, totalPEN, cuenta, comandaServidor, anularItem, platos, idioma, personalizarItemServidor, t } = useApp();
   const [cambiando, setCambiando] = useState<ItemServidor | null>(null);
+  const [personalizando, setPersonalizando] = useState<ItemServidor | null>(null);
   const [anulando, setAnulando] = useState<string | null>(null);
   const [errorCambio, setErrorCambio] = useState<string | null>(null);
   const [, setTick] = useState(0);
@@ -161,8 +165,22 @@ export const SeguimientoPage: React.FC<SeguimientoPageProps> = ({ onIrACsat, onV
                     <span>{i.cantidad}x {i.platoNombre}</span>
                     <span className="font-semibold text-stone-900 shrink-0">S/ {(i.precioUnit * i.cantidad).toFixed(2)}</span>
                   </div>
+                  {(() => {
+                    const p = leerPersonalizacion(i.notas);
+                    return hayPersonalizacion(p) ? (
+                      <div className="space-y-0.5">
+                        {p.sin.length > 0 && <p className={`text-[11px] font-semibold ${p.sinAlergia ? 'text-rose-700' : 'text-amber-700'}`}>{t('perSin', { n: p.sin.map((id) => nombreIngrediente(id, idioma)).join(', ') })}</p>}
+                        {p.pedido && <p className="text-[11px] text-amber-700 italic">{t('perPedidoEtq', { n: p.pedido })}</p>}
+                      </div>
+                    ) : null;
+                  })()}
                   {puedeModificar && anulando !== i.id && (
                     <div className="flex gap-2">
+                      {!i.etiquetaId && esPersonalizable(platos.find((p) => p.id === i.platoId)?.codigo) && (
+                        <button type="button" onClick={() => setPersonalizando(i)} className="px-3 py-1 rounded-lg text-[11px] font-semibold text-[#466212] bg-white border border-[#CFE1A5] hover:border-[#577A17]">
+                          {t('perBoton')}
+                        </button>
+                      )}
                       {!i.etiquetaId && (
                         <button type="button" onClick={() => setCambiando(i)} className="px-3 py-1 rounded-lg text-[11px] font-semibold text-[#466212] bg-white border border-[#CFE1A5] hover:border-[#577A17]">
                           {t('cambiar')}
@@ -196,6 +214,16 @@ export const SeguimientoPage: React.FC<SeguimientoPageProps> = ({ onIrACsat, onV
         {itemsServidor.some((i) => i.etiquetaId) && puedeModificar && <p className="text-[10px] text-stone-500">{t('cambiarSoloPlatos')}</p>}
       </div>
       {cambiando && <CambiarPlatoModal item={cambiando} onClose={() => setCambiando(null)} />}
+      {personalizando && (
+        <PersonalizarModal
+          codigo={platos.find((p) => p.id === personalizando.platoId)?.codigo ?? ''}
+          plato={personalizando.platoNombre}
+          cantidad={personalizando.cantidad}
+          inicial={leerPersonalizacion(personalizando.notas)}
+          onGuardar={(p) => personalizarItemServidor(personalizando, p)}
+          onClose={() => setPersonalizando(null)}
+        />
+      )}
 
       {/* Action Buttons */}
       <div className="space-y-2">

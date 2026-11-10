@@ -8,11 +8,11 @@
   --wine-light: #466212;
   --gold-primary: #8FB339;
   --gold-light: #C9DDA0;
-  --sand-bg: #F7F8FA;
+  --sand-bg: #F6F8F0;
   --card-bg: #FFFFFF;
-  --text-main: #1F2937;
-  --text-muted: #6B7280;
-  --border-color: #E5E7EB;
+  --text-main: #1F1F1F;
+  --text-muted: #5E6648;
+  --border-color: #DFE3CF;
 }
 
 * {
@@ -63,6 +63,6 @@ body {
 
 /* Pantallas táctiles: los controles tienen al menos 36 px de alto para pulsarlos con el dedo */
 @media (pointer: coarse) {
-  button, select, summary { min-height: 36px; }
+  button:not([role="switch"]), select, summary { min-height: 36px; }
   input[type="checkbox"], input[type="radio"] { min-width: 22px; min-height: 22px; }
 }

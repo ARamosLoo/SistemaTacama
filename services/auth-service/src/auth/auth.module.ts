@@ -9,6 +9,7 @@ import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { UsuariosAdminController } from './usuarios-admin.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtMesaStrategy } from './strategies/jwt-mesa.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -35,7 +36,7 @@ import { MesasModule } from '../mesas/mesas.module';
     UsuariosModule,
     forwardRef(() => MesasModule),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UsuariosAdminController],
   providers: [
     AuthService,
     JwtStrategy,

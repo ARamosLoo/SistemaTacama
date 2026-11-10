@@ -4,6 +4,7 @@ import { Plato } from '../types';
 import { useApp } from '../context/AppContext';
 import { HojaVid } from './Logo';
 import { NutriLinea, NutriDetalle } from './NutricionInfo';
+import { conflictosDe } from '../lib/alergias';
 import { Wine, Plus, ShieldAlert, Leaf } from 'lucide-react';
 
 interface PlatoCardProps {
@@ -16,7 +17,7 @@ export const PlatoCard: React.FC<PlatoCardProps> = ({ plato, onAbrirMaridaje, co
   const { agregarAlCarrito, alergiasDeclaradas, t, nombreAlergeno } = useApp();
 
   // Comprobar si el plato contiene algún alérgeno declarado por el usuario
-  const conflictoAlergeno = plato.alergenos.filter((a) => alergiasDeclaradas.includes(a.codigo));
+  const conflictoAlergeno = conflictosDe(plato, alergiasDeclaradas);
   const tieneConflicto = conflictoAlergeno.length > 0;
   const esBebida = plato.categoria === 'BEBIDA' || plato.seccion === 'GUARNICIONES';
 
@@ -52,7 +53,7 @@ export const PlatoCard: React.FC<PlatoCardProps> = ({ plato, onAbrirMaridaje, co
           {tieneConflicto && (
             <div className="absolute bottom-3 left-3 bg-rose-600/95 text-white px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center space-x-1 shadow-md">
               <ShieldAlert className="w-3.5 h-3.5" />
-              <span>{t('contiene')}: {conflictoAlergeno.map((a) => nombreAlergeno(a.codigo)).join(', ')}</span>
+              <span>{t('contiene')}: {conflictoAlergeno.map((c) => nombreAlergeno(c)).join(', ')}</span>
             </div>
           )}
         </div>

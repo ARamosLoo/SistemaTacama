@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useState } from 'react';
-import { api, TOKEN_KEY } from './api';
+import { api, leerSesion, guardarSesion, borrarSesion } from './api';
 
 export type Rol =
   | 'ADMINISTRADOR' | 'JEFE_SALON' | 'MOZO' | 'COCINA' | 'SOMMELIER' | 'ALMACEN';
 
-export type Modulo = 'kds' | 'mesas' | 'carta' | 'sommelier' | 'inventario' | 'analitica';
+export type Modulo = 'kds' | 'mesas' | 'carta' | 'sommelier' | 'inventario' | 'analitica' | 'cuentas';
 
 export interface Usuario {
   id: string;
@@ -15,7 +15,7 @@ export interface Usuario {
 
 // Módulos del portal a los que accede cada rol (primer elemento = pantalla inicial)
 export const ACCESO_POR_ROL: Record<Rol, Modulo[]> = {
-  ADMINISTRADOR: ['analitica', 'kds', 'mesas', 'carta', 'sommelier', 'inventario'],
+  ADMINISTRADOR: ['analitica', 'kds', 'mesas', 'carta', 'sommelier', 'inventario', 'cuentas'],
   JEFE_SALON: ['mesas', 'kds', 'carta', 'analitica', 'inventario'],
   MOZO: ['mesas'],
   COCINA: ['kds'],
@@ -32,54 +32,29 @@ export const NOMBRE_ROL: Record<Rol, string> = {
   ALMACEN: 'Almacén',
 };
 
-// Cuentas de desarrollo (las mismas que carga el seed del auth-service)
-export const CUENTAS_DEMO: { rol: Rol; email: string; password: string }[] = [
-  { rol: 'ADMINISTRADOR', email: 'admin@tacama.pe', password: 'Admin2024!' },
-  { rol: 'JEFE_SALON', email: 'jefe@tacama.pe', password: 'JefeSalon2024!' },
-  { rol: 'MOZO', email: 'mozo1@tacama.pe', password: 'Mozo2024!' },
-  { rol: 'COCINA', email: 'cocina@tacama.pe', password: 'Cocina2024!' },
-  { rol: 'SOMMELIER', email: 'sommelier@tacama.pe', password: 'Sommelier2024!' },
-  { rol: 'ALMACEN', email: 'almacen@tacama.pe', password: 'Almacen2024!' },
-];
-
 interface AuthCtx {
   usuario: Usuario | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, recordar?: boolean) => Promise<void>;
   logout: () => void;
 }
 
 const Ctx = createContext<AuthCtx | undefined>(undefined);
-const USER_KEY = 'tacama.staff.usuario';
-
-const leerUsuario = (): Usuario | null => {
-  try {
-    const raw = sessionStorage.getItem(USER_KEY);
-    return raw && sessionStorage.getItem(TOKEN_KEY) ? (JSON.parse(raw) as Usuario) : null;
-  } catch {
-    return null;
-  }
-};
+const leerUsuario = (): Usuario | null => leerSesion<Usuario>()?.usuario ?? null;
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [usuario, setUsuario] = useState<Usuario | null>(leerUsuario);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, recordar = false) => {
     const r = await api<{ accessToken: string; usuario: Usuario }>('/auth/login', {
       method: 'POST',
       body: { email, password },
     });
-    try {
-      sessionStorage.setItem(TOKEN_KEY, r.accessToken);
-      sessionStorage.setItem(USER_KEY, JSON.stringify(r.usuario));
-    } catch { /* almacenamiento no disponible */ }
+    guardarSesion(r.accessToken, r.usuario, recordar);
     setUsuario(r.usuario);
   };
 
   const logout = () => {
-    try {
-      sessionStorage.removeItem(TOKEN_KEY);
-      sessionStorage.removeItem(USER_KEY);
-    } catch { /* noop */ }
+    borrarSesion();
     setUsuario(null);
   };
 

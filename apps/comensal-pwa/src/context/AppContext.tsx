@@ -8,6 +8,15 @@ import { mensajeStock } from '../lib/stock';
 import { VERSION_TERMINOS } from '../lib/legal';
 import { recomendarPlatos, armarMenuRecomendado, armarMenuPopular, PlatoRecomendado, MenuRecomendado } from '../lib/recomendar';
 import { texto, ClaveTexto, Idioma, detectarIdioma, ALERGENOS_NOMBRE } from '../lib/i18n';
+import { esOtro, textoDeOtro, textosOtros, soloCodigosDeAlergeno } from '../lib/alergias';
+import { leerSesionLocal, guardarSesionLocal, leerJsonSesion } from '../lib/almacen';
+import { Personalizacion, hayPersonalizacion, notaPersonalizacion, notasSinPersonalizacion, unirNotas } from '../lib/personalizar';
+
+// La línea del carrito se identifica con "plato::comensal" y, si el mismo plato se pide con otra personalización, "#sufijo"
+const baseDeLinea = (lineaId: string) => lineaId.split('#')[0];
+const sufijoDeLinea = (lineaId?: string) => (lineaId && lineaId.includes('#') ? '#' + lineaId.split('#')[1] : '');
+const mismaPersonalizacion = (a: Partial<Personalizacion>, b: Partial<Personalizacion>) =>
+  JSON.stringify([a.sin ?? [], !!a.sinAlergia, (a.pedido ?? '').trim()]) === JSON.stringify([b.sin ?? [], !!b.sinAlergia, (b.pedido ?? '').trim()]);
 
 interface AppContextType {
   mesa: string;
@@ -31,6 +40,8 @@ interface AppContextType {
   renombrarComensal: (idx: number, nombre: string) => void;
   nombreComensal: (c: Comensal) => string;
   reasignarItem: (lineaId: string, comensalId: string) => void;
+  personalizarItem: (lineaId: string, p: Personalizacion) => void;
+  personalizarItemServidor: (item: ItemServidor, p: Personalizacion) => Promise<void>;
   alergenosCatalogo: Alergeno[];
   momento: Momento;
   setMomento: (m: Momento) => void;
@@ -124,29 +135,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [idioma]);
   // Momento del día: antes de las 11:00 se propone desayuno, luego almuerzo; el comensal puede cambiarlo
   const [momento, setMomentoEstado] = useState<Momento>(() => {
-    try {
-      const g = sessionStorage.getItem('tacama.momento');
-      if (g === 'desayuno' || g === 'almuerzo') return g;
-    } catch { /* sin almacenamiento */ }
+    const g = leerSesionLocal('tacama.momento');
+    if (g === 'desayuno' || g === 'almuerzo') return g;
     return new Date().getHours() < 11 ? 'desayuno' : 'almuerzo';
   });
   const setMomento = (m: Momento) => {
     setMomentoEstado(m);
-    try { sessionStorage.setItem('tacama.momento', m); } catch { /* sin almacenamiento */ }
+    guardarSesionLocal('tacama.momento', m);
   };
   // ── Comensales de la mesa: un solo celular puede pedir por varias personas, cada una con su perfil ──
   type Grupo = { comensales: Comensal[]; activoIdx: number; configurada: boolean };
-  const [grupo, setGrupo] = useState<Grupo>(() => {
-    try {
-      const g = sessionStorage.getItem('tacama.mesa');
-      if (g) return JSON.parse(g) as Grupo;
-    } catch { /* sin almacenamiento */ }
-    return { comensales: [], activoIdx: 0, configurada: false };
-  });
+  const [grupo, setGrupo] = useState<Grupo>(() => leerJsonSesion<Grupo>('tacama.mesa') ?? { comensales: [], activoIdx: 0, configurada: false });
   const actualizarGrupo = (fn: (g: Grupo) => Grupo) =>
     setGrupo((prev) => {
       const nuevo = fn(prev);
-      try { sessionStorage.setItem('tacama.mesa', JSON.stringify(nuevo)); } catch { /* sin almacenamiento */ }
+      guardarSesionLocal('tacama.mesa', JSON.stringify(nuevo));
       return nuevo;
     });
   const comensales = grupo.comensales;
@@ -200,15 +203,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     actualizarGrupo((g) => ({ ...g, comensales: g.comensales.map((c, i) => (i === idx ? { ...c, nombre } : c)) }));
   // Aceptación de términos y datos: solo vale para esta visita (sessionStorage), no se guarda en servidor
   const [terminosAceptados, setTerminosAceptados] = useState<boolean>(() => {
-    try {
-      // Solo vale la aceptación de la versión vigente de los términos
-      const g = sessionStorage.getItem('tacama.terminos');
-      return g === '1' || (!!g && JSON.parse(g).v === VERSION_TERMINOS);
-    } catch { return false; }
+    // Solo vale la aceptación de la versión vigente de los términos
+    const g = leerSesionLocal('tacama.terminos');
+    if (g === '1') return true;
+    return !!g && leerJsonSesion<{ v?: string }>('tacama.terminos')?.v === VERSION_TERMINOS;
   });
   const aceptarTerminos = () => {
     setTerminosAceptados(true);
-    try { sessionStorage.setItem('tacama.terminos', JSON.stringify({ v: VERSION_TERMINOS, ts: new Date().toISOString(), salud: true })); } catch { /* sin almacenamiento */ }
+    guardarSesionLocal('tacama.terminos', JSON.stringify({ v: VERSION_TERMINOS, ts: new Date().toISOString(), salud: true }));
   };
   // Aviso breve al agregar un plato a la comanda
   const [aviso, setAviso] = useState<string | null>(null);
@@ -378,13 +380,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const quien = comensales.length > 1 && activo ? ' ' + texto(idioma, 'toastPara', { c: nombreComensal(activo) }) : '';
     mostrarAviso(texto(idioma, 'toastAgregado', { n: item.nombre }) + quien);
     setCarrito((prev) => {
-      const idx = prev.findIndex((i) => (i.lineaId ?? i.id) === lineaId);
+      // Se suma a la línea del mismo plato y comensal que no esté personalizada; si no hay, se crea una línea nueva
+      const idx = prev.findIndex((i) => baseDeLinea(i.lineaId ?? i.id) === lineaId && !hayPersonalizacion(i));
       if (idx >= 0) {
         const copy = [...prev];
         copy[idx] = { ...copy[idx], cantidad: copy[idx].cantidad + cantidad };
         return copy;
       }
-      return [...prev, { ...item, comensalId, lineaId, cantidad }];
+      const existeBase = prev.some((i) => (i.lineaId ?? i.id) === lineaId);
+      return [...prev, { ...item, comensalId, lineaId: existeBase ? lineaId + '#' + Date.now().toString(36) : lineaId, cantidad }];
     });
   };
 
@@ -407,25 +411,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCarrito((prev) => {
       const origen = prev.find((i) => clave(i) === lineaId);
       if (!origen) return prev;
-      const nuevaLinea = origen.id + '::' + comensalId;
+      let nuevaLinea = origen.id + '::' + comensalId + sufijoDeLinea(origen.lineaId);
       const resto = prev.filter((i) => clave(i) !== lineaId);
       const existente = resto.findIndex((i) => clave(i) === nuevaLinea);
-      if (existente >= 0) {
-        // si ya había el mismo ítem para ese comensal, se suman las cantidades
+      if (existente >= 0 && mismaPersonalizacion(resto[existente], origen)) {
+        // si ya había el mismo ítem, con lo mismo pedido, para ese comensal, se suman las cantidades
         const copy = [...resto];
         copy[existente] = { ...copy[existente], cantidad: copy[existente].cantidad + origen.cantidad };
         return copy;
       }
+      // Con una personalización distinta no se funden: se perdería el "sin" o la marca de alergia de una de las dos
+      if (existente >= 0) nuevaLinea += '#' + Date.now().toString(36);
       return prev.map((i) => (clave(i) === lineaId ? { ...i, comensalId, lineaId: nuevaLinea } : i));
     });
   };
+
+  // Personalización de un plato todavía en el carrito (ingredientes que se quitan y pedido especial)
+  const personalizarItem = (lineaId: string, p: Personalizacion) =>
+    setCarrito((prev) => prev.map((i) => (clave(i) === lineaId ? { ...i, sin: p.sin, sinAlergia: p.sinAlergia && p.sin.length > 0, pedido: p.pedido.trim() || undefined } : i)));
 
   const limpiarCarrito = () => setCarrito([]);
   const totalPEN = carrito.reduce((acc, item) => acc + item.precioPEN * item.cantidad, 0);
 
   const t = (clave: ClaveTexto, vars?: Record<string, string | number>) => texto(idioma, clave, vars);
   const nombreComensal = (c: Comensal) => c.nombre.trim() || texto(idioma, 'comensalN', { n: comensales.indexOf(c) + 1 });
-  const nombreAlergeno = (codigo: string) => ALERGENOS_NOMBRE[codigo]?.[idioma] ?? codigo;
+  const nombreAlergeno = (codigo: string) => (esOtro(codigo) ? texto(idioma, 'alergiaOtro', { n: textoDeOtro(codigo) }) : ALERGENOS_NOMBRE[codigo]?.[idioma] ?? codigo);
   const mesa =
     mesaEstado === 'ok' ? `${texto(idioma, 'mesa')} ${String(mesaNumero).padStart(2, '0')}` : texto(idioma, mesaEstado === 'error' ? 'mesaSinConexion' : 'mesaConectando');
   const recomendados =
@@ -480,9 +490,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const com = comensales.find((c) => c.id === i.comensalId);
       const partes: string[] = [];
       if (varios && com) partes.push(nombreComensal(com));
-      if (com && com.alergias.length) partes.push('ALERGIA: ' + com.alergias.map((a) => ALERGENOS_NOMBRE[a]?.es ?? a).join(', '));
+      if (com && com.alergias.length) partes.push('ALERGIA: ' + com.alergias.map((a) => (esOtro(a) ? 'OTRA: ' + textoDeOtro(a) : ALERGENOS_NOMBRE[a]?.es ?? a)).join(', '));
       if (i.notas) partes.push(i.notas);
-      const nota = partes.join(' | ');
+      const pers = notaPersonalizacion({ sin: i.sin, sinAlergia: i.sinAlergia, pedido: i.pedido });
+      if (pers) partes.push(pers);
+      const nota = unirNotas(partes);
       const codigo = i.etiquetaId ?? (esBebida ? i.id.replace(/-(copa|botella)$/, '') : undefined);
       return {
         platoId: esBebida ? codigo! : i.id,
@@ -494,13 +506,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       };
     });
 
+    // Las alergias escritas con palabras propias ("Otros") no son códigos del catálogo: viajan como observación para la cocina
+    const otras = comensales
+      .map((c) => ({ c, t: textosOtros(c.alergias) }))
+      .filter((x) => x.t.length > 0)
+      .map((x) => (varios ? nombreComensal(x.c) + ': ' : '') + x.t.join(', '));
     const { data: comanda } = await api<{ data: { id: string } }>('/comandas', {
       method: 'POST',
-      body: { mesaId, sesionMesaId: tokenMesa.slice(-32), items },
+      body: { mesaId, sesionMesaId: tokenMesa.slice(-32), items, ...(otras.length ? { observaciones: 'ALERGIA (otras): ' + otras.join(' | ') } : {}) },
     });
 
     // Alergias de todos los comensales de la mesa (códigos de alérgeno)
-    const codigos = [...new Set(comensales.flatMap((c) => c.alergias))];
+    const codigos = [...new Set(comensales.flatMap((c) => soloCodigosDeAlergeno(c.alergias)))];
     await api(`/comandas/${comanda.id}/restricciones`, {
       method: 'POST',
       body: { alergenos: codigos, consentimiento: true, versionTerminos: VERSION_TERMINOS },
@@ -542,6 +559,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
     await sincronizarRef.current();
   };
+  // Personalizar un plato ya enviado: cambia las notas de cocina (solo los 5 minutos posteriores a la confirmación)
+  const personalizarItemServidor = async (item: ItemServidor, p: Personalizacion) => {
+    if (!comandaRef.current) return;
+    const notas = unirNotas([notasSinPersonalizacion(item.notas), notaPersonalizacion(p)]);
+    await api(`/comandas/${comandaRef.current}/items/${item.id}/notas`, { method: 'PATCH', body: { notas } });
+    await sincronizarRef.current();
+  };
   const itemAgotado = (item: ItemCarrito) =>
     item.tipo === 'PLATO'
       ? platos.some((p) => p.id === item.id && !p.disponible)
@@ -568,7 +592,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         modalAlergenosAbierto, setModalAlergenosAbierto, platos, etiquetas, cargandoCarta, errorCarta,
         carrito, agregarAlCarrito, eliminarDelCarrito, actualizarCantidad, limpiarCarrito, totalPEN,
         comandaActivaId, estadoComanda, confirmarComanda, obtenerMaridajes, csatEnviado, enviarCsat, cuenta, solicitarCuenta,
-        comandaServidor, anularItem, cambiarItem, itemAgotado, avisoStock,
+        comandaServidor, anularItem, cambiarItem, itemAgotado, avisoStock, personalizarItem, personalizarItemServidor,
       }}
     >
       {children}

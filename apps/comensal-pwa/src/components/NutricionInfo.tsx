@@ -1,6 +1,7 @@
 import React from 'react';
 import { NUTRICION, InfoNutricional } from '../lib/nutricion';
 import { useApp } from '../context/AppContext';
+import { ahorroDe } from '../lib/personalizar';
 
 /** Información nutricional referencial de un plato por su código de carta (undefined si no hay datos). */
 export const nutriDe = (codigo?: string): InfoNutricional | undefined => (codigo ? NUTRICION[codigo] : undefined);
@@ -8,7 +9,7 @@ export const nutriDe = (codigo?: string): InfoNutricional | undefined => (codigo
 interface Totales { kcal: number; kj: number; proteinas: number; grasas: number; carbohidratos: number; fibra: number }
 
 /** Suma la información nutricional de varios platos (cada uno con su cantidad). */
-export function sumarNutricion(items: { codigo?: string; cantidad?: number }[]): Totales | null {
+export function sumarNutricion(items: { codigo?: string; cantidad?: number; sin?: string[] }[]): Totales | null {
   const t: Totales = { kcal: 0, kj: 0, proteinas: 0, grasas: 0, carbohidratos: 0, fibra: 0 };
   let hay = false;
   for (const it of items) {
@@ -18,6 +19,9 @@ export function sumarNutricion(items: { codigo?: string; cantidad?: number }[]):
     const c = it.cantidad ?? 1;
     t.kcal += n.kcal * c; t.kj += n.kj * c; t.proteinas += n.proteinas * c; t.grasas += n.grasas * c;
     t.carbohidratos += n.carbohidratos * c; t.fibra += n.fibra * c;
+    // Lo que el comensal pide quitar baja la energía y los macronutrientes del plato
+    const a = ahorroDe(it.codigo, it.sin);
+    t.kcal -= a.kcal * c; t.kj -= a.kj * c; t.proteinas -= a.proteinas * c; t.grasas -= a.grasas * c; t.carbohidratos -= a.carbohidratos * c;
   }
   return hay ? t : null;
 }
@@ -55,7 +59,7 @@ export const NutriDetalle: React.FC<{ codigo?: string }> = ({ codigo }) => {
   const n = nutriDe(codigo);
   if (!n) return null;
   return (
-    <details className="group mt-2 rounded-xl border border-stone-200 bg-[#F7F8FA] px-3 py-2">
+    <details className="group mt-2 rounded-xl border border-stone-200 bg-[#F6F8F0] px-3 py-2">
       <summary className="cursor-pointer select-none text-[11px] font-semibold text-[#466212] list-none flex items-center justify-between gap-2">
         <span>{t('nutriTitulo')}</span>
         <span className="text-stone-500 font-normal">{f(n.kcal)} kcal · {f(n.kj)} kJ</span>
@@ -76,7 +80,7 @@ export const NutriDetalle: React.FC<{ codigo?: string }> = ({ codigo }) => {
 };
 
 /** Resumen de una selección: energía total y macronutrientes. */
-export const NutriTotal: React.FC<{ items: { codigo?: string; cantidad?: number }[]; titulo?: string; compacto?: boolean }> = ({ items, titulo, compacto }) => {
+export const NutriTotal: React.FC<{ items: { codigo?: string; cantidad?: number; sin?: string[] }[]; titulo?: string; compacto?: boolean }> = ({ items, titulo, compacto }) => {
   const { t } = useApp();
   const f = useFmt();
   const tot = sumarNutricion(items);

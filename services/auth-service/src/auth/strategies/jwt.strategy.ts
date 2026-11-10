@@ -37,11 +37,12 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException('Usuario no encontrado o inactivo');
     }
 
-    // El objeto retornado se adjunta a request.user
+    // El objeto retornado se adjunta a request.user. El rol es el de la base de datos: si un administrador
+    // cambia el rol de alguien, el cambio vale de inmediato y no cuando venza el token que ya tenía.
     return {
       id: payload.sub,
       email: payload.email,
-      rol: payload.rol,
+      rol: usuario.rol,
     };
   }
 }

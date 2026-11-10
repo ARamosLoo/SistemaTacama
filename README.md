@@ -207,7 +207,9 @@ tacamamesa/
 
 **Información nutricional:** cada plato muestra su energía (kcal y kJ) y sus macronutrientes por porción, y el carrito y la recomendación suman el total de lo que se está eligiendo. Son valores **referenciales**, calculados con las Tablas Peruanas de Composición de Alimentos (CENAN / INS, Minsa) como referencia y recetas estándar; regenerar con `node infra/data/build-nutricion.js`. La cocina o un nutricionista debe validarlos con las recetas reales.
 
-**Personal (http://localhost:5174):** login con JWT; cada rol ve solo sus módulos.
+**Personalizar un plato:** en las entradas, los principales, los desayunos, el menú kids y los piqueos (52 platos) el comensal puede quitar ingredientes (por ejemplo "sin cebolla", "sin papas fritas"), marcar si lo pide por alergia y escribir un pedido especial. La energía del carrito se descuenta según lo que quita. La cocina lo ve resaltado en la pantalla KDS (en rojo si es por alergia). Se puede cambiar o quitar durante los 5 minutos posteriores a confirmar el pedido. Los ingredientes retirables de cada plato se definen en `infra/data/build-nutricion.js` (tabla `OPC`) y deben validarse con la cocina.
+
+**Personal (http://localhost:5174):** login con JWT; cada rol ve solo sus módulos. La pantalla de ingreso ya no lista cuentas: cada persona entra con la cuenta que el **administrador** le crea en el módulo **Cuentas** (alta, cambio de rol, restablecer contraseña, activar y desactivar). Las contraseñas se guardan cifradas (bcrypt) y el sistema nunca las muestra. La casilla "Guardar mi cuenta en este dispositivo" mantiene la sesión y recuerda el correo; la contraseña no se guarda en el sistema (la guarda, si el usuario lo acepta, el administrador de contraseñas del navegador). El administrador inicial y las cuentas de ejemplo de la tabla las crea el seed solo para desarrollo: cámbielas antes de usar el sistema con datos reales.
 
 | Rol | Correo | Contraseña | Módulos |
 |---|---|---|---|

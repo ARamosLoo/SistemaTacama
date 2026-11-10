@@ -59,7 +59,15 @@ Conviene tener abiertas, en ventanas separadas: el celular (comensal), la cocina
 2. El mozo ve cómo va a pagar (por ejemplo, el vuelto si es efectivo, o que lleve el POS si es tarjeta) y cobra en la mesa.
 3. El mozo pulsa **"Confirmar pago y liberar mesa"**: la mesa queda libre y el comensal ve "Pago confirmado". Si el cliente se retira sin pedir la cuenta, el mozo usa **"Liberar mesa sin cuenta"** (queda en la auditoría).
 
-**F. Indicadores**
+**E2. Personalizar un plato**
+1. En el carrito, en el lomo saltado, pulsar **Personalizar**: marcar "Sin cebolla" y "Sin papas fritas" (baja la energía del total) y escribir "poco picante".
+2. Confirmar el pedido: en la pantalla de cocina el plato muestra "SIN: cebolla, papas fritas" y "PEDIDO: poco picante" resaltados (en rojo si se marcó "Lo pido por alergia").
+3. Durante los primeros 5 minutos se puede volver a personalizar desde el seguimiento del pedido.
+
+**F. Cuentas del personal**
+- Administrador: módulo **Cuentas**. Crear una cuenta (nombre, correo, rol y contraseña inicial), entrar con ella, cambiar su rol, restablecer su contraseña y desactivarla (la persona ya no puede ingresar).
+
+**G. Indicadores**
 - Administrador: "KPIs y auditoría" (ticket promedio, venta cruzada, calificación). **Aclarar que el historial es de ejemplo.**
 
 ## 3. Qué decir con honestidad

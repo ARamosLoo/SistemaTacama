@@ -271,6 +271,85 @@ for (const [cod, porcion, personas, receta] of R) {
   };
 }
 
+
+// ── Ingredientes que el comensal puede pedir que se quiten (entradas, principales, desayunos, menú kids y piqueos) ──
+// [opción, [[ingrediente de la receta, gramos que se retiran], ...]]. El ahorro de energía y macronutrientes
+// sale de la misma receta usada arriba. Las etiquetas de cada opción están en apps/comensal-pwa/src/lib/ingredientes.ts.
+const g = (id, ...pares) => [id, pares];
+const OPC = {
+  'TAC-002': [g('guacamole', ['guacamole', 45])],
+  'TAC-003': [g('guacamole', ['guacamole', 45])],
+  'TAC-004': [g('huancaina', ['salsaHuancaina', 45])],
+  'TAC-005': [g('guacamole', ['guacamole', 45])],
+  'TAC-006': [g('guacamole', ['guacamole', 40]), g('huancaina', ['salsaHuancaina', 40])],
+  'TAC-007': [g('pasas', ['pasas', 20]), g('pecanas', ['pecanaSal', 25]), g('alioli', ['alioli', 20]), g('pan', ['pan', 60])],
+  'TAC-008': [g('huancaina', ['salsaHuancaina', 60])],
+  'TAC-009': [g('ensalada', ['tomate', 40], ['lechuga', 30], ['aceite', 4])],
+  'TAC-010': [g('salsaCriolla', ['salsaCriolla', 60]), g('huancaina', ['salsaHuancaina', 60]), g('choclo', ['choclo', 120])],
+  'TAC-011': [g('palta', ['palta', 35]), g('mayonesa', ['mayonesa', 25]), g('huevo', ['huevo', 20])],
+  'TAC-012': [g('huevo', ['huevo', 45]), g('aceitunas', ['aceituna', 10]), g('lechuga', ['lechuga', 15])],
+  'TAC-013': [g('mayonesa', ['mayonesa', 30]), g('verduras', ['verduras', 90])],
+  'TAC-014': [g('mayonesa', ['mayonesa', 30]), g('verduras', ['verduras', 80])],
+  'TAC-015': [g('cebolla', ['cebolla', 30]), g('tomate', ['tomate', 60])],
+  'TAC-016': [g('crutones', ['pan', 25], ['aceite', 8]), g('anchoas', ['pescado', 5]), g('parmesano', ['parmesano', 15]), g('huevo', ['huevo', 30])],
+  'TAC-017': [g('crutones', ['pan', 25], ['aceite', 8]), g('anchoas', ['pescado', 5]), g('parmesano', ['parmesano', 15]), g('huevo', ['huevo', 30])],
+  'TAC-018': [g('palta', ['palta', 60]), g('cebolla', ['cebolla', 20]), g('esparragos', ['esparrago', 30]), g('choclo', ['choclo', 40]), g('tomate', ['tomate', 50]), g('zanahoria', ['zanahoria', 30])],
+  'TAC-019': [g('salsaCriolla', ['salsaCriolla', 50])],
+  'TAC-020': [g('salsaCriolla', ['salsaCriolla', 50])],
+  'TAC-022': [g('pasas', ['pasas', 10]), g('aceitunas', ['aceituna', 10]), g('huevo', ['huevo', 50]), g('cebolla', ['cebolla', 40]), g('queso', ['quesoFresco', 20])],
+  'TAC-023': [g('salsaBBQ', ['salsaBBQ', 60])],
+  'TAC-024': [g('huevo', ['huevo', 25]), g('aceitunas', ['aceituna', 8]), g('papa', ['papaCocida', 100]), g('arroz', ['arroz', 150])],
+  'TAC-025': [g('salsaCriolla', ['salsaCriolla', 60]), g('arveja', ['arveja', 30]), g('zanahoria', ['zanahoria', 30])],
+  'TAC-028': [g('salsaCriolla', ['salsaCriolla', 70]), g('chipsCamote', ['camoteChips', 70])],
+  'TAC-029': [g('pure', ['puré', 130]), g('pallares', ['pallar', 80]), g('arroz', ['arroz', 150])],
+  'TAC-030': [g('sopaSeca', ['sopaSeca', 140])],
+  'TAC-031': [g('salsaVino', ['salsaVino', 60])],
+  'TAC-033': [g('cebolla', ['cebolla', 60]), g('tomate', ['tomate', 50]), g('papasFritas', ['papaFrita', 120]), g('arroz', ['arroz', 140])],
+  'TAC-034': [g('pure', ['puré', 160]), g('arroz', ['arroz', 150]), g('salsaVino', ['salsaVino', 100])],
+  'TAC-035': [g('arroz', ['arroz', 150])],
+  'TAC-036': [g('arroz', ['arroz', 150]), g('salsaVino', ['salsaVino', 100])],
+  'TAC-037': [g('huevo', ['huevo', 55]), g('platano', ['platano', 70], ['aceite', 8])],
+  'TAC-038': [g('salsaCriolla', ['salsaCriolla', 60]), g('tartara', ['tartara', 30]), g('papasFritas', ['papaFrita', 140])],
+  'TAC-040': [g('arroz', ['arroz', 220])],
+  'TAC-041': [g('papasFritas', ['papaFrita', 120])],
+  'TAC-042': [g('queso', ['cheddar', 20]), g('papasFritas', ['papaFrita', 120])],
+  'TAC-043': [g('pure', ['puré', 100]), g('arroz', ['arroz', 100]), g('salsaVino', ['salsaVino', 60])],
+  'TAC-046': [g('jamon', ['jamon', 80])],
+  'TAC-047': [g('quesoAzul', ['azul', 40]), g('gouda', ['gouda', 50]), g('parmesano', ['parmesano', 30])],
+  'TAC-049': [g('tocino', ['tocino', 40]), g('salame', ['salame', 50]), g('carneMolida', ['molida', 70])],
+  'TAC-050': [g('cebolla', ['cebolla', 40]), g('papasFritas', ['papaFrita', 110]), g('salsaVino', ['salsaVino', 60])],
+  'TAC-051': [g('chipsCamote', ['camoteChips', 60]), g('salsaCriolla', ['salsaCriolla', 50])],
+  'TAC-052': [g('palta', ['palta', 60]), g('mayonesa', ['mayonesa', 25])],
+  'TAC-053': [g('queso', ['cheddar', 25])],
+  'TAC-054': [g('queso', ['cheddar', 25]), g('tocino', ['tocino', 20]), g('huevo', ['huevo', 55])],
+};
+// Platos a los que se les puede personalizar el pedido (entradas, principales, desayunos, kids y piqueos)
+const ROLES_PERSONALIZABLES = ['ENTRADA', 'FONDO', 'DESAYUNO', 'KIDS', 'PIQUEO'];
+const personalizables = require('./carta-tacama.json').filter((p) => ROLES_PERSONALIZABLES.includes(p.rol)).map((p) => p.codigo);
+
+// Cada opción debe tener su nombre en los 5 idiomas en apps/comensal-pwa/src/lib/ingredientes.ts; si falta, la cocina
+// recibiría el identificador crudo ("huancaina") y la personalización guardada no se podría releer.
+const etiquetas = fs.readFileSync(path.join(__dirname, '../../apps/comensal-pwa/src/lib/ingredientes.ts'), 'utf8');
+const idsConNombre = new Set([...etiquetas.matchAll(/^ {2}(\w+): \[/gm)].map((m) => m[1]));
+const sinNombre = [...new Set(Object.values(OPC).flat().map(([id]) => id))].filter((id) => !idsConNombre.has(id));
+if (sinNombre.length) throw new Error('ingredientes sin nombre en ingredientes.ts: ' + sinNombre.join(', '));
+
+const QUITAR = {};
+for (const [cod, opciones] of Object.entries(OPC)) {
+  if (!personalizables.includes(cod)) throw new Error('plato no personalizable: ' + cod);
+  QUITAR[cod] = {};
+  for (const [id, pares] of opciones) {
+    let p = 0, gr = 0, c = 0;
+    for (const [ing, cant] of pares) {
+      const x = I[ing];
+      if (!x) throw new Error('ingrediente desconocido ' + ing);
+      p += (x[0] * cant) / 100; gr += (x[1] * cant) / 100; c += (x[2] * cant) / 100;
+    }
+    const kcal = Math.round((4 * p + 9 * gr + 4 * c) / 5) * 5;
+    QUITAR[cod][id] = { kcal, kj: Math.round(kcal * 4.184), proteinas: Math.round(p), grasas: Math.round(gr), carbohidratos: Math.round(c) };
+  }
+}
+
 // Todos los platos de la carta deben tener información
 const carta = require('./carta-tacama.json');
 const faltan = carta.filter((p) => !salida[p.codigo]).map((p) => p.codigo);
@@ -294,6 +373,13 @@ export interface InfoNutricional {
 }
 
 export const NUTRICION: Record<string, InfoNutricional> = ${JSON.stringify(salida, null, 2)};
+
+/** Energía y macronutrientes que se descuentan al quitar cada ingrediente de un plato. */
+export interface AhorroIngrediente { kcal: number; kj: number; proteinas: number; grasas: number; carbohidratos: number }
+export const QUITAR: Record<string, Record<string, AhorroIngrediente>> = ${JSON.stringify(QUITAR, null, 2)};
+
+/** Códigos de los platos a los que se puede personalizar el pedido (entradas, principales, desayunos, kids y piqueos). */
+export const PERSONALIZABLES: string[] = ${JSON.stringify(personalizables)};
 `;
 fs.writeFileSync(path.join(__dirname, '../../apps/comensal-pwa/src/lib/nutricion.ts'), ts);
 console.log('platos con información nutricional:', Object.keys(salida).length);

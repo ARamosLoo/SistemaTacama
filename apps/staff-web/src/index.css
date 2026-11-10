@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --bg-dark: #121417;
-  --bg-panel: #1A1D23;
-  --bg-card: #22262F;
+  --bg-dark: #F6F8F0;
+  --bg-panel: #FFFFFF;
+  --bg-card: #FFFFFF;
   --wine-glow: #577A17;
   --gold-glow: #8FB339;
-  --accent-green: #10B981;
-  --accent-rose: #F43F5E;
+  --accent-green: #8FB339;
+  --accent-rose: #A24556;
 }
 
 * {
@@ -21,7 +21,7 @@
 body {
   font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-dark);
-  color: #F3F4F6;
+  color: #1F1F1F;
 }
 
 .font-serif-tacama {
@@ -34,16 +34,16 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #1A1D23;
+  background: #EEF0E4;
 }
 ::-webkit-scrollbar-thumb {
-  background: #374151;
+  background: #C5CBAF;
   border-radius: 4px;
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
-  50% { box-shadow: 0 0 25px rgba(244, 63, 94, 0.8); }
+  0%, 100% { box-shadow: 0 0 15px rgba(162, 69, 86, 0.30); }
+  50% { box-shadow: 0 0 25px rgba(162, 69, 86, 0.55); }
 }
 
 .alert-pulse-danger {
@@ -56,6 +56,17 @@ body {
 
 /* Pantallas táctiles: los controles tienen al menos 36 px de alto para pulsarlos con el dedo */
 @media (pointer: coarse) {
-  button, select, summary { min-height: 36px; }
+  button:not([role="switch"]), select, summary { min-height: 36px; }
   input[type="checkbox"], input[type="radio"] { min-width: 22px; min-height: 22px; }
+}
+
+/* Tablas de datos: en teléfonos cada fila se convierte en una tarjeta con su etiqueta (en vez de deslizar de lado) */
+@media (max-width: 767px) {
+  .tabla-tarjetas, .tabla-tarjetas tbody, .tabla-tarjetas tr, .tabla-tarjetas td { display: block; }
+  .tabla-tarjetas thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .tabla-tarjetas tbody { padding: 4px 0; }
+  .tabla-tarjetas tr { margin: 10px 12px; padding: 4px 0; border: 1px solid #DFE3CF; border-radius: 14px; background: #FFFFFF; }
+  .tabla-tarjetas td { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 8px 14px !important; text-align: right !important; }
+  .tabla-tarjetas td::before { content: attr(data-label); flex: 0 0 34%; text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #555D41; padding-top: 2px; }
+  .tabla-tarjetas td > * { text-align: right; min-width: 0; }
 }

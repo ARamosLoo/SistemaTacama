@@ -7,6 +7,7 @@ export interface ComandaCocina {
   minutosTranscurridos: number;
   modificadaHaceMin?: number; // el comensal cambió o anuló un plato hace estos minutos
   alergiasMesa: string[];
+  observaciones?: string; // por ejemplo "ALERGIA (otras): ..." escrita por el comensal
   items: {
     id: string;
     nombre: string;
