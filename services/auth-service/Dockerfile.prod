@@ -1,0 +1,50 @@
+# ============================================================
+# Dockerfile.prod — auth-service (TacamaMesa)
+# Multi-stage build optimizado para monorepo pnpm
+# ============================================================
+
+# ── Etapa 1: Base ──
+FROM node:20-alpine AS base
+RUN apk add --no-cache libc6-compat openssl
+RUN npm install -g pnpm@8.15.4
+WORKDIR /app
+
+# ── Etapa 2: Dependencias ──
+FROM base AS deps
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.json ./
+COPY packages ./packages
+COPY services/auth-service/package.json ./services/auth-service/
+COPY services/auth-service/prisma ./services/auth-service/prisma
+
+RUN pnpm install --frozen-lockfile
+
+# ── Etapa 3: Build ──
+FROM base AS builder
+COPY --from=deps /app ./
+COPY services/auth-service ./services/auth-service
+
+# Compilar paquetes compartidos del monorepo
+RUN pnpm --filter "@tacamamesa/shared-*" build
+# Generar cliente de Prisma para auth-service
+RUN pnpm --filter "@tacamamesa/auth-service" exec prisma generate
+# Compilar microservicio con NestJS
+RUN pnpm --filter "@tacamamesa/auth-service" build
+
+# ── Etapa 4: Producción ──
+FROM node:20-alpine AS runner
+RUN apk add --no-cache libc6-compat openssl
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/services/auth-service/dist ./services/auth-service/dist
+COPY --from=builder /app/services/auth-service/generated ./services/auth-service/generated
+COPY --from=builder /app/services/auth-service/prisma ./services/auth-service/prisma
+COPY --from=builder /app/services/auth-service/package.json ./services/auth-service/package.json
+COPY --from=builder /app/package.json ./package.json
+
+WORKDIR /app/services/auth-service
+EXPOSE 3001
+CMD ["node", "dist/main.js"]
+

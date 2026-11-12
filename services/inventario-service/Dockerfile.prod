@@ -1,0 +1,50 @@
+# ============================================================
+# Dockerfile.prod — inventario-service (TacamaMesa)
+# Multi-stage build optimizado para monorepo pnpm
+# ============================================================
+
+# ── Etapa 1: Base ──
+FROM node:20-alpine AS base
+RUN apk add --no-cache libc6-compat openssl
+RUN npm install -g pnpm@8.15.4
+WORKDIR /app
+
+# ── Etapa 2: Dependencias ──
+FROM base AS deps
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.json ./
+COPY packages ./packages
+COPY services/inventario-service/package.json ./services/inventario-service/
+COPY services/inventario-service/prisma ./services/inventario-service/prisma
+
+RUN pnpm install --frozen-lockfile
+
+# ── Etapa 3: Build ──
+FROM base AS builder
+COPY --from=deps /app ./
+COPY services/inventario-service ./services/inventario-service
+
+# Compilar paquetes compartidos del monorepo
+RUN pnpm --filter "@tacamamesa/shared-*" build
+# Generar cliente de Prisma para inventario-service
+RUN pnpm --filter "@tacamamesa/inventario-service" exec prisma generate
+# Compilar microservicio con NestJS
+RUN pnpm --filter "@tacamamesa/inventario-service" build
+
+# ── Etapa 4: Producción ──
+FROM node:20-alpine AS runner
+RUN apk add --no-cache libc6-compat openssl
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/services/inventario-service/dist ./services/inventario-service/dist
+COPY --from=builder /app/services/inventario-service/generated ./services/inventario-service/generated
+COPY --from=builder /app/services/inventario-service/prisma ./services/inventario-service/prisma
+COPY --from=builder /app/services/inventario-service/package.json ./services/inventario-service/package.json
+COPY --from=builder /app/package.json ./package.json
+
+WORKDIR /app/services/inventario-service
+EXPOSE 3005
+CMD ["node", "dist/main.js"]
+

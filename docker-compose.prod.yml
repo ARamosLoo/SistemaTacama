@@ -1,0 +1,325 @@
+# =============================================================
+# docker-compose.prod.yml — TacamaMesa (Producción)
+# VPS Contabo · HTTPS automático con Let's Encrypt · Red privada
+# =============================================================
+
+networks:
+  tacama-net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  traefik_certs:
+
+services:
+
+  # ── API GATEWAY / REVERSE PROXY (TRAEFIK v3) ──────────────────
+  # ÚNICO servicio que expone puertos al exterior (80 y 443)
+  traefik:
+    image: traefik:v3.1
+    container_name: tacama-traefik
+    restart: unless-stopped
+    command:
+      # Provider Docker (detecta servicios en tacama-net)
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=tacama-net"
+
+      # Entrypoints HTTP (80) y HTTPS (443)
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+
+      # Redirección global obligatoria de HTTP a HTTPS
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+
+      # Let's Encrypt automático vía HTTP-01 challenge
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json"
+
+      # Logs
+      - "--log.level=INFO"
+      - "--accesslog=true"
+
+      # Dashboard desactivado en producción por seguridad
+      - "--api.insecure=false"
+      - "--api.dashboard=false"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "traefik_certs:/certs"
+    networks:
+      - tacama-net
+
+  # ── POSTGRESQL ────────────────────────────────────────────────
+  # Base de datos relacional con 6 esquemas (auth, catalogo, etc.)
+  # Sin directiva ports: inaccesible desde el exterior
+  postgres:
+    image: postgres:16-alpine
+    container_name: tacama-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - tacama-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── REDIS ─────────────────────────────────────────────────────
+  # Caché con autenticación por contraseña. Sin puertos expuestos.
+  redis:
+    image: redis:7-alpine
+    container_name: tacama-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD}
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - tacama-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── RABBITMQ ──────────────────────────────────────────────────
+  # Mensajería asíncrona entre microservicios. Sin puertos al exterior.
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: tacama-rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./infra/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./infra/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    networks:
+      - tacama-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  # ── SIMULADOR BODEGA (SANDBOX) ────────────────────────────────
+  # WireMock interno para consultas de existencias de bodega
+  bodega-sandbox:
+    image: wiremock/wiremock:3.5.4-alpine
+    container_name: tacama-bodega-sandbox
+    restart: unless-stopped
+    command:
+      - "--global-response-templating"
+    volumes:
+      - ./infra/sandbox/mappings:/home/wiremock/mappings:ro
+      - ./infra/sandbox/__files:/home/wiremock/__files:ro
+    networks:
+      - tacama-net
+
+  # ── MICROSERVICIO: AUTH (3001) ────────────────────────────────
+  auth-service:
+    build:
+      context: .
+      dockerfile: services/auth-service/Dockerfile.prod
+    container_name: tacama-auth
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: ${AUTH_DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      JWT_MESA_SECRET: ${JWT_MESA_SECRET}
+      JWT_MESA_EXPIRES_IN: ${JWT_MESA_EXPIRES_IN:-4h}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - tacama-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.auth.rule=Host(`${DOMAIN:-tacama-api.duckdns.org}`) && (PathPrefix(`/api/v1/auth`) || PathPrefix(`/api/v1/mesas`))"
+      - "traefik.http.routers.auth.entrypoints=websecure"
+      - "traefik.http.routers.auth.tls=true"
+      - "traefik.http.routers.auth.tls.certresolver=letsencrypt"
+      - "traefik.http.services.auth.loadbalancer.server.port=3001"
+      - "traefik.http.middlewares.auth-ratelimit.ratelimit.average=100"
+      - "traefik.http.middlewares.auth-ratelimit.ratelimit.period=1m"
+      - "traefik.http.routers.auth.middlewares=auth-ratelimit"
+
+  # ── MICROSERVICIO: CATALOGO-I18N (3002) ───────────────────────
+  catalogo-i18n-service:
+    build:
+      context: .
+      dockerfile: services/catalogo-i18n-service/Dockerfile.prod
+    container_name: tacama-catalogo
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3002
+      DATABASE_URL: ${CATALOGO_DATABASE_URL}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_TTL_CARTA: ${REDIS_TTL_CARTA:-300}
+      REDIS_TTL_TRADUCCIONES: ${REDIS_TTL_TRADUCCIONES:-1800}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tacama-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.catalogo.rule=Host(`${DOMAIN:-tacama-api.duckdns.org}`) && (PathPrefix(`/api/v1/carta`) || PathPrefix(`/api/v1/platos`) || PathPrefix(`/api/v1/admin`) || PathPrefix(`/api/v1/uploads`))"
+      - "traefik.http.routers.catalogo.entrypoints=websecure"
+      - "traefik.http.routers.catalogo.tls=true"
+      - "traefik.http.routers.catalogo.tls.certresolver=letsencrypt"
+      - "traefik.http.services.catalogo.loadbalancer.server.port=3002"
+
+  # ── MICROSERVICIO: MARIDAJE (3003) ───────────────────────────
+  maridaje-service:
+    build:
+      context: .
+      dockerfile: services/maridaje-service/Dockerfile.prod
+    container_name: tacama-maridaje
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3003
+      DATABASE_URL: ${MARIDAJE_DATABASE_URL}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_TTL_MARIDAJE: ${REDIS_TTL_MARIDAJE:-600}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - tacama-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.maridaje.rule=Host(`${DOMAIN:-tacama-api.duckdns.org}`) && (PathPrefix(`/api/v1/maridajes`) || PathPrefix(`/api/v1/reglas-maridaje`) || PathPrefix(`/api/v1/etiquetas`))"
+      - "traefik.http.routers.maridaje.entrypoints=websecure"
+      - "traefik.http.routers.maridaje.tls=true"
+      - "traefik.http.routers.maridaje.tls.certresolver=letsencrypt"
+      - "traefik.http.services.maridaje.loadbalancer.server.port=3003"
+
+  # ── MICROSERVICIO: COMANDAS + WEBSOCKET (3004) ────────────────
+  comandas-service:
+    build:
+      context: .
+      dockerfile: services/comandas-service/Dockerfile.prod
+    container_name: tacama-comandas
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3004
+      DATABASE_URL: ${COMANDAS_DATABASE_URL}
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_MESA_SECRET: ${JWT_MESA_SECRET}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - tacama-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.comandas.rule=Host(`${DOMAIN:-tacama-api.duckdns.org}`) && (PathPrefix(`/api/v1/comandas`) || PathPrefix(`/api/v1/valoraciones`) || PathPrefix(`/socket.io`) || PathPrefix(`/cocina`))"
+      - "traefik.http.routers.comandas.entrypoints=websecure"
+      - "traefik.http.routers.comandas.tls=true"
+      - "traefik.http.routers.comandas.tls.certresolver=letsencrypt"
+      - "traefik.http.services.comandas.loadbalancer.server.port=3004"
+
+  # ── MICROSERVICIO: INVENTARIO (3005) ──────────────────────────
+  inventario-service:
+    build:
+      context: .
+      dockerfile: services/inventario-service/Dockerfile.prod
+    container_name: tacama-inventario
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3005
+      DATABASE_URL: ${INVENTARIO_DATABASE_URL}
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      BODEGA_SANDBOX_URL: ${BODEGA_SANDBOX_URL:-http://bodega-sandbox:8080/sandbox}
+      BODEGA_SANDBOX_API_KEY: ${BODEGA_SANDBOX_API_KEY}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      bodega-sandbox:
+        condition: service_started
+    networks:
+      - tacama-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.inventario.rule=Host(`${DOMAIN:-tacama-api.duckdns.org}`) && (PathPrefix(`/api/v1/existencias`))"
+      - "traefik.http.routers.inventario.entrypoints=websecure"
+      - "traefik.http.routers.inventario.tls=true"
+      - "traefik.http.routers.inventario.tls.certresolver=letsencrypt"
+      - "traefik.http.services.inventario.loadbalancer.server.port=3005"
+
+  # ── MICROSERVICIO: ANALITICA Y AUDITORIA (3006) ───────────────
+  analitica-auditoria-service:
+    build:
+      context: .
+      dockerfile: services/analitica-auditoria-service/Dockerfile.prod
+    container_name: tacama-analitica
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3006
+      DATABASE_URL: ${ANALITICA_DATABASE_URL}
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - tacama-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.analitica.rule=Host(`${DOMAIN:-tacama-api.duckdns.org}`) && (PathPrefix(`/api/v1/indicadores`) || PathPrefix(`/api/v1/auditoria`))"
+      - "traefik.http.routers.analitica.entrypoints=websecure"
+      - "traefik.http.routers.analitica.tls=true"
+      - "traefik.http.routers.analitica.tls.certresolver=letsencrypt"
+      - "traefik.http.services.analitica.loadbalancer.server.port=3006"
+

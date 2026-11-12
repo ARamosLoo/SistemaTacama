@@ -1,0 +1,50 @@
+# ============================================================
+# Dockerfile.prod — catalogo-i18n-service (TacamaMesa)
+# Multi-stage build optimizado para monorepo pnpm
+# ============================================================
+
+# ── Etapa 1: Base ──
+FROM node:20-alpine AS base
+RUN apk add --no-cache libc6-compat openssl
+RUN npm install -g pnpm@8.15.4
+WORKDIR /app
+
+# ── Etapa 2: Dependencias ──
+FROM base AS deps
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.json ./
+COPY packages ./packages
+COPY services/catalogo-i18n-service/package.json ./services/catalogo-i18n-service/
+COPY services/catalogo-i18n-service/prisma ./services/catalogo-i18n-service/prisma
+
+RUN pnpm install --frozen-lockfile
+
+# ── Etapa 3: Build ──
+FROM base AS builder
+COPY --from=deps /app ./
+COPY services/catalogo-i18n-service ./services/catalogo-i18n-service
+
+# Compilar paquetes compartidos del monorepo
+RUN pnpm --filter "@tacamamesa/shared-*" build
+# Generar cliente de Prisma para catalogo-i18n-service
+RUN pnpm --filter "@tacamamesa/catalogo-i18n-service" exec prisma generate
+# Compilar microservicio con NestJS
+RUN pnpm --filter "@tacamamesa/catalogo-i18n-service" build
+
+# ── Etapa 4: Producción ──
+FROM node:20-alpine AS runner
+RUN apk add --no-cache libc6-compat openssl
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/services/catalogo-i18n-service/dist ./services/catalogo-i18n-service/dist
+COPY --from=builder /app/services/catalogo-i18n-service/generated ./services/catalogo-i18n-service/generated
+COPY --from=builder /app/services/catalogo-i18n-service/prisma ./services/catalogo-i18n-service/prisma
+COPY --from=builder /app/services/catalogo-i18n-service/package.json ./services/catalogo-i18n-service/package.json
+COPY --from=builder /app/package.json ./package.json
+
+WORKDIR /app/services/catalogo-i18n-service
+EXPOSE 3002
+CMD ["node", "dist/main.js"]
+

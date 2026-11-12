@@ -1,120 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/platos/:p*",
-      "destination": "https://TU-COMENSAL.vercel.app/platos/:p*"
+      "source": "/platos/:path*",
+      "destination": "https://sistema-tacama.vercel.app/platos/:path*"
     },
     {
-      "source": "/api/v1/auth",
-      "destination": "https://AUTH.up.railway.app/api/v1/auth"
-    },
-    {
-      "source": "/api/v1/auth/:p*",
-      "destination": "https://AUTH.up.railway.app/api/v1/auth/:p*"
-    },
-    {
-      "source": "/api/v1/mesas",
-      "destination": "https://AUTH.up.railway.app/api/v1/mesas"
-    },
-    {
-      "source": "/api/v1/mesas/:p*",
-      "destination": "https://AUTH.up.railway.app/api/v1/mesas/:p*"
-    },
-    {
-      "source": "/api/v1/carta",
-      "destination": "https://CATALOGO.up.railway.app/api/v1/carta"
-    },
-    {
-      "source": "/api/v1/carta/:p*",
-      "destination": "https://CATALOGO.up.railway.app/api/v1/carta/:p*"
-    },
-    {
-      "source": "/api/v1/platos",
-      "destination": "https://CATALOGO.up.railway.app/api/v1/platos"
-    },
-    {
-      "source": "/api/v1/platos/:p*",
-      "destination": "https://CATALOGO.up.railway.app/api/v1/platos/:p*"
-    },
-    {
-      "source": "/api/v1/admin",
-      "destination": "https://CATALOGO.up.railway.app/api/v1/admin"
-    },
-    {
-      "source": "/api/v1/admin/:p*",
-      "destination": "https://CATALOGO.up.railway.app/api/v1/admin/:p*"
-    },
-    {
-      "source": "/api/v1/uploads",
-      "destination": "https://CATALOGO.up.railway.app/api/v1/uploads"
-    },
-    {
-      "source": "/api/v1/uploads/:p*",
-      "destination": "https://CATALOGO.up.railway.app/api/v1/uploads/:p*"
-    },
-    {
-      "source": "/api/v1/maridajes",
-      "destination": "https://MARIDAJE.up.railway.app/api/v1/maridajes"
-    },
-    {
-      "source": "/api/v1/maridajes/:p*",
-      "destination": "https://MARIDAJE.up.railway.app/api/v1/maridajes/:p*"
-    },
-    {
-      "source": "/api/v1/reglas-maridaje",
-      "destination": "https://MARIDAJE.up.railway.app/api/v1/reglas-maridaje"
-    },
-    {
-      "source": "/api/v1/reglas-maridaje/:p*",
-      "destination": "https://MARIDAJE.up.railway.app/api/v1/reglas-maridaje/:p*"
-    },
-    {
-      "source": "/api/v1/etiquetas",
-      "destination": "https://MARIDAJE.up.railway.app/api/v1/etiquetas"
-    },
-    {
-      "source": "/api/v1/etiquetas/:p*",
-      "destination": "https://MARIDAJE.up.railway.app/api/v1/etiquetas/:p*"
-    },
-    {
-      "source": "/api/v1/comandas",
-      "destination": "https://COMANDAS.up.railway.app/api/v1/comandas"
-    },
-    {
-      "source": "/api/v1/comandas/:p*",
-      "destination": "https://COMANDAS.up.railway.app/api/v1/comandas/:p*"
-    },
-    {
-      "source": "/api/v1/valoraciones",
-      "destination": "https://COMANDAS.up.railway.app/api/v1/valoraciones"
-    },
-    {
-      "source": "/api/v1/valoraciones/:p*",
-      "destination": "https://COMANDAS.up.railway.app/api/v1/valoraciones/:p*"
-    },
-    {
-      "source": "/api/v1/existencias",
-      "destination": "https://INVENTARIO.up.railway.app/api/v1/existencias"
-    },
-    {
-      "source": "/api/v1/existencias/:p*",
-      "destination": "https://INVENTARIO.up.railway.app/api/v1/existencias/:p*"
-    },
-    {
-      "source": "/api/v1/indicadores",
-      "destination": "https://ANALITICA.up.railway.app/api/v1/indicadores"
-    },
-    {
-      "source": "/api/v1/indicadores/:p*",
-      "destination": "https://ANALITICA.up.railway.app/api/v1/indicadores/:p*"
-    },
-    {
-      "source": "/api/v1/auditoria",
-      "destination": "https://ANALITICA.up.railway.app/api/v1/auditoria"
-    },
-    {
-      "source": "/api/v1/auditoria/:p*",
-      "destination": "https://ANALITICA.up.railway.app/api/v1/auditoria/:p*"
+      "source": "/api/v1/:path*",
+      "destination": "https://tacama-api.duckdns.org/api/v1/:path*"
     },
     {
       "source": "/((?!api/|assets/|platos/|socket.io/).*)",

@@ -1,0 +1,51 @@
+# ============================================================
+# Dockerfile.prod — comandas-service (TacamaMesa)
+# Multi-stage build optimizado para monorepo pnpm
+# WebSocket Socket.IO en /cocina (puerto 3004)
+# ============================================================
+
+# ── Etapa 1: Base ──
+FROM node:20-alpine AS base
+RUN apk add --no-cache libc6-compat openssl
+RUN npm install -g pnpm@8.15.4
+WORKDIR /app
+
+# ── Etapa 2: Dependencias ──
+FROM base AS deps
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json tsconfig.json ./
+COPY packages ./packages
+COPY services/comandas-service/package.json ./services/comandas-service/
+COPY services/comandas-service/prisma ./services/comandas-service/prisma
+
+RUN pnpm install --frozen-lockfile
+
+# ── Etapa 3: Build ──
+FROM base AS builder
+COPY --from=deps /app ./
+COPY services/comandas-service ./services/comandas-service
+
+# Compilar paquetes compartidos del monorepo
+RUN pnpm --filter "@tacamamesa/shared-*" build
+# Generar cliente de Prisma para comandas-service
+RUN pnpm --filter "@tacamamesa/comandas-service" exec prisma generate
+# Compilar microservicio con NestJS
+RUN pnpm --filter "@tacamamesa/comandas-service" build
+
+# ── Etapa 4: Producción ──
+FROM node:20-alpine AS runner
+RUN apk add --no-cache libc6-compat openssl
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/services/comandas-service/dist ./services/comandas-service/dist
+COPY --from=builder /app/services/comandas-service/generated ./services/comandas-service/generated
+COPY --from=builder /app/services/comandas-service/prisma ./services/comandas-service/prisma
+COPY --from=builder /app/services/comandas-service/package.json ./services/comandas-service/package.json
+COPY --from=builder /app/package.json ./package.json
+
+WORKDIR /app/services/comandas-service
+EXPOSE 3004
+CMD ["node", "dist/main.js"]
+
