@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import {
   Plato, EtiquetaTacama, ItemCarrito, MaridajeRecomendacion, EstadoComanda, Alergeno, PerfilComensal, Momento, Comensal,
 } from '../types';
-import { api } from '../lib/api';
+import { api, ApiError } from '../lib/api';
 import { mensajeStock } from '../lib/stock';
 import { VERSION_TERMINOS } from '../lib/legal';
 import { recomendarPlatos, armarMenuRecomendado, armarMenuPopular, PlatoRecomendado, MenuRecomendado } from '../lib/recomendar';
@@ -235,6 +235,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [cargandoCarta, setCargandoCarta] = useState<boolean>(true);
   const [errorCarta, setErrorCarta] = useState<string | null>(null);
   const comandaRef = useRef<string | null>(null);
+  // El pedido activo se recuerda en sessionStorage (por mesa): si se recarga la página, el seguimiento no se pierde
+  const claveComanda = 'tacama.comanda:' + qr;
 
   // ── Sesión de mesa por QR ───────────────────────────────────
   useEffect(() => {
@@ -346,11 +348,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // ── Estado de la comanda en tiempo real (WebSocket + sondeo de respaldo) ──
   useEffect(() => {
     const socket: Socket = io(`${import.meta.env.VITE_SOCKET_URL ?? ''}/cocina`, { query: { rol: 'comensal' } });
+    // Al recargar la página se retoma el pedido guardado; si ya terminó o no existe, se descarta
+    let restaurando = false;
+    const descartarComanda = () => {
+      comandaRef.current = null;
+      guardarSesionLocal(claveComanda, '');
+      setComandaActivaId(null);
+      setEstadoComanda(null);
+      setComandaServidor(null);
+    };
     // Lee la comanda: estado, si pidió la cuenta y si ya calificó
     const sincronizar = async () => {
       if (!comandaRef.current) return;
       try {
         const { data } = await api<{ data: { estado: string; cuentaSolicitadaEn?: string | null; valoracion?: unknown; metodoPago?: string | null; items?: any[]; ventanaCambioHasta?: string | null; ahoraServidor?: string } }>(`/comandas/${comandaRef.current}`);
+        if (restaurando && (data.estado === 'CERRADA' || data.estado === 'ANULADA')) {
+          restaurando = false;
+          descartarComanda();
+          return;
+        }
+        restaurando = false;
+        if (data.estado === 'CERRADA' || data.estado === 'ANULADA') guardarSesionLocal(claveComanda, '');
         setEstadoComanda(ESTADO_UI[data.estado] ?? null);
         setCuenta({ solicitada: !!data.cuentaSolicitadaEn, metodoPago: data.metodoPago ?? null });
         if (data.valoracion) setCsatEnviado(true);
@@ -363,9 +381,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           })),
           ventanaHasta: data.ventanaCambioHasta ? Date.parse(data.ventanaCambioHasta) - desfase : null,
         });
-      } catch { /* reintenta en el próximo ciclo */ }
+      } catch (e) {
+        // La comanda ya no existe: se olvida; cualquier otro fallo se reintenta en el próximo ciclo
+        if (e instanceof ApiError && e.status === 404) descartarComanda();
+      }
     };
     sincronizarRef.current = sincronizar;
+    const guardada = leerSesionLocal(claveComanda);
+    if (guardada && !comandaRef.current) {
+      restaurando = true;
+      comandaRef.current = guardada;
+      setComandaActivaId(guardada.slice(0, 8).toUpperCase());
+      sincronizar();
+    }
     socket.on('cocina:estado_cambiado', (p: { comandaId: string }) => {
       if (p.comandaId === comandaRef.current) sincronizar();
     });
@@ -525,6 +553,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     await api(`/comandas/${comanda.id}`, { method: 'PATCH', body: { estado: 'PENDIENTE' } });
 
     comandaRef.current = comanda.id;
+    guardarSesionLocal(claveComanda, comanda.id);
     setComandaServidor(null);
     setComandaActivaId(comanda.id.slice(0, 8).toUpperCase());
     setEstadoComanda('CONFIRMADA');
