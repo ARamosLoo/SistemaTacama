@@ -20,5 +20,7 @@
 	@analitica path /api/v1/indicadores* /api/v1/auditoria*
 	reverse_proxy @analitica analitica-auditoria-service:3006
 
-	respond "TacamaMesa API" 200
+	# Solo la raiz: sin este matcher, respond se ejecuta antes que reverse_proxy y contesta todo
+	@raiz path /
+	respond @raiz "TacamaMesa API" 200
 }
