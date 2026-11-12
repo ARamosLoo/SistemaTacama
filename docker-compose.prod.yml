@@ -1,0 +1,197 @@
+# =============================================================
+# docker-compose.prod.yml — TacamaMesa en un VPS
+# Uso:  docker compose -f docker-compose.prod.yml up -d --build
+# Solo Caddy (80/443) es publico; el resto vive en la red interna.
+# =============================================================
+x-servicio: &servicio
+  restart: unless-stopped
+  networks: [tacama-net]
+
+x-env-comun: &env-comun
+  NODE_ENV: production
+  JWT_SECRET: ${JWT_SECRET}
+  JWT_MESA_SECRET: ${JWT_MESA_SECRET}
+  JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+  JWT_MESA_EXPIRES_IN: ${JWT_MESA_EXPIRES_IN:-4h}
+  CORS_ORIGINS: ${CORS_ORIGINS}
+  RABBITMQ_URL: amqp://${RABBITMQ_USER}:${RABBITMQ_PASSWORD}@rabbitmq:5672/${RABBITMQ_VHOST:-tacamamesa}
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  REDIS_PASSWORD: ${REDIS_PASSWORD}
+
+networks:
+  tacama-net:
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  caddy_data:
+  caddy_config:
+  uploads_catalogo:
+
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [tacama-net]
+    depends_on:
+      - auth-service
+      - catalogo-i18n-service
+      - maridaje-service
+      - comandas-service
+      - inventario-service
+      - analitica-auditoria-service
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks: [tacama-net]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD} --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes
+    volumes: [redis_data:/data]
+    networks: [tacama-net]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-tacamamesa}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./infra/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./infra/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    networks: [tacama-net]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  bodega-sandbox:
+    image: wiremock/wiremock:3.5.4-alpine
+    restart: unless-stopped
+    command: ["--global-response-templating"]
+    volumes:
+      - ./infra/sandbox/mappings:/home/wiremock/mappings:ro
+      - ./infra/sandbox/__files:/home/wiremock/__files:ro
+    networks: [tacama-net]
+
+  auth-service:
+    <<: *servicio
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.prod
+      args: { SERVICE: auth-service }
+    environment:
+      <<: *env-comun
+      PORT: "3001"
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=auth
+    depends_on:
+      postgres: { condition: service_healthy }
+
+  catalogo-i18n-service:
+    <<: *servicio
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.prod
+      args: { SERVICE: catalogo-i18n-service }
+    environment:
+      <<: *env-comun
+      PORT: "3002"
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=catalogo
+    volumes:
+      - uploads_catalogo:/app/services/catalogo-i18n-service/uploads
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  maridaje-service:
+    <<: *servicio
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.prod
+      args: { SERVICE: maridaje-service }
+    environment:
+      <<: *env-comun
+      PORT: "3003"
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=maridaje
+      ANALITICA_SERVICE_URL: http://analitica-auditoria-service:3006
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+
+  comandas-service:
+    <<: *servicio
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.prod
+      args: { SERVICE: comandas-service }
+    environment:
+      <<: *env-comun
+      PORT: "3004"
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=comandas
+      INVENTARIO_URL: http://inventario-service:3005/api/v1
+    depends_on:
+      postgres: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+
+  inventario-service:
+    <<: *servicio
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.prod
+      args: { SERVICE: inventario-service }
+    environment:
+      <<: *env-comun
+      PORT: "3005"
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=inventario
+      BODEGA_SANDBOX_URL: http://bodega-sandbox:8080/sandbox
+      BODEGA_SANDBOX_API_KEY: ${BODEGA_SANDBOX_API_KEY:-sandbox_key}
+    depends_on:
+      postgres: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+
+  analitica-auditoria-service:
+    <<: *servicio
+    build:
+      context: .
+      dockerfile: infra/docker/Dockerfile.prod
+      args: { SERVICE: analitica-auditoria-service }
+    environment:
+      <<: *env-comun
+      PORT: "3006"
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=analitica
+    depends_on:
+      postgres: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }

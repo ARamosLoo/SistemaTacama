@@ -1,0 +1,24 @@
+# Gateway de produccion: HTTPS automatico (Lets Encrypt) para el dominio de la variable DOMAIN
+{$DOMAIN} {
+	encode gzip
+
+	@auth path /api/v1/auth* /api/v1/mesas*
+	reverse_proxy @auth auth-service:3001
+
+	@catalogo path /api/v1/carta* /api/v1/platos* /api/v1/admin* /api/v1/uploads*
+	reverse_proxy @catalogo catalogo-i18n-service:3002
+
+	@maridaje path /api/v1/maridajes* /api/v1/reglas-maridaje* /api/v1/etiquetas*
+	reverse_proxy @maridaje maridaje-service:3003
+
+	@comandas path /api/v1/comandas* /api/v1/valoraciones* /socket.io*
+	reverse_proxy @comandas comandas-service:3004
+
+	@inventario path /api/v1/existencias*
+	reverse_proxy @inventario inventario-service:3005
+
+	@analitica path /api/v1/indicadores* /api/v1/auditoria*
+	reverse_proxy @analitica analitica-auditoria-service:3006
+
+	respond "TacamaMesa API" 200
+}

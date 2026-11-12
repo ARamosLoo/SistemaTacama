@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+**/dist
+**/generated
+.git
+SistemaTacama
+apps/*/src
+apps/*/public
+apps/*/dist
+logs
+*.log
+.env
+.env.*
+docs

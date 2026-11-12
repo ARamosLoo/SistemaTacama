@@ -1,0 +1,34 @@
+# ============================================================
+# Dockerfile de PRODUCCION para cualquier microservicio NestJS.
+# Contexto de build = raiz del repo (necesita packages/shared-*).
+# Uso: docker build -f infra/docker/Dockerfile.prod --build-arg SERVICE=auth-service .
+# ============================================================
+FROM node:20-alpine
+# ts-node global: solo para cargar los datos iniciales (prisma/seed.ts) una vez
+RUN apk add --no-cache libc6-compat openssl && npm install -g pnpm@8.15.4 ts-node@10.9.2 typescript@5.9.3
+ENV HUSKY=0
+ARG SERVICE
+ENV SERVICE=${SERVICE}
+WORKDIR /app
+
+# Manifiestos del workspace (el lockfile exige ver todos los importadores)
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json ./
+COPY apps/comensal-pwa/package.json apps/comensal-pwa/package.json
+COPY apps/staff-web/package.json apps/staff-web/package.json
+COPY packages ./packages
+COPY services/${SERVICE}/package.json services/${SERVICE}/package.json
+
+# Solo instala este servicio y sus paquetes compartidos
+RUN pnpm install --frozen-lockfile --filter "@tacamamesa/${SERVICE}..."
+
+COPY services/${SERVICE} ./services/${SERVICE}
+COPY infra/data ./infra/data
+
+RUN pnpm --filter @tacamamesa/shared-types --filter @tacamamesa/shared-errors build \
+ && pnpm --filter "@tacamamesa/${SERVICE}" exec prisma generate \
+ && pnpm --filter "@tacamamesa/${SERVICE}" build
+
+WORKDIR /app/services/${SERVICE}
+ENV NODE_ENV=production
+# Crea o actualiza tablas (sin borrar datos) y arranca
+CMD ["sh", "-c", "pnpm exec prisma db push --skip-generate && node dist/main"]
