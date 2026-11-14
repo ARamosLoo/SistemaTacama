@@ -209,33 +209,42 @@ export class ExistenciasService {
     }
   }
 
-  /** RN07: registra devolución cuando se anula una comanda */
+  /**
+   * RN07: revierte las salidas de una comanda anulada. Es idempotente: solo repone lo que aún no se devolvió
+   * (descontando devoluciones previas y los ítems que el comensal ya anuló por separado).
+   */
   async registrarDevolucion(dto: { comandaId: string; motivo: string }) {
-    // Buscar movimientos de SALIDA asociados a la comanda
     const movimientos = await this.prisma.movimientoInventario.findMany({
-      where: { comandaId: dto.comandaId, tipo: 'SALIDA' },
+      where: {
+        OR: [
+          { comandaId: dto.comandaId, tipo: { in: ['SALIDA', 'DEVOLUCION'] } },
+          { referencia: dto.comandaId, tipo: 'ENTRADA', motivo: { startsWith: 'Ítem anulado' } },
+        ],
+      },
     });
 
-    for (const mov of movimientos) {
-      const cantidadARevertir = Math.abs(mov.cantidad);
+    // Neto por etiqueta: salidas (negativas) + devoluciones/entradas (positivas)
+    const pendiente = new Map<string, number>();
+    for (const m of movimientos) {
+      pendiente.set(m.etiquetaId, (pendiente.get(m.etiquetaId) ?? 0) - m.cantidad);
+    }
 
-      // Actualizar existencia
+    for (const [etiquetaId, cantidadARevertir] of pendiente) {
+      if (cantidadARevertir <= 0) continue;
+
       await this.prisma.existencia.update({
-        where: { etiquetaId: mov.etiquetaId },
+        where: { etiquetaId },
         data: { stockActual: { increment: cantidadARevertir } },
       });
-
-      // Registrar movimiento de DEVOLUCION
       await this.prisma.movimientoInventario.create({
         data: {
-          etiquetaId: mov.etiquetaId,
-          tipo:       'DEVOLUCION',
-          cantidad:   cantidadARevertir,
-          comandaId:  dto.comandaId,
-          motivo:     dto.motivo,
+          etiquetaId,
+          tipo:      'DEVOLUCION',
+          cantidad:  cantidadARevertir,
+          comandaId: dto.comandaId,
+          motivo:    dto.motivo,
         },
       });
-
       this.logger.log(`Stock revertido (RN07): +${cantidadARevertir} para comanda ${dto.comandaId}`);
     }
   }

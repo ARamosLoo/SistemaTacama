@@ -37,6 +37,10 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
 
   const [enviando, setEnviando] = useState<boolean>(false);
   const hayAgotados = carrito.some(itemAgotado);
+  // RN12: el vino, el pisco y la coctelería solo se piden con la declaración de mayoría de edad
+  const hayAlcohol = carrito.some((i) => i.tipo !== 'PLATO' || platos.find((p) => p.id === i.id)?.tags.includes('coctel'));
+  const [mayorEdad, setMayorEdad] = useState<boolean>(false);
+  const [confirmaConflicto, setConfirmaConflicto] = useState<boolean>(false);
 
   // Comprobar si algún item tiene conflicto con alergias declaradas
   // Cada ítem se compara con las alergias del comensal para quien se pidió
@@ -62,7 +66,7 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
     setEnviando(true);
     setErrorEnvio(null);
     try {
-      await confirmarComanda();
+      await confirmarComanda({ mayorEdad, conflictos: alergenosEnConflicto, confirmaConflicto });
       onComandaEnviada();
     } catch (e: any) {
       setErrorEnvio(e?.message ?? t('errEnvio'));
@@ -266,6 +270,20 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
         ) : null;
       })()}
 
+      {alergenosEnConflicto.length > 0 && (
+        <label className="flex items-start gap-2 text-xs text-rose-800 bg-rose-50 border border-rose-200 rounded-xl p-3 cursor-pointer">
+          <input type="checkbox" checked={confirmaConflicto} onChange={(e) => setConfirmaConflicto(e.target.checked)} className="mt-0.5 accent-rose-700" />
+          <span>{t('confirmoConflictoAlergeno')}</span>
+        </label>
+      )}
+
+      {hayAlcohol && (
+        <label className="flex items-start gap-2 text-xs text-stone-700 bg-amber-50 border border-amber-200 rounded-xl p-3 cursor-pointer">
+          <input type="checkbox" checked={mayorEdad} onChange={(e) => setMayorEdad(e.target.checked)} className="mt-0.5 accent-[#577A17]" />
+          <span>{t('mayorEdadAlcohol')}</span>
+        </label>
+      )}
+
       {errorEnvio && (
         <p className="text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded-xl p-3">{errorEnvio}</p>
       )}
@@ -273,7 +291,7 @@ export const CarritoPage: React.FC<CarritoPageProps> = ({ onVolver, onComandaEnv
       {/* Confirm CTA */}
       <button
         onClick={handleConfirmar}
-        disabled={enviando || hayAgotados}
+        disabled={enviando || hayAgotados || (hayAlcohol && !mayorEdad) || (alergenosEnConflicto.length > 0 && !confirmaConflicto)}
         className="w-full py-4 bg-gradient-to-r from-[#2E4310] via-[#577A17] to-[#466212] text-white rounded-2xl font-serif-tacama text-sm font-bold tracking-wider shadow-lg hover:shadow-xl transition disabled:opacity-50 flex items-center justify-center space-x-2"
       >
         <span>{enviando ? t('enviando') : t('confirmarEnviar')}</span>

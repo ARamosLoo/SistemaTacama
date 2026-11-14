@@ -7,6 +7,8 @@ export interface ComandaCocina {
   minutosTranscurridos: number;
   modificadaHaceMin?: number; // el comensal cambió o anuló un plato hace estos minutos
   alergiasMesa: string[];
+  requiereAprobacionChef?: boolean; // RN02: platos con alérgenos declarados pendientes de aprobación del chef
+  alergenoAprobadoPor?: string;
   observaciones?: string; // por ejemplo "ALERGIA (otras): ..." escrita por el comensal
   items: {
     id: string;

@@ -51,6 +51,8 @@ export const CocinaKdsPage: React.FC = () => {
             alergenos: alergenosPlato.get(i.platoId) ?? [],
           })),
           observaciones: c.observaciones ?? undefined,
+          requiereAprobacionChef: !!c.conflictoAlergeno && !c.alergenoAprobadoEn,
+          alergenoAprobadoPor: c.alergenoAprobadoPor ?? undefined,
         })),
       );
       setError(null);
@@ -76,6 +78,17 @@ export const CocinaKdsPage: React.FC = () => {
     setComandas((prev) => prev.map((c) => (c.id === id ? { ...c, estado: nuevoEstado } : c)));
     try {
       await api(`/comandas/${id}`, { method: 'PATCH', body: { estado: UI_A_BACK[nuevoEstado] } });
+    } finally {
+      cargar();
+    }
+  };
+
+  // RN02: el chef aprueba preparar los platos con alérgenos declarados por la mesa
+  const aprobarAlergenos = async (id: string) => {
+    try {
+      await api(`/comandas/${id}/aprobar-alergenos`, { method: 'POST' });
+    } catch (e: any) {
+      setError(e.message ?? 'No se pudo aprobar');
     } finally {
       cargar();
     }
@@ -284,7 +297,17 @@ export const CocinaKdsPage: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="p-3 bg-stone-100/60 border-t border-stone-200 flex space-x-2">
-                {cmd.estado === 'CONFIRMADA' && (
+                {cmd.estado === 'CONFIRMADA' && cmd.requiereAprobacionChef && (
+                  <button
+                    onClick={() => aprobarAlergenos(cmd.id)}
+                    className="flex-1 py-2 bg-gradient-to-r from-rose-700 to-rose-800 hover:from-rose-600 hover:to-rose-700 text-white rounded-xl text-xs font-bold shadow flex items-center justify-center space-x-1 transition"
+                  >
+                    <ShieldAlert className="w-3.5 h-3.5" />
+                    <span>Aprobar platos con alérgenos (chef)</span>
+                  </button>
+                )}
+
+                {cmd.estado === 'CONFIRMADA' && !cmd.requiereAprobacionChef && (
                   <button
                     onClick={() => cambiarEstado(cmd.id, 'EN_PREPARACION')}
                     className="flex-1 py-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white rounded-xl text-xs font-bold shadow flex items-center justify-center space-x-1 transition"

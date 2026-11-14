@@ -67,7 +67,7 @@ interface AppContextType {
   totalPEN: number;
   comandaActivaId: string | null;
   estadoComanda: EstadoComanda | null;
-  confirmarComanda: () => Promise<void>;
+  confirmarComanda: (opts?: { mayorEdad?: boolean; conflictos?: string[]; confirmaConflicto?: boolean }) => Promise<void>;
   obtenerMaridajes: (plato: Plato) => Promise<MaridajeRecomendacion[]>;
   csatEnviado: boolean;
   enviarCsat: (puntuacion: number, comentario: string) => Promise<void>;
@@ -480,8 +480,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // ── Maridaje (RF06): hasta 3 etiquetas con stock ────────────
   const obtenerMaridajes = async (plato: Plato): Promise<MaridajeRecomendacion[]> => {
+    // RN13: el segmento sale de lo que el comensal declaró (peruano / extranjero); sin eso, del idioma
+    const segmento = perfil ? (perfil.origen === 'extranjero' ? 'EXTRANJERO' : 'NACIONAL') : idioma === 'es' ? 'NACIONAL' : 'EXTRANJERO';
     try {
-      const { data } = await api<{ data: any[] }>(`/maridajes?plato=${encodeURIComponent(plato.codigo)}`);
+      const { data } = await api<{ data: any[] }>(`/maridajes?plato=${encodeURIComponent(plato.codigo)}&segmento=${segmento}`);
       return data.map((r) => ({
         etiquetaId: r.codigoInterno,
         nombre: r.nombre,
@@ -499,7 +501,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // ── Comanda: crear → declarar alergias (RN01) → confirmar ───
-  const confirmarComanda = async () => {
+  const confirmarComanda = async ({ mayorEdad = false, conflictos = [], confirmaConflicto = false }: { mayorEdad?: boolean; conflictos?: string[]; confirmaConflicto?: boolean } = {}) => {
     if (!mesaId || !tokenMesa) throw new Error('Mesa no identificada');
     // Antes de enviar a cocina se vuelve a leer la carta y la bodega: nada agotado puede llegar a la comanda
     const [platosAhora, etiquetasAhora] = await Promise.all([cargarCarta().catch(() => platos), cargarEtiquetas()]);
@@ -529,6 +531,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         platoNombre: i.nombre,
         precioUnit: i.precioPEN,
         cantidad: i.cantidad,
+        ...(esBebida || platos.find((p) => p.id === i.id)?.tags.includes('coctel') ? { esAlcohol: true } : {}),
         ...(esBebida ? { etiquetaId: codigo, etiquetaNombre: i.nombre } : {}),
         ...(nota ? { notas: nota } : {}),
       };
@@ -541,7 +544,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       .map((x) => (varios ? nombreComensal(x.c) + ': ' : '') + x.t.join(', '));
     const { data: comanda } = await api<{ data: { id: string } }>('/comandas', {
       method: 'POST',
-      body: { mesaId, sesionMesaId: tokenMesa.slice(-32), items, ...(otras.length ? { observaciones: 'ALERGIA (otras): ' + otras.join(' | ') } : {}) },
+      body: { mesaId, sesionMesaId: tokenMesa.slice(-32), items, mayorEdad, conflictosAlergeno: conflictos, confirmaConflicto, ...(otras.length ? { observaciones: 'ALERGIA (otras): ' + otras.join(' | ') } : {}) },
     });
 
     // Alergias de todos los comensales de la mesa (códigos de alérgeno)

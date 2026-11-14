@@ -18,6 +18,8 @@ class ActualizarEtiquetaDto {
 }
 
 const ROLES_BODEGA = ['ADMINISTRADOR', 'JEFE_SALON', 'SOMMELIER', 'ALMACEN'];
+// RN10: solo el jefe de salón y el administrador modifican los umbrales de reposición
+const ROLES_UMBRAL = ['ADMINISTRADOR', 'JEFE_SALON'];
 
 @ApiTags('inventario')
 @Controller('existencias')
@@ -36,6 +38,9 @@ export class ExistenciasController {
     const sesion = sesionDelToken(authorization);
     if (!sesion || !ROLES_BODEGA.includes(sesion.rol)) {
       throw new ForbiddenException({ mensaje: 'Solo bodega y administración pueden modificar el stock', codigo: 'INV_005' });
+    }
+    if (dto.umbralMinimo !== undefined && !ROLES_UMBRAL.includes(sesion.rol)) {
+      throw new ForbiddenException({ mensaje: 'Solo el jefe de salón y el administrador pueden modificar los umbrales de reposición (RN10)', codigo: 'INV_006' });
     }
     return { data: await this.existenciasService.actualizarEtiqueta(ref, dto, sesion.id) };
   }

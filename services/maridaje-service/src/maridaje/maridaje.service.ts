@@ -29,7 +29,7 @@ export class MaridajeService {
    * que maridan con el plato, filtradas por stock > 0 (RN03)
    * y con variedad de precios (RN05).
    */
-  async recomendar(platoId: string): Promise<object[]> {
+  async recomendar(platoId: string, segmento?: string): Promise<object[]> {
     // Telemetría de venta cruzada: una recomendación emitida por consulta (no bloquea la respuesta)
     this.reportarRecomendacion(platoId);
 
@@ -56,6 +56,9 @@ export class MaridajeService {
       const ttl = this.config.get<number>('REDIS_TTL_MARIDAJE', 600);
       await this.redis.set(cacheKey(platoId), reglas, ttl);
     }
+    // RN13: se aplican las reglas sin segmento y las del segmento del comensal; el precio de la etiqueta no cambia
+    const seg = segmento?.toUpperCase();
+    reglas = reglas.filter((r) => !r.segmento || r.segmento === seg);
     if (reglas.length === 0) return [];
 
     // ── 2. Stock actual del inventario-service (vigente en cada consulta) ──
@@ -119,28 +122,18 @@ export class MaridajeService {
   }
 
   /**
-   * RN05: garantiza que al menos una etiqueta sea de diferente rango de precio.
-   * Estrategia: tomar la de mayor puntaje y luego, si todas son del mismo rango,
-   * agregar la de mejor puntaje del siguiente rango disponible.
+   * RN05: la recomendación incluye al menos una etiqueta de un rango de precio distinto al de la mejor,
+   * siempre que exista alguna. Se toman las 3 de mayor puntaje y, si todas son del mismo rango, la última
+   * se reemplaza por la de mayor puntaje de otro rango.
    */
   private aplicarVariedadPrecios(reglas: any[]) {
-    if (reglas.length <= 1) return reglas;
-
-    const resultado: typeof reglas = [reglas[0]]; // siempre la mejor
-    const rangoUsado = new Set<string>([reglas[0].etiqueta.rangoPrecio]);
-
-    for (const r of reglas.slice(1)) {
-      if (resultado.length >= 3) break;
-      // Priorizar rangos no usados para cumplir RN05
-      if (!rangoUsado.has(r.etiqueta.rangoPrecio)) {
-        resultado.push(r);
-        rangoUsado.add(r.etiqueta.rangoPrecio);
-      } else if (resultado.length < 3) {
-        resultado.push(r);
-      }
-    }
-
-    return resultado;
+    const top = reglas.slice(0, 3);
+    if (top.length <= 1) return top;
+    const rangoMejor = top[0].etiqueta.rangoPrecio;
+    if (top.some((r) => r.etiqueta.rangoPrecio !== rangoMejor)) return top;
+    const otra = reglas.slice(3).find((r) => r.etiqueta.rangoPrecio !== rangoMejor);
+    if (otra) top[top.length - 1] = otra;
+    return top;
   }
 
   /**

@@ -78,6 +78,8 @@ model ReglaMaridaje {
   vigenciaHasta DateTime? @map("vigencia_hasta")  // null = sin vencimiento
   activa      Boolean     @default(true)
   creadaPor   String?     @map("creada_por")  // ID del sommelier
+  // RN13: NACIONAL | EXTRANJERO | null (todos). Solo corrige el sesgo de omisión de la oferta premium; nunca cambia precios ni trato
+  segmento    String?
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
 

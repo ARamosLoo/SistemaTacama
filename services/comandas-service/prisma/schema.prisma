@@ -57,6 +57,11 @@ model Comanda {
   metodoPago          String?   @map("metodo_pago") // EFECTIVO | TARJETA | TRANSFERENCIA
   efectivoPagaCon     Decimal?  @map("efectivo_paga_con") @db.Decimal(10, 2)
   cerradaEn           DateTime? @map("cerrada_en")
+  // RN02: platos con alérgenos declarados por la mesa. El comensal los confirma al pedir y el chef los aprueba antes de preparar
+  conflictoAlergeno       String?   @map("conflicto_alergeno")        // códigos separados por coma
+  conflictoConfirmadoComensal Boolean @default(false) @map("conflicto_confirmado_comensal")
+  alergenoAprobadoPor     String?   @map("alergeno_aprobado_por")
+  alergenoAprobadoEn      DateTime? @map("alergeno_aprobado_en")
 
   // Relaciones
   items           DetalleComanda[]

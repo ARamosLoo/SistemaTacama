@@ -1,10 +1,13 @@
 /**
- * regla.service.ts — CRUD de reglas de maridaje para el sommelier.
+ * regla.service.ts — CRUD de reglas de maridaje para el sommelier (RN04, RF07).
  */
 
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { RedisService } from '../redis/redis.service';
+
+// Misma clave que usa MaridajeService para cachear las reglas de un plato
+const cacheKey = (platoId: string) => `maridaje:reglas:${platoId}`;
 
 @Injectable()
 export class ReglaService {
@@ -13,6 +16,7 @@ export class ReglaService {
     private readonly redis: RedisService,
   ) {}
 
+  /** Reglas activas (las desactivadas se reactivan con PATCH /reglas-maridaje/:id) */
   async findAll() {
     return this.prisma.reglaMaridaje.findMany({
       where: { activa: true },
@@ -21,8 +25,7 @@ export class ReglaService {
     });
   }
 
-  async crear(dto: { platoId: string; etiquetaId: string; puntaje: number; motivo?: string }) {
-    // Verificar duplicado
+  async crear(dto: { platoId: string; etiquetaId: string; puntaje: number; motivo?: string; segmento?: string }, creadaPor?: string) {
     const existe = await this.prisma.reglaMaridaje.findUnique({
       where: { platoId_etiquetaId: { platoId: dto.platoId, etiquetaId: dto.etiquetaId } },
     });
@@ -34,11 +37,28 @@ export class ReglaService {
       });
     }
 
-    const regla = await this.prisma.reglaMaridaje.create({ data: dto });
+    const regla = await this.prisma.reglaMaridaje.create({ data: { ...dto, creadaPor } });
+    await this.redis.del(cacheKey(dto.platoId));
+    return regla;
+  }
 
-    // Invalidar caché de maridaje para este plato
-    await this.redis.del(`maridaje:${dto.platoId}`);
+  /** Edita puntaje, motivo, vigencia o activa/desactiva una regla (RF07) */
+  async actualizar(
+    id: string,
+    dto: { puntaje?: number; motivo?: string; activa?: boolean; segmento?: string; vigenciaHasta?: string | null },
+  ) {
+    const existe = await this.prisma.reglaMaridaje.findUnique({ where: { id } });
+    if (!existe) throw new NotFoundException({ mensaje: 'Regla de maridaje no encontrada', codigo: 'MAR_001' });
 
+    const { vigenciaHasta, ...resto } = dto;
+    const regla = await this.prisma.reglaMaridaje.update({
+      where: { id },
+      data: {
+        ...resto,
+        ...(vigenciaHasta !== undefined ? { vigenciaHasta: vigenciaHasta ? new Date(vigenciaHasta) : null } : {}),
+      },
+    });
+    await this.redis.del(cacheKey(existe.platoId));
     return regla;
   }
 }

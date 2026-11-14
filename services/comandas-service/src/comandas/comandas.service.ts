@@ -31,6 +31,7 @@ interface ItemComanda {
   etiquetaId?: string;
   etiquetaNombre?: string;
   notas?: string;
+  esAlcohol?: boolean;
 }
 
 interface CrearComandaDto {
@@ -39,6 +40,9 @@ interface CrearComandaDto {
   mozoId?: string;
   items: ItemComanda[];
   observaciones?: string;
+  mayorEdad?: boolean;
+  conflictosAlergeno?: string[];
+  confirmaConflicto?: boolean;
 }
 
 // Comandas que mantienen ocupada una mesa (hasta que el mozo cierra la última)
@@ -63,13 +67,8 @@ export class ComandasService {
     consentimiento: boolean,
     versionTerminos?: string,
   ) {
-    if (!consentimiento) {
-      throw new BadRequestException({
-        mensaje: 'El comensal debe otorgar consentimiento explícito para procesar datos de salud (Ley 29733)',
-        codigo: 'CMD_002',
-      });
-    }
-
+    // RN09: sin consentimiento expreso la declaración sirve solo para esta comanda (se registra con consentimiento=false
+    // y nunca se asocia a un perfil ni a un historial del comensal); con consentimiento puede conservarse en su perfil.
     // Verificar que la comanda existe y está en BORRADOR
     const comanda = await this.prisma.comanda.findUnique({ where: { id: comandaId } });
     if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
@@ -99,6 +98,22 @@ export class ComandasService {
 
   // ── 2. Crear borrador de comanda ───────────────────────────
   async crear(dto: CrearComandaDto) {
+    // RN12: vino y pisco solo con la declaración de mayoría de edad
+    if (dto.items.some((i) => i.etiquetaId || i.esAlcohol) && !dto.mayorEdad) {
+      throw new BadRequestException({
+        mensaje: 'La venta de bebidas alcohólicas requiere declarar que el comensal es mayor de edad (RN12)',
+        codigo: 'CMD_020',
+      });
+    }
+    // RN02: un plato con alérgeno declarado por la mesa requiere la confirmación expresa del comensal (y luego la del chef)
+    const conflictos = [...new Set(dto.conflictosAlergeno ?? [])];
+    if (conflictos.length > 0 && !dto.confirmaConflicto) {
+      throw new BadRequestException({
+        mensaje: 'El pedido incluye platos con alérgenos declarados: el comensal debe confirmarlos expresamente (RN02)',
+        codigo: 'CMD_021',
+      });
+    }
+
     const total = dto.items.reduce(
       (acc, i) => acc + i.precioUnit * i.cantidad, 0,
     );
@@ -118,6 +133,8 @@ export class ComandasService {
         estado:       'BORRADOR',
         totalPEN:     total,
         observaciones: dto.observaciones,
+        conflictoAlergeno: conflictos.length ? conflictos.join(',') : null,
+        conflictoConfirmadoComensal: conflictos.length > 0,
         items: {
           create: dto.items.map((i) => ({
             platoId:       i.platoId,
@@ -157,6 +174,17 @@ export class ComandasService {
 
     if (comanda.estado !== 'BORRADOR') {
       throw new ForbiddenException({ mensaje: 'Solo se puede confirmar una comanda en estado BORRADOR', codigo: 'CMD_003' });
+    }
+
+    // RN03: la etiqueta debe seguir teniendo existencia al momento de confirmar (si el inventario no responde, no se bloquea)
+    for (const i of comanda.items.filter((x) => x.etiquetaId)) {
+      const disponible = await this.stockDisponible(i.etiquetaId!);
+      if (disponible !== null && disponible < i.cantidad) {
+        throw new ConflictException({
+          mensaje: `No hay existencias suficientes de ${i.etiquetaNombre ?? i.platoNombre}. Retíralo del pedido (RN03)`,
+          codigo: 'CMD_023',
+        });
+      }
     }
 
     // Obtener alérgenos declarados
@@ -210,8 +238,62 @@ export class ComandasService {
     return confirmada;
   }
 
+  /** Existencia actual de una etiqueta en inventario; null si no se pudo consultar */
+  private async stockDisponible(etiquetaId: string): Promise<number | null> {
+    try {
+      const base = process.env.INVENTARIO_URL ?? 'http://localhost:3005/api/v1';
+      const r = await fetch(`${base}/existencias?etiqueta=${encodeURIComponent(etiquetaId)}`, { signal: AbortSignal.timeout(2000) });
+      if (!r.ok) return null;
+      const j: any = await r.json();
+      return typeof j?.data?.stockActual === 'number' ? j.data.stockActual : null;
+    } catch {
+      return null;
+    }
+  }
+
+  /** RN02: el chef aprueba preparar los platos con alérgenos declarados; queda en auditoría */
+  async aprobarAlergenos(id: string, sesion: SesionPersonal) {
+    const comanda = await this.prisma.comanda.findUnique({ where: { id } });
+    if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
+    if (!comanda.conflictoAlergeno) {
+      throw new BadRequestException({ mensaje: 'La comanda no tiene platos con alérgenos declarados', codigo: 'CMD_024' });
+    }
+    if (comanda.alergenoAprobadoEn) return comanda;
+    const actualizada = await this.prisma.comanda.update({
+      where: { id },
+      data: { alergenoAprobadoPor: sesion.nombre, alergenoAprobadoEn: new Date() },
+    });
+    await this.mqProducer.publicar('comanda.alergeno-aprobado', {
+      id, comandaId: id, mesaId: comanda.mesaId, alergenos: comanda.conflictoAlergeno,
+      usuarioId: sesion.id, usuario: sesion.nombre, rol: sesion.rol, origen: 'comandas-service',
+    });
+    this.cocinaGateway.emitirCambioEstado(id, 'ALERGENOS_APROBADOS');
+    return actualizada;
+  }
+
+  /** RN11: toda modificación o anulación de una comanda ya enviada queda con usuario, fecha y motivo (log de auditoría) */
+  private async auditarModificacion(
+    comanda: { id: string; mesaId: string },
+    accion: string,
+    motivo: string,
+    sesion: SesionPersonal | null,
+  ) {
+    await this.mqProducer.publicar('comanda.modificada', {
+      tipo: 'comanda.modificada',
+      comandaId: comanda.id,
+      mesaId: comanda.mesaId,
+      accion,
+      motivo,
+      usuarioId: sesion?.id,
+      usuario: sesion?.nombre ?? 'Comensal (mesa)',
+      rol: sesion?.rol ?? 'COMENSAL',
+      timestamp: new Date().toISOString(),
+      origen: 'comandas-service',
+    });
+  }
+
   // ── 4. Anular comanda (RN07: revierte stock) ───────────────
-  async anular(id: string, motivo: string) {
+  async anular(id: string, motivo: string, sesion: SesionPersonal | null = null) {
     const comanda = await this.prisma.comanda.findUnique({ where: { id } });
 
     if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
@@ -237,6 +319,7 @@ export class ComandasService {
       timestamp: new Date().toISOString(),
     };
     await this.mqProducer.publicar('comanda.anulada', evento);
+    if (comanda.estado !== 'BORRADOR') await this.auditarModificacion(comanda, 'ANULACION', motivo, sesion);
 
     this.logger.log(`Comanda anulada: ${id} — ${motivo}`);
     return anulada;
@@ -258,6 +341,10 @@ export class ComandasService {
     if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
     if (comanda.estado === 'BORRADOR' || comanda.estado === 'ANULADA') {
       throw new ForbiddenException({ mensaje: 'La comanda no está activa en cocina', codigo: 'CMD_003' });
+    }
+    // RN02: con platos de alérgenos declarados, el chef debe aprobarlos antes de empezar a preparar
+    if (estado === 'EN_PREPARACION' && comanda.conflictoAlergeno && !comanda.alergenoAprobadoEn) {
+      throw new ForbiddenException({ mensaje: 'El chef debe aprobar los platos con alérgenos declarados antes de prepararlos (RN02)', codigo: 'CMD_022' });
     }
     // Flujo operativo: cocina prepara (EN_PREPARACION → LISTA) y el mozo entrega (LISTA → ENTREGADA)
     const PREVIO: Record<string, string[]> = { EN_PREPARACION: ['PENDIENTE'], LISTA: ['EN_PREPARACION'], ENTREGADA: ['LISTA'] };
@@ -398,7 +485,7 @@ export class ComandasService {
     }
   }
 
-  async anularItem(id: string, itemId: string) {
+  async anularItem(id: string, itemId: string, sesion: SesionPersonal | null = null) {
     const comanda = await this.prisma.comanda.findUnique({ where: { id }, include: { items: true } });
     if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
     this.validarVentanaDeCambio(comanda);
@@ -407,18 +494,19 @@ export class ComandasService {
 
     // Si era el único plato, se anula la comanda completa (revierte stock)
     if (comanda.items.length === 1) {
-      return this.anular(id, 'Anulada por el comensal (único plato)');
+      return this.anular(id, 'Anulada por el comensal (único plato)', sesion);
     }
     await this.prisma.detalleComanda.delete({ where: { id: itemId } });
     const restantes = comanda.items.filter((i) => i.id !== itemId);
     const total = restantes.reduce((acc, i) => acc + Number(i.subtotal), 0);
     const actualizada = await this.prisma.comanda.update({ where: { id }, data: { totalPEN: total, modificadaEn: new Date() }, include: { items: true } });
     if (item.etiquetaId) await this.devolverStock(item.etiquetaId, item.cantidad, id);
+    await this.auditarModificacion(comanda, 'ANULACION_ITEM', `Se anuló «${item.platoNombre}» (x${item.cantidad})`, sesion);
     this.cocinaGateway.emitirCambioEstado(id, 'COMANDA_MODIFICADA');
     return actualizada;
   }
 
-  async cambiarItem(id: string, itemId: string, dto: { platoId: string; platoNombre: string; precioUnit: number; notas?: string }) {
+  async cambiarItem(id: string, itemId: string, dto: { platoId: string; platoNombre: string; precioUnit: number; notas?: string }, sesion: SesionPersonal | null = null) {
     const comanda = await this.prisma.comanda.findUnique({ where: { id }, include: { items: true } });
     if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
     this.validarVentanaDeCambio(comanda);
@@ -440,6 +528,7 @@ export class ComandasService {
     const items = await this.prisma.detalleComanda.findMany({ where: { comandaId: id } });
     const total = items.reduce((acc, i) => acc + Number(i.subtotal), 0);
     const actualizada = await this.prisma.comanda.update({ where: { id }, data: { totalPEN: total, modificadaEn: new Date() }, include: { items: true } });
+    await this.auditarModificacion(comanda, 'CAMBIO_ITEM', `«${item.platoNombre}» cambiado por «${dto.platoNombre}»`, sesion);
     this.cocinaGateway.emitirCambioEstado(id, 'COMANDA_MODIFICADA');
     return actualizada;
   }
@@ -448,7 +537,7 @@ export class ComandasService {
    * Personalización de un plato ya pedido (ingredientes que se quitan, alergia, pedido especial): solo cambia las
    * notas que ve la cocina, dentro de los 5 minutos posteriores a la confirmación. La comanda queda marcada como modificada.
    */
-  async personalizarItem(id: string, itemId: string, notas: string) {
+  async personalizarItem(id: string, itemId: string, notas: string, sesion: SesionPersonal | null = null) {
     const comanda = await this.prisma.comanda.findUnique({ where: { id }, include: { items: true } });
     if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
     this.validarVentanaDeCambio(comanda);
@@ -464,6 +553,7 @@ export class ComandasService {
     const nuevas = [...partes(item.notas).filter((p) => !esPersonalizacion(p)), ...partes(notas).filter(esPersonalizacion)].join(' | ');
     await this.prisma.detalleComanda.update({ where: { id: itemId }, data: { notas: nuevas.slice(0, 600) || null } });
     const actualizada = await this.prisma.comanda.update({ where: { id }, data: { modificadaEn: new Date() }, include: { items: true } });
+    await this.auditarModificacion(comanda, 'PERSONALIZACION_ITEM', `Notas de «${item.platoNombre}» actualizadas`, sesion);
     this.cocinaGateway.emitirCambioEstado(id, 'COMANDA_MODIFICADA');
     return actualizada;
   }

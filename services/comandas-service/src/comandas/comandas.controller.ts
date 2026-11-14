@@ -34,6 +34,8 @@ class RestriccionDto {
 }
 
 class ItemDto {
+  @ApiProperty({ required: false, description: 'RN12: el ítem es una bebida alcohólica (por ejemplo, coctelería)' })
+  @IsOptional() @IsBoolean() esAlcohol?: boolean;
   @ApiProperty() @IsString() platoId: string;
   @ApiProperty() @IsString() platoNombre: string;
   @ApiProperty() @IsNumber() @IsPositive() precioUnit: number;
@@ -51,6 +53,12 @@ class CrearComandaDto {
   @IsArray() @ArrayMinSize(1) @ValidateNested({ each: true }) @Type(() => ItemDto)
   items: ItemDto[];
   @ApiProperty({ required: false }) @IsOptional() @IsString() observaciones?: string;
+  @ApiProperty({ required: false, description: 'RN12: declaración de mayoría de edad; obligatoria si hay vino o pisco' })
+  @IsOptional() @IsBoolean() mayorEdad?: boolean;
+  @ApiProperty({ required: false, description: 'RN02: códigos de alérgeno declarados que están presentes en los platos pedidos' })
+  @IsOptional() @IsArray() conflictosAlergeno?: string[];
+  @ApiProperty({ required: false, description: 'RN02: el comensal confirma expresamente los platos con alérgenos declarados' })
+  @IsOptional() @IsBoolean() confirmaConflicto?: boolean;
 }
 
 class LiberarMesaDto {
@@ -95,6 +103,10 @@ function rolDelToken(authorization?: string): string | null {
 // ── Controller ────────────────────────────────────────────────
 /** Quien puede confirmar el pago y cerrar la mesa: personal de salón. */
 const ROLES_QUE_COBRAN = ['MOZO', 'JEFE_SALON', 'ADMINISTRADOR', 'CAJA'];
+/** RN02: quienes pueden aprobar la preparación de platos con alérgenos declarados (el chef y su cocina) */
+const ROLES_CHEF = ['COCINA', 'ADMINISTRADOR'];
+/** Personal con sesión válida: consulta y anulación de comandas (no el comensal) */
+const ROLES_PERSONAL = ['MOZO', 'JEFE_SALON', 'ADMINISTRADOR', 'CAJA', 'COCINA', 'SOMMELIER', 'ALMACEN', 'ANFITRION'];
 
 export class CambiarItemDto {
   @ApiProperty() @IsString() platoId: string;
@@ -181,14 +193,23 @@ export class ComandasController {
   async anularComanda(
     @Param('id') id: string,
     @Body('motivo') motivo: string,
+    @Headers('authorization') authorization?: string,
   ) {
-    return { data: await this.comandasService.anular(id, motivo ?? 'Anulación solicitada') };
+    const sesion = sesionDelToken(authorization);
+    if (!sesion || !ROLES_PERSONAL.includes(sesion.rol)) {
+      throw new ForbiddenException({ mensaje: 'Solo el personal puede anular una comanda completa', codigo: 'CMD_011' });
+    }
+    return { data: await this.comandasService.anular(id, motivo ?? 'Anulación solicitada', sesion) };
   }
 
   /** GET /api/v1/comandas/:id — obtener comanda */
   @Get('comandas')
   @ApiOperation({ summary: 'Listar comandas (KDS / salón)', description: 'Filtro opcional ?estado=PENDIENTE,EN_PREPARACION,LISTA' })
-  async listar(@Query('estado') estado?: string) {
+  async listar(@Query('estado') estado?: string, @Headers('authorization') authorization?: string) {
+    const sesion = sesionDelToken(authorization);
+    if (!sesion || !ROLES_PERSONAL.includes(sesion.rol)) {
+      throw new ForbiddenException({ mensaje: 'Solo el personal puede consultar las comandas', codigo: 'CMD_011' });
+    }
     return { data: await this.comandasService.listar(estado ? estado.split(',') : undefined) };
   }
 
@@ -234,6 +255,18 @@ export class ComandasController {
     return sesion;
   }
 
+  /** POST /api/v1/comandas/:id/aprobar-alergenos — el chef aprueba preparar platos con alérgenos declarados (RN02) */
+  @Post('comandas/:id/aprobar-alergenos')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Aprobar platos con alérgenos declarados (RN02)', description: 'Solo cocina/chef. Habilita pasar a EN_PREPARACION.' })
+  async aprobarAlergenos(@Param('id') id: string, @Headers('authorization') authorization?: string) {
+    const sesion = sesionDelToken(authorization);
+    if (!sesion || !ROLES_CHEF.includes(sesion.rol)) {
+      throw new ForbiddenException({ mensaje: 'Solo el chef o cocina pueden aprobar platos con alérgenos declarados (RN02)', codigo: 'CMD_011' });
+    }
+    return { data: await this.comandasService.aprobarAlergenos(id, sesion) };
+  }
+
   /** POST /api/v1/comandas/:id/atender — un mozo toma la mesa y queda como responsable */
   @Post('comandas/:id/atender')
   @HttpCode(HttpStatus.OK)
@@ -249,22 +282,22 @@ export class ComandasController {
   /** DELETE /api/v1/comandas/:id/items/:itemId — el comensal anula un plato (primeros 5 minutos) */
   @Delete('comandas/:id/items/:itemId')
   @ApiOperation({ summary: 'Anular un plato de la comanda', description: 'Solo dentro de los 5 minutos posteriores a la confirmación.' })
-  async anularItem(@Param('id') id: string, @Param('itemId') itemId: string) {
-    return { data: await this.comandasService.anularItem(id, itemId) };
+  async anularItem(@Param('id') id: string, @Param('itemId') itemId: string, @Headers('authorization') authorization?: string) {
+    return { data: await this.comandasService.anularItem(id, itemId, sesionDelToken(authorization)) };
   }
 
   /** PATCH /api/v1/comandas/:id/items/:itemId — el comensal cambia un plato por otro (primeros 5 minutos) */
   @Patch('comandas/:id/items/:itemId')
   @ApiOperation({ summary: 'Cambiar un plato de la comanda', description: 'Solo dentro de los 5 minutos posteriores a la confirmación.' })
-  async cambiarItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() dto: CambiarItemDto) {
-    return { data: await this.comandasService.cambiarItem(id, itemId, dto) };
+  async cambiarItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() dto: CambiarItemDto, @Headers('authorization') authorization?: string) {
+    return { data: await this.comandasService.cambiarItem(id, itemId, dto, sesionDelToken(authorization)) };
   }
 
   /** PATCH /api/v1/comandas/:id/items/:itemId/notas — el comensal personaliza un plato (primeros 5 minutos) */
   @Patch('comandas/:id/items/:itemId/notas')
   @ApiOperation({ summary: 'Personalizar un plato de la comanda', description: 'Cambia las notas para cocina; solo dentro de los 5 minutos posteriores a la confirmación.' })
-  async personalizarItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() dto: NotasItemDto) {
-    return { data: await this.comandasService.personalizarItem(id, itemId, dto.notas) };
+  async personalizarItem(@Param('id') id: string, @Param('itemId') itemId: string, @Body() dto: NotasItemDto, @Headers('authorization') authorization?: string) {
+    return { data: await this.comandasService.personalizarItem(id, itemId, dto.notas, sesionDelToken(authorization)) };
   }
 
   /** POST /api/v1/valoraciones — CSAT del comensal */
