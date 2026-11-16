@@ -48,6 +48,60 @@ export class AdminService {
     return { ...actualizado, precioBase: Number(actualizado.precioBase) };
   }
 
+  /** RF19: alérgenos e ingredientes de un plato, más el catálogo de alérgenos disponibles */
+  async composicion(id: string) {
+    const plato = await this.prisma.plato.findUnique({
+      where: { id },
+      include: { alergenos: { include: { alergeno: true } }, ingredientes: { include: { ingrediente: true } } },
+    });
+    if (!plato) throw new NotFoundException({ mensaje: 'Plato no encontrado', codigo: 'CAT_001' });
+    const catalogo = await this.prisma.alergeno.findMany({ orderBy: { nombreEs: 'asc' } });
+    return {
+      alergenos: plato.alergenos.map((a) => a.alergeno.codigo),
+      ingredientes: plato.ingredientes.map((i) => i.ingrediente.nombreEs).sort(),
+      catalogoAlergenos: catalogo.map((a) => ({ codigo: a.codigo, nombre: a.nombreEs })),
+    };
+  }
+
+  /** RF19: reemplaza los alérgenos y/o los ingredientes de un plato. Un ingrediente nuevo se crea en el catálogo. */
+  async actualizarComposicion(id: string, dto: { alergenos?: string[]; ingredientes?: string[] }) {
+    const plato = await this.prisma.plato.findUnique({ where: { id }, select: { id: true, codigoInterno: true } });
+    if (!plato) throw new NotFoundException({ mensaje: 'Plato no encontrado', codigo: 'CAT_001' });
+
+    if (dto.alergenos) {
+      const codigos = [...new Set(dto.alergenos.map((c) => String(c).trim().toUpperCase()).filter(Boolean))];
+      const existentes = await this.prisma.alergeno.findMany({ where: { codigo: { in: codigos } } });
+      if (existentes.length !== codigos.length) {
+        const faltan = codigos.filter((c) => !existentes.some((e) => e.codigo === c));
+        throw new BadRequestException({ mensaje: `Alérgenos desconocidos: ${faltan.join(', ')}`, codigo: 'CAT_006' });
+      }
+      await this.prisma.$transaction([
+        this.prisma.platoAlergeno.deleteMany({ where: { platoId: id } }),
+        this.prisma.platoAlergeno.createMany({ data: existentes.map((e) => ({ platoId: id, alergenoId: e.id })) }),
+      ]);
+    }
+
+    if (dto.ingredientes) {
+      const nombres = [...new Set(dto.ingredientes.map((n) => String(n).trim()).filter(Boolean))].slice(0, 60);
+      if (nombres.some((n) => n.length > 80)) {
+        throw new BadRequestException({ mensaje: 'Cada ingrediente admite hasta 80 caracteres', codigo: 'CAT_007' });
+      }
+      const ids: string[] = [];
+      for (const nombre of nombres) {
+        const ing = await this.prisma.ingrediente.upsert({ where: { nombreEs: nombre }, update: {}, create: { nombreEs: nombre } });
+        ids.push(ing.id);
+      }
+      await this.prisma.$transaction([
+        this.prisma.platoIngrediente.deleteMany({ where: { platoId: id } }),
+        this.prisma.platoIngrediente.createMany({ data: ids.map((ingredienteId) => ({ platoId: id, ingredienteId })) }),
+      ]);
+    }
+
+    await this.carta.invalidar();
+    this.logger.log(`Composición de ${plato.codigoInterno} actualizada`);
+    return this.composicion(id);
+  }
+
   /** Recibe la imagen como data URL (base64), la guarda y la asocia al plato. */
   async subirFoto(id: string, imagen: string) {
     const plato = await this.prisma.plato.findUnique({ where: { id } });

@@ -71,6 +71,7 @@ export interface MaridajeRecomendacion {
   stockActual: number;
   explicacionSommelier: string;
   puntuacionAfinidad: number;
+  reglaId?: string; // regla de maridaje que originó la sugerencia (RF08)
 }
 
 export interface ItemCarrito {

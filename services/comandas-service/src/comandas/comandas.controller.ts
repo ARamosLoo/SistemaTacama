@@ -59,6 +59,8 @@ class CrearComandaDto {
   @IsOptional() @IsArray() conflictosAlergeno?: string[];
   @ApiProperty({ required: false, description: 'RN02: el comensal confirma expresamente los platos con alérgenos declarados' })
   @IsOptional() @IsBoolean() confirmaConflicto?: boolean;
+  @ApiProperty({ required: false, description: 'Clave única del pedido: un reintento no crea una comanda duplicada' })
+  @IsOptional() @IsString() @MaxLength(64) claveIdempotencia?: string;
 }
 
 class LiberarMesaDto {
@@ -265,6 +267,17 @@ export class ComandasController {
       throw new ForbiddenException({ mensaje: 'Solo el chef o cocina pueden aprobar platos con alérgenos declarados (RN02)', codigo: 'CMD_011' });
     }
     return { data: await this.comandasService.aprobarAlergenos(id, sesion) };
+  }
+
+  /** DELETE /api/v1/comandas/:id/datos-salud — RNF11: el comensal elimina sus datos de salud */
+  @Delete('comandas/:id/datos-salud')
+  @ApiOperation({ summary: 'Eliminar los datos de salud del comensal (RNF11)', description: 'Borra las alergias declaradas de la comanda. Disponible al terminar el servicio.' })
+  async eliminarDatosSalud(
+    @Param('id') id: string,
+    @Headers('x-sesion-mesa') sesionMesa?: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    return { data: await this.comandasService.eliminarDatosSalud(id, sesionMesa, sesionDelToken(authorization)) };
   }
 
   /** POST /api/v1/comandas/:id/atender — un mozo toma la mesa y queda como responsable */

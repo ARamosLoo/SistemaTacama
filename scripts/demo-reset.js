@@ -47,7 +47,9 @@ sql.push('BEGIN;');
 sql.push('TRUNCATE comandas.valoraciones, comandas.restricciones_alergenos, comandas.detalle_comandas, comandas.comandas CASCADE;');
 sql.push('TRUNCATE inventario.movimientos_inventario;');
 sql.push('TRUNCATE analitica.eventos_negocio;');
+sql.push('ALTER TABLE analitica.log_auditoria DISABLE TRIGGER USER;');
 sql.push('DELETE FROM analitica.log_auditoria;');
+sql.push('ALTER TABLE analitica.log_auditoria ENABLE TRIGGER USER;');
 sql.push('DELETE FROM analitica.indicadores_diarios;');
 
 // ── Carta: precios, disponibilidad y fotos originales

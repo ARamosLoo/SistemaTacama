@@ -5,7 +5,7 @@
  * Caché Redis por REDIS_TTL_MARIDAJE segundos (< 1 s NFR).
  */
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { RedisService } from '../redis/redis.service';
 import { ConfigService } from '@nestjs/config';
@@ -102,6 +102,53 @@ export class MaridajeService {
   async listarEtiquetas() {
     const e = await this.prisma.etiqueta.findMany({ where: { activa: true }, orderBy: { precioLista: 'desc' } });
     return e.map((x) => ({ ...x, precioLista: Number(x.precioLista) }));
+  }
+
+  /**
+   * RF08: registra la respuesta del comensal a una recomendación.
+   * ACEPTADA = agregó la sugerencia principal; MODIFICADA = agregó otra de las sugeridas; RECHAZADA = cerró sin agregar ninguna.
+   */
+  async registrarRespuesta(reglaId: string, sesionMesaId: string, respuesta: string, comandaId?: string) {
+    const regla = await this.prisma.reglaMaridaje.findUnique({ where: { id: reglaId } });
+    if (!regla) throw new NotFoundException({ mensaje: 'Regla de maridaje no encontrada', codigo: 'MAR_001' });
+    return this.prisma.recomendacion.create({
+      data: { reglaId, etiquetaId: regla.etiquetaId, sesionMesaId, aceptada: respuesta === 'ACEPTADA', respuesta, comandaId },
+    });
+  }
+
+  /** RF08: resumen de respuestas a las recomendaciones (para el sommelier) */
+  async resumenRespuestas() {
+    const filas = await this.prisma.recomendacion.groupBy({ by: ['respuesta'], _count: { _all: true } });
+    const total = filas.reduce((a, f) => a + f._count._all, 0);
+    return {
+      total,
+      porRespuesta: Object.fromEntries(filas.map((f) => [f.respuesta ?? 'SIN_RESPUESTA', f._count._all])),
+    };
+  }
+
+  /**
+   * RF09: guion de apoyo para el mozo con los argumentos de venta de una etiqueta (y su maridaje con el plato, si hay regla vigente).
+   */
+  async guion(etiquetaRef: string, platoId?: string) {
+    const e = await this.prisma.etiqueta.findFirst({ where: { OR: [{ codigoInterno: etiquetaRef }, { id: etiquetaRef }] } });
+    if (!e) throw new NotFoundException({ mensaje: 'Etiqueta no encontrada', codigo: 'MAR_003' });
+    const regla = platoId
+      ? await this.prisma.reglaMaridaje.findFirst({ where: { platoId, etiquetaId: e.id, activa: true } })
+      : null;
+    const precio = Number(e.precioLista);
+    const argumentos = [
+      `${e.nombre}${e.cepa ? ' · ' + e.cepa : ''}${e.anada ? ' · cosecha ' + e.anada : ''}`,
+      e.descripcionEs,
+      e.notasDegust ? `Notas de cata: ${e.notasDegust}` : null,
+      regla?.motivo ? `Por qué marida con este plato: ${regla.motivo}` : e.maridajeGeneral ? `Marida bien con: ${e.maridajeGeneral}` : null,
+      `Precio de la botella: S/ ${precio.toFixed(2)} (rango ${e.rangoPrecio.toLowerCase()}). Ofrezca también la copa si el comensal duda.`,
+      'Producido por Viña Tacama, la bodega más antigua en actividad del Perú: cuéntelo al presentar la etiqueta.',
+    ].filter(Boolean) as string[];
+    return {
+      etiquetaId: e.id, codigoInterno: e.codigoInterno, nombre: e.nombre, precioLista: precio, rangoPrecio: e.rangoPrecio,
+      frase: `Le sugiero ${e.nombre}: ${e.descripcionEs}`,
+      argumentos,
+    };
   }
 
   async registrarAceptacion(

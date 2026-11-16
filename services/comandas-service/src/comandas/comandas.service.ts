@@ -43,6 +43,7 @@ interface CrearComandaDto {
   mayorEdad?: boolean;
   conflictosAlergeno?: string[];
   confirmaConflicto?: boolean;
+  claveIdempotencia?: string;
 }
 
 // Comandas que mantienen ocupada una mesa (hasta que el mozo cierra la última)
@@ -76,16 +77,12 @@ export class ComandasService {
       throw new ForbiddenException({ mensaje: 'Solo se pueden declarar alergias en estado BORRADOR', codigo: 'CMD_003' });
     }
 
-    // Crear o actualizar restricciones
-    await this.prisma.restriccionAlergeno.create({
-      data: { comandaId, alergenos, consentimiento, versionTerminos },
-    });
-
-    // Marcar alergias como declaradas en la comanda
-    await this.prisma.comanda.update({
-      where: { id: comandaId },
-      data: { alergiasDeclaradas: true },
-    });
+    // La declaración reemplaza a la anterior (un reintento no la duplica) y marca la comanda como declarada, todo junto
+    await this.prisma.$transaction([
+      this.prisma.restriccionAlergeno.deleteMany({ where: { comandaId } }),
+      this.prisma.restriccionAlergeno.create({ data: { comandaId, alergenos, consentimiento, versionTerminos } }),
+      this.prisma.comanda.update({ where: { id: comandaId }, data: { alergiasDeclaradas: true } }),
+    ]);
 
     return {
       comandaId,
@@ -98,6 +95,11 @@ export class ComandasService {
 
   // ── 2. Crear borrador de comanda ───────────────────────────
   async crear(dto: CrearComandaDto) {
+    // Reintento del mismo pedido (la respuesta anterior se perdió): se devuelve la comanda ya creada
+    if (dto.claveIdempotencia) {
+      const previa = await this.prisma.comanda.findUnique({ where: { claveIdempotencia: dto.claveIdempotencia }, include: { items: true } });
+      if (previa) return previa;
+    }
     // RN12: vino y pisco solo con la declaración de mayoría de edad
     if (dto.items.some((i) => i.etiquetaId || i.esAlcohol) && !dto.mayorEdad) {
       throw new BadRequestException({
@@ -133,6 +135,7 @@ export class ComandasService {
         estado:       'BORRADOR',
         totalPEN:     total,
         observaciones: dto.observaciones,
+        claveIdempotencia: dto.claveIdempotencia,
         conflictoAlergeno: conflictos.length ? conflictos.join(',') : null,
         conflictoConfirmadoComensal: conflictos.length > 0,
         items: {
@@ -163,6 +166,9 @@ export class ComandasService {
     });
 
     if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
+
+    // Reintento de una confirmación que ya se aplicó (la respuesta se perdió): no se repite ni se vuelve a publicar
+    if (comanda.confirmadaEn && ['PENDIENTE', 'EN_PREPARACION', 'LISTA', 'ENTREGADA'].includes(comanda.estado)) return comanda;
 
     // RN01: No se puede confirmar sin declaración de alergias
     if (!comanda.alergiasDeclaradas) {
@@ -323,6 +329,44 @@ export class ComandasService {
 
     this.logger.log(`Comanda anulada: ${id} — ${motivo}`);
     return anulada;
+  }
+
+  /**
+   * RNF11: el comensal puede eliminar sus datos de salud (alergias declaradas) cuando el servicio terminó
+   * (comanda cerrada o anulada): mientras se prepara el pedido, la cocina los necesita. Solo puede pedirlo quien tiene la
+   * sesión de esa mesa, o la jefatura. Todo el borrado ocurre en una sola transacción.
+   */
+  async eliminarDatosSalud(id: string, sesionMesaId?: string, sesion: SesionPersonal | null = null) {
+    const comanda = await this.prisma.comanda.findUnique({ where: { id }, include: { items: true } });
+    if (!comanda) throw new NotFoundException({ mensaje: 'Comanda no encontrada', codigo: 'CMD_001' });
+
+    const esJefatura = !!sesion && ['JEFE_SALON', 'ADMINISTRADOR'].includes(sesion.rol);
+    if (!esJefatura && (!sesionMesaId || sesionMesaId !== comanda.sesionMesaId)) {
+      throw new ForbiddenException({ mensaje: 'Solo el comensal de esta mesa puede eliminar sus datos de salud', codigo: 'CMD_026' });
+    }
+    // Un borrador o un pedido en curso conserva el aviso: quitarlo saltaría la aprobación del chef (RN02)
+    if (!['CERRADA', 'ANULADA'].includes(comanda.estado)) {
+      throw new ConflictException({
+        mensaje: 'Tus datos de salud se pueden eliminar cuando termine el servicio: la cocina los necesita mientras prepara tu pedido',
+        codigo: 'CMD_025',
+      });
+    }
+
+    const esAlergia = (p: string) => /^(ALERGIA|SIN \(ALERGIA\))/.test(p.trim());
+    const limpiar = (t?: string | null) => (t ?? '').split(' | ').filter((p) => p.trim() && !esAlergia(p)).join(' | ') || null;
+    const cambiosEnItems = comanda.items
+      .filter((i) => i.notas && i.notas !== limpiar(i.notas))
+      .map((i) => this.prisma.detalleComanda.update({ where: { id: i.id }, data: { notas: limpiar(i.notas) } }));
+    const [borradas] = await this.prisma.$transaction([
+      this.prisma.restriccionAlergeno.deleteMany({ where: { comandaId: id } }),
+      ...cambiosEnItems,
+      this.prisma.comanda.update({ where: { id }, data: { observaciones: limpiar(comanda.observaciones), conflictoAlergeno: null } }),
+    ]);
+    await this.mqProducer.publicar('comanda.datos-eliminados', {
+      id, comandaId: id, mesaId: comanda.mesaId, registros: (borradas as { count: number }).count,
+      usuarioId: sesion?.id, usuario: sesion?.nombre ?? 'Comensal (mesa)', origen: 'comandas-service',
+    });
+    return { comandaId: id, registrosEliminados: (borradas as { count: number }).count };
   }
 
   // ── Obtener comanda por ID ─────────────────────────────────

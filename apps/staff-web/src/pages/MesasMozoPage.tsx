@@ -3,6 +3,7 @@ import { io } from 'socket.io-client';
 import { api, nombreMesa } from '../lib/api';
 import { useAuth } from '../lib/auth';
 import { MesaStatus } from '../types';
+import { GuionVenta } from '../components/GuionVenta';
 import { Users, Clock, Wine, CheckCircle2, Star, DoorClosed, Banknote, CreditCard, Landmark, HandPlatter, UserCheck } from 'lucide-react';
 
 const MOTIVOS_LIBERAR = [
@@ -50,6 +51,7 @@ export const MesasMozoPage: React.FC = () => {
               total: (c.items ?? []).reduce((a: number, i: any) => a + Number(i.subtotal), 0),
               metodoPago: c.metodoPago ?? undefined, pagaCon: c.efectivoPagaCon != null ? Number(c.efectivoPagaCon) : undefined,
               modificadaEn: c.modificadaEn ?? undefined,
+              items: (c.items ?? []).map((i: any) => ({ platoId: i.platoId, nombre: i.platoNombre, etiquetaId: i.etiquetaId ?? undefined })),
             })),
             mozoId: conMozo?.mozoId ?? undefined,
             mozoAsignado: conMozo?.mozoNombre ?? undefined,
@@ -88,18 +90,18 @@ export const MesasMozoPage: React.FC = () => {
 
   // El mozo toma la mesa: desde ahí es el responsable hasta que se cierre y la mesa quede libre
   const atenderMesa = (comandaId: string) =>
-    ejecutar(() => api(`/comandas/${comandaId}/atender`, { method: 'POST' }), 'No se pudo tomar la mesa');
+    ejecutar(() => api(`/comandas/${comandaId}/atender`, { method: 'POST', cola: true }), 'No se pudo tomar la mesa');
 
   // La entrega en mesa la confirma el mozo (cocina solo deja la comanda lista)
   const confirmarEntrega = (comandaId: string) =>
-    ejecutar(() => api(`/comandas/${comandaId}`, { method: 'PATCH', body: { estado: 'ENTREGADA' } }), 'No se pudo confirmar la entrega');
+    ejecutar(() => api(`/comandas/${comandaId}`, { method: 'PATCH', body: { estado: 'ENTREGADA' }, cola: true }), 'No se pudo confirmar la entrega');
 
   // El mozo cobra con el método que eligió el comensal y confirma el pago: la mesa queda libre
   const cerrarMesa = (comandaId: string) =>
-    ejecutar(() => api(`/comandas/${comandaId}/cerrar`, { method: 'POST' }), 'No se pudo cerrar la mesa');
+    ejecutar(() => api(`/comandas/${comandaId}/cerrar`, { method: 'POST', cola: true }), 'No se pudo cerrar la mesa');
 
   const liberarMesa = (comandaId: string, motivo: string) =>
-    ejecutar(() => api(`/comandas/${comandaId}/liberar`, { method: 'POST', body: { motivo } }), 'No se pudo liberar la mesa');
+    ejecutar(() => api(`/comandas/${comandaId}/liberar`, { method: 'POST', body: { motivo }, cola: true }), 'No se pudo liberar la mesa');
 
   const sinAtender = mesas.filter((m) => m.comandas?.length && !m.mozoId);
   const mias = mesas.filter((m) => m.comandas?.length && m.mozoId === usuario?.id);
@@ -278,6 +280,8 @@ export const MesasMozoPage: React.FC = () => {
                           <span className="text-[10px] text-amber-700 text-right shrink-0">Toma la mesa para llevarla</span>
                         )}
                       </div>
+
+                      {!c.cuentaSolicitada && <GuionVenta items={c.items} />}
 
                       {c.estado === 'ENTREGADA' && c.cuentaSolicitada && c.metodoPago && (
                         <div className="flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 rounded-xl px-3 py-2 text-[11px] text-amber-800">

@@ -31,6 +31,7 @@ export interface ComandaMesa {
   modificadaEn?: string; // el comensal cambió o anuló un plato
   metodoPago?: string; // EFECTIVO | TARJETA | TRANSFERENCIA
   pagaCon?: number; // efectivo: monto con el que pagará
+  items?: { platoId: string; nombre: string; etiquetaId?: string }[]; // para el guion de venta (RF09)
 }
 
 export interface MesaStatus {

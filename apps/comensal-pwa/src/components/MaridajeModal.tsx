@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { fotoEtiqueta } from '../lib/fotos';
 import { Plato, MaridajeRecomendacion } from '../types';
 import { useApp } from '../context/AppContext';
@@ -12,13 +12,16 @@ interface MaridajeModalProps {
 }
 
 export const MaridajeModal: React.FC<MaridajeModalProps> = ({ plato, onClose }) => {
-  const { obtenerMaridajes, agregarAlCarrito, avisoStock, idioma, t } = useApp();
+  const { obtenerMaridajes, registrarRespuestaMaridaje, agregarAlCarrito, avisoStock, idioma, t } = useApp();
+  // RF08: una respuesta por sugerencia y por consulta
+  const respondidas = useRef<Set<string>>(new Set());
   const [recomendaciones, setRecomendaciones] = useState<MaridajeRecomendacion[]>([]);
   const [cargando, setCargando] = useState<boolean>(true);
   const [agregados, setAgregados] = useState<string[]>([]);
 
   useEffect(() => {
     if (plato) {
+      respondidas.current = new Set();
       setCargando(true);
       obtenerMaridajes(plato).then((recs) => {
         setRecomendaciones(recs);
@@ -44,10 +47,27 @@ export const MaridajeModal: React.FC<MaridajeModalProps> = ({ plato, onClose }) 
     });
 
     setAgregados((prev) => [...prev, `${rec.etiquetaId}-${tipoVenta}`]);
+
+    // RF08: la sugerencia principal se acepta; otra de las sugeridas cuenta como modificada
+    if (!respondidas.current.has(rec.etiquetaId)) {
+      respondidas.current.add(rec.etiquetaId);
+      registrarRespuestaMaridaje(rec.reglaId, recomendaciones[0]?.etiquetaId === rec.etiquetaId ? 'ACEPTADA' : 'MODIFICADA');
+    }
+  };
+
+  // RF08: si se cierra sin agregar ninguna etiqueta, las sugerencias se registran como rechazadas
+  const cerrar = () => {
+    if (respondidas.current.size === 0 && !cargando) {
+      recomendaciones.forEach((r) => {
+        respondidas.current.add(r.etiquetaId);
+        registrarRespuestaMaridaje(r.reglaId, 'RECHAZADA');
+      });
+    }
+    onClose();
   };
 
   return (
-    <Modal onClose={onClose} etiqueta={`${t('marTitulo')} ${plato.nombre}`}>
+    <Modal onClose={cerrar} etiqueta={`${t('marTitulo')} ${plato.nombre}`}>
       <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-amber-900/10 relative max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex items-start justify-between pb-4 border-b border-stone-100">
@@ -66,7 +86,7 @@ export const MaridajeModal: React.FC<MaridajeModalProps> = ({ plato, onClose }) 
               </h3>
             </div>
           </div>
-          <button onClick={onClose} aria-label="Cerrar modal de maridaje" className="text-stone-400 hover:text-stone-600 p-1">
+          <button onClick={cerrar} aria-label="Cerrar modal de maridaje" className="text-stone-400 hover:text-stone-600 p-1">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -167,7 +187,7 @@ export const MaridajeModal: React.FC<MaridajeModalProps> = ({ plato, onClose }) 
         <div className="pt-3 border-t border-stone-100 flex justify-end">
           <button
             type="button"
-            onClick={onClose}
+            onClick={cerrar}
             className="px-5 py-2 text-xs font-semibold bg-stone-100 text-stone-700 hover:bg-stone-200 rounded-xl transition"
           >
             {t('volverCarta')}

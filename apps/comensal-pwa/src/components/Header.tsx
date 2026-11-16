@@ -1,7 +1,11 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { HojaVid } from './Logo';
-import { ShieldAlert, ShoppingBag } from 'lucide-react';
+import { ShieldAlert, ShoppingBag, Globe } from 'lucide-react';
+import { IDIOMAS, Idioma } from '../lib/i18n';
+
+// RF03: el comensal puede cambiar el idioma a mano; cada idioma se muestra con su propio nombre
+const NOMBRE_IDIOMA: Record<Idioma, string> = { es: 'Español', en: 'English', fr: 'Français', pt: 'Português', de: 'Deutsch' };
 
 interface HeaderProps {
   vistaActiva: 'carta' | 'carrito' | 'seguimiento' | 'csat';
@@ -9,7 +13,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ setVistaActiva }) => {
-  const { mesa, alergiasDeclaradas, setModalAlergenosAbierto, carrito, comandaActivaId, t } = useApp();
+  const { mesa, alergiasDeclaradas, setModalAlergenosAbierto, carrito, comandaActivaId, t, idioma, setIdioma } = useApp();
 
   const totalItems = carrito.reduce((acc, i) => acc + i.cantidad, 0);
 
@@ -27,6 +31,18 @@ export const Header: React.FC<HeaderProps> = ({ setVistaActiva }) => {
 
         {/* Controles */}
         <div className="flex items-center space-x-2">
+          <label className="relative flex items-center">
+            <span className="sr-only">{t('idiomaEtiqueta')}</span>
+            <Globe className="w-3.5 h-3.5 text-stone-600 absolute left-2 pointer-events-none" aria-hidden="true" />
+            <select
+              value={idioma}
+              onChange={(e) => setIdioma(e.target.value as Idioma)}
+              aria-label={t('idiomaEtiqueta')}
+              className="appearance-none bg-white border border-stone-300 rounded-full text-xs font-semibold text-stone-700 pl-7 pr-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#577A17]/40"
+            >
+              {IDIOMAS.map((i) => <option key={i} value={i}>{NOMBRE_IDIOMA[i]}</option>)}
+            </select>
+          </label>
           <button
             onClick={() => setModalAlergenosAbierto(true)}
             className={`flex items-center space-x-1 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all ${

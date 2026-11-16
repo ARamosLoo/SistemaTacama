@@ -10,6 +10,7 @@ import { recomendarPlatos, armarMenuRecomendado, armarMenuPopular, PlatoRecomend
 import { texto, ClaveTexto, Idioma, detectarIdioma, ALERGENOS_NOMBRE } from '../lib/i18n';
 import { esOtro, textoDeOtro, textosOtros, soloCodigosDeAlergeno } from '../lib/alergias';
 import { leerSesionLocal, guardarSesionLocal, leerJsonSesion } from '../lib/almacen';
+import { PedidoEnCola, leerCola, guardarCola, borrarCola } from '../lib/colaOffline';
 import { Personalizacion, hayPersonalizacion, notaPersonalizacion, notasSinPersonalizacion, unirNotas } from '../lib/personalizar';
 
 // La línea del carrito se identifica con "plato::comensal" y, si el mismo plato se pide con otra personalización, "#sufijo"
@@ -69,6 +70,10 @@ interface AppContextType {
   estadoComanda: EstadoComanda | null;
   confirmarComanda: (opts?: { mayorEdad?: boolean; conflictos?: string[]; confirmaConflicto?: boolean }) => Promise<void>;
   obtenerMaridajes: (plato: Plato) => Promise<MaridajeRecomendacion[]>;
+  eliminarDatosSalud: () => Promise<string>;
+  pedidoEnCola: boolean; // RNF14: hay un pedido guardado sin conexión, pendiente de envío
+  errorCola: string | null;
+  registrarRespuestaMaridaje: (reglaId: string | undefined, respuesta: 'ACEPTADA' | 'MODIFICADA' | 'RECHAZADA') => Promise<void>;
   csatEnviado: boolean;
   enviarCsat: (puntuacion: number, comentario: string) => Promise<void>;
   /** Pedido tal como lo registró el servidor (con ids de ítem y hora límite para cambios) */
@@ -226,6 +231,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [carrito, setCarrito] = useState<ItemCarrito[]>([]);
   const [comandaActivaId, setComandaActivaId] = useState<string | null>(null);
   const [estadoComanda, setEstadoComanda] = useState<EstadoComanda | null>(null);
+  const [pedidoEnCola, setPedidoEnCola] = useState<boolean>(() => !!leerCola());
+  const [errorCola, setErrorCola] = useState<string | null>(null);
   const [csatEnviado, setCsatEnviado] = useState<boolean>(false);
   const [comandaServidor, setComandaServidor] = useState<ComandaServidor | null>(null);
   const sincronizarRef = useRef<() => Promise<void>>(async () => undefined);
@@ -494,17 +501,124 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         stockActual: r.stockDisponible,
         explicacionSommelier: r.motivo ?? r.descripcion,
         puntuacionAfinidad: r.puntaje * 10,
+        reglaId: r.reglaId,
       }));
     } catch {
       return [];
     }
   };
 
+  // RNF11: elimina las alergias declaradas (en el servidor, si ya hay comanda, y en este dispositivo)
+  const eliminarDatosSalud = async (): Promise<string> => {
+    if (comandaRef.current) {
+      try {
+        await api(`/comandas/${comandaRef.current}/datos-salud`, { method: 'DELETE', headers: { 'X-Sesion-Mesa': (tokenMesa ?? '').slice(-32) } });
+      } catch (e: any) {
+        return e?.message ?? 'No se pudieron eliminar los datos';
+      }
+    }
+    // Se borra también del almacenamiento de la sesión, y se pide declarar de nuevo (no queda como "sin alergias")
+    actualizarGrupo((g) => ({
+      ...g,
+      comensales: g.comensales.map((c) => ({ ...c, alergias: [], perfil: c.perfil ? { ...c.perfil, alergiasRespondidas: false } : c.perfil })),
+    }));
+    return 'ok';
+  };
+
+  // RF08: el comensal acepta, modifica o rechaza la sugerencia de maridaje
+  const registrarRespuestaMaridaje = async (reglaId: string | undefined, respuesta: 'ACEPTADA' | 'MODIFICADA' | 'RECHAZADA') => {
+    if (!reglaId || !tokenMesa) return;
+    try {
+      await api('/maridajes/respuesta', { method: 'POST', body: { reglaId, sesionMesaId: tokenMesa.slice(-32), respuesta } });
+    } catch { /* la telemetría no debe interrumpir el pedido */ }
+  };
+
+  /** Espera como máximo `ms` por una consulta de verificación; sin red devuelve `vacio` para no demorar el envío (RNF14). */
+  const conTope = <T,>(p: Promise<T>, ms: number, vacio: T): Promise<T> =>
+    Promise.race([p.catch(() => vacio), new Promise<T>((r) => setTimeout(() => r(vacio), ms))]);
+
+  // ── RNF14: envío del pedido con cola local ───
+  /** Clave única del pedido: si el servidor lo recibió pero la respuesta se perdió, el reintento no crea otra comanda. */
+  const nuevaClave = () => (typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  const MAX_REINTENTOS_COLA = 120; // unos 10 minutos a un intento cada 5 s
+
+  const esErrorDeRed = (e: unknown) => e instanceof TypeError || (!(e instanceof ApiError) && typeof navigator !== 'undefined' && navigator.onLine === false);
+
+  /** Crea la comanda, declara las alergias (RN01) y la confirma. Reanuda donde quedó si la red cayó a mitad del envío. */
+  const enviarPedido = async (p: PedidoEnCola): Promise<string> => {
+    if (!p.comandaId) {
+      const { data } = await api<{ data: { id: string } }>('/comandas', { method: 'POST', body: p.cuerpo });
+      p.comandaId = data.id;
+      guardarCola(p);
+    }
+    if (!p.restriccionesOk) {
+      await api(`/comandas/${p.comandaId}/restricciones`, { method: 'POST', body: { alergenos: p.codigos, consentimiento: true, versionTerminos: VERSION_TERMINOS } });
+      p.restriccionesOk = true;
+      guardarCola(p);
+    }
+    await api(`/comandas/${p.comandaId}`, { method: 'PATCH', body: { estado: 'PENDIENTE' } });
+    return p.comandaId;
+  };
+
+  const aplicarPedidoEnviado = (comandaId: string, clave: string) => {
+    comandaRef.current = comandaId;
+    guardarSesionLocal(clave, comandaId);
+    setComandaServidor(null);
+    setComandaActivaId(comandaId.slice(0, 8).toUpperCase());
+    setEstadoComanda('CONFIRMADA');
+    setCsatEnviado(false);
+    setCuenta({ solicitada: false, metodoPago: null });
+    sincronizarRef.current();
+    setTimeout(cargarEtiquetas, 1500); // refleja el descuento de stock
+  };
+
+  // Mientras haya un pedido en cola: se reintenta al volver la red y cada 5 segundos
+  const colaRef = useRef({ enviarPedido, aplicarPedidoEnviado });
+  colaRef.current = { enviarPedido, aplicarPedidoEnviado };
+  const enviandoCola = useRef(false);
+  useEffect(() => {
+    if (!pedidoEnCola) return;
+    const intentar = async () => {
+      if (enviandoCola.current) return;
+      const p = leerCola();
+      if (!p) { setPedidoEnCola(false); return; }
+      if ((p.intentos ?? 0) >= MAX_REINTENTOS_COLA) {
+        borrarCola();
+        setPedidoEnCola(false);
+        setErrorCola('No se pudo enviar el pedido después de varios intentos. Avisa a tu mozo.');
+        return;
+      }
+      p.intentos = (p.intentos ?? 0) + 1;
+      guardarCola(p);
+      enviandoCola.current = true;
+      try {
+        const id = await colaRef.current.enviarPedido(p);
+        borrarCola();
+        colaRef.current.aplicarPedidoEnviado(id, p.claveComanda);
+        setPedidoEnCola(false);
+        setErrorCola(null);
+      } catch (e) {
+        if (!esErrorDeRed(e)) {
+          // El servidor lo rechazó (por ejemplo, ya no hay existencias): no se reintenta
+          borrarCola();
+          setPedidoEnCola(false);
+          setErrorCola((e as Error).message);
+        }
+      } finally {
+        enviandoCola.current = false;
+      }
+    };
+    window.addEventListener('online', intentar);
+    const reloj = setInterval(intentar, 5000);
+    void intentar();
+    return () => { window.removeEventListener('online', intentar); clearInterval(reloj); };
+  }, [pedidoEnCola]);
+
   // ── Comanda: crear → declarar alergias (RN01) → confirmar ───
   const confirmarComanda = async ({ mayorEdad = false, conflictos = [], confirmaConflicto = false }: { mayorEdad?: boolean; conflictos?: string[]; confirmaConflicto?: boolean } = {}) => {
     if (!mesaId || !tokenMesa) throw new Error('Mesa no identificada');
     // Antes de enviar a cocina se vuelve a leer la carta y la bodega: nada agotado puede llegar a la comanda
-    const [platosAhora, etiquetasAhora] = await Promise.all([cargarCarta().catch(() => platos), cargarEtiquetas()]);
+    const [platosAhora, etiquetasAhora] = await Promise.all([conTope(cargarCarta(), 2500, platos), conTope(cargarEtiquetas(), 2500, [] as any[])]);
     const agotados = carrito.filter((i) =>
       i.tipo === 'PLATO'
         ? platosAhora.some((p) => p.id === i.id && !p.disponible)
@@ -542,28 +656,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       .map((c) => ({ c, t: textosOtros(c.alergias) }))
       .filter((x) => x.t.length > 0)
       .map((x) => (varios ? nombreComensal(x.c) + ': ' : '') + x.t.join(', '));
-    const { data: comanda } = await api<{ data: { id: string } }>('/comandas', {
-      method: 'POST',
-      body: { mesaId, sesionMesaId: tokenMesa.slice(-32), items, mayorEdad, conflictosAlergeno: conflictos, confirmaConflicto, ...(otras.length ? { observaciones: 'ALERGIA (otras): ' + otras.join(' | ') } : {}) },
-    });
-
+    const cuerpo: Record<string, unknown> = {
+      claveIdempotencia: nuevaClave(),
+      mesaId, sesionMesaId: tokenMesa.slice(-32), items, mayorEdad, conflictosAlergeno: conflictos, confirmaConflicto,
+      ...(otras.length ? { observaciones: 'ALERGIA (otras): ' + otras.join(' | ') } : {}),
+    };
     // Alergias de todos los comensales de la mesa (códigos de alérgeno)
     const codigos = [...new Set(comensales.flatMap((c) => soloCodigosDeAlergeno(c.alergias)))];
-    await api(`/comandas/${comanda.id}/restricciones`, {
-      method: 'POST',
-      body: { alergenos: codigos, consentimiento: true, versionTerminos: VERSION_TERMINOS },
-    });
-    await api(`/comandas/${comanda.id}`, { method: 'PATCH', body: { estado: 'PENDIENTE' } });
+    const pedido: PedidoEnCola = { cuerpo, codigos, claveComanda, creadoEn: new Date().toISOString() };
+    try {
+      aplicarPedidoEnviado(await enviarPedido(pedido), claveComanda);
+    } catch (e) {
+      if (!esErrorDeRed(e)) throw e;
+      // RNF14: sin conexión el pedido se guarda en el dispositivo y se envía solo al volver la red
+      guardarCola(pedido);
+      setPedidoEnCola(true);
+      setErrorCola(null);
+      setCarrito([]);
+    }
 
-    comandaRef.current = comanda.id;
-    guardarSesionLocal(claveComanda, comanda.id);
-    setComandaServidor(null);
-    setComandaActivaId(comanda.id.slice(0, 8).toUpperCase());
-    setEstadoComanda('CONFIRMADA');
-    setCsatEnviado(false);
-    setCuenta({ solicitada: false, metodoPago: null });
-    sincronizarRef.current();
-    setTimeout(cargarEtiquetas, 1500); // refleja el descuento de stock
   };
 
   const enviarCsat = async (puntuacion: number, comentario: string) => {
@@ -623,7 +734,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         momento, setMomento, perfil, guardarPerfil, recomendados, menuRecomendado, mostrarRecomendacion, setMostrarRecomendacion, t, nombreAlergeno,
         modalAlergenosAbierto, setModalAlergenosAbierto, platos, etiquetas, cargandoCarta, errorCarta,
         carrito, agregarAlCarrito, eliminarDelCarrito, actualizarCantidad, limpiarCarrito, totalPEN,
-        comandaActivaId, estadoComanda, confirmarComanda, obtenerMaridajes, csatEnviado, enviarCsat, cuenta, solicitarCuenta,
+        comandaActivaId, estadoComanda, confirmarComanda, obtenerMaridajes, registrarRespuestaMaridaje, eliminarDatosSalud, pedidoEnCola, errorCola, csatEnviado, enviarCsat, cuenta, solicitarCuenta,
         comandaServidor, anularItem, cambiarItem, itemAgotado, avisoStock, personalizarItem, personalizarItemServidor,
       }}
     >

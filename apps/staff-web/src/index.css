@@ -70,3 +70,10 @@ body {
   .tabla-tarjetas td::before { content: attr(data-label); flex: 0 0 34%; text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #555D41; padding-top: 2px; }
   .tabla-tarjetas td > * { text-align: right; min-width: 0; }
 }
+
+/* Accesibilidad (RNF06, WCAG 2.1 AA): ningún texto baja de 12 px y el gris "piedra 400" se oscurece (5,0:1 sobre blanco). */
+.text-stone-400,
+.placeholder-stone-400::placeholder { color: #6B7355; }
+[class*="text-[9px]"],
+[class*="text-[10px]"],
+[class*="text-[11px]"] { font-size: 12px; line-height: 1.35; }

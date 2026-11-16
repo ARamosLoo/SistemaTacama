@@ -38,7 +38,8 @@ export class RolesGuard implements CanActivate {
       });
     }
 
-    const tieneRol = rolesRequeridos.some((rol) => user.rol === rol);
+    // El enum compartido va en minúsculas y la base de datos en mayúsculas: se compara sin distinguirlas
+    const tieneRol = rolesRequeridos.some((rol) => String(rol).toUpperCase() === String(user.rol).toUpperCase());
 
     if (!tieneRol) {
       throw new ForbiddenException({

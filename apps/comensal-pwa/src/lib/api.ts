@@ -11,7 +11,7 @@ const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function api<T = any>(
   path: string,
-  opts: { method?: string; body?: unknown; idioma?: string; token?: string } = {},
+  opts: { method?: string; body?: unknown; idioma?: string; token?: string; headers?: Record<string, string> } = {},
 ): Promise<T> {
   const metodo = opts.method ?? 'GET';
   // Las lecturas se reintentan ante caídas momentáneas del servicio (red o error 5xx)
@@ -25,6 +25,7 @@ export async function api<T = any>(
           'Content-Type': 'application/json',
           ...(opts.idioma ? { 'Accept-Language': opts.idioma } : {}),
           ...(opts.token ? { Authorization: `Bearer ${opts.token}` } : {}),
+          ...(opts.headers ?? {}),
         },
         body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
       });

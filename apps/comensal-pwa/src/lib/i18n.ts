@@ -249,6 +249,11 @@ const es = {
   pedidoCurso: 'Pedido en curso',
   carta: 'Carta', comanda: 'Comanda', estado: 'Estado', opinion: 'Opinión',
   cargando: 'Cargando carta...',
+  insumosPeruanos: 'Insumos peruanos',
+  idiomaEtiqueta: 'Idioma',
+  sinConexionPedido: 'Sin conexión: tu pedido quedó guardado en este dispositivo y se enviará solo cuando vuelva la señal. No cierres esta página.',
+  eliminarMisDatos: 'Eliminar mis datos de salud', datosEliminados: 'Tus datos de salud fueron eliminados.',
+  alergiaOcultos: 'Ocultamos {n} platos que contienen tus alergias.', alergiaMostrar: 'Mostrarlos (con advertencia)', alergiaOcultar: 'Volver a ocultarlos',
   confirmoConflictoAlergeno: 'Mi pedido incluye platos con alérgenos que declaré. Confirmo que deseo pedirlos y entiendo que el chef deberá aprobar su preparación.',
   mayorEdadAlcohol: 'Declaro ser mayor de 18 años y que las bebidas alcohólicas de este pedido (vino, pisco o coctelería) son para personas mayores de edad.',
   preciosIncluyen: 'Precios incluyen 10% de servicio y 18% de IGV.',
@@ -539,6 +544,11 @@ const en: Diccionario = {
   pedidoCurso: 'Order in progress',
   carta: 'Menu', comanda: 'Order', estado: 'Status', opinion: 'Feedback',
   cargando: 'Loading menu...',
+  insumosPeruanos: 'Peruvian ingredients',
+  idiomaEtiqueta: 'Language',
+  sinConexionPedido: 'No connection: your order is saved on this device and will be sent automatically when the signal returns. Do not close this page.',
+  eliminarMisDatos: 'Delete my health data', datosEliminados: 'Your health data has been deleted.',
+  alergiaOcultos: 'We hid {n} dishes that contain your allergies.', alergiaMostrar: 'Show them (with a warning)', alergiaOcultar: 'Hide them again',
   confirmoConflictoAlergeno: 'My order includes dishes with allergens I declared. I confirm I want them and understand the chef must approve their preparation.',
   mayorEdadAlcohol: 'I declare that I am over 18 and that the alcoholic drinks in this order (wine, pisco or cocktails) are for adults only.',
   preciosIncluyen: 'Prices include 10% service and 18% sales tax.',
@@ -820,6 +830,11 @@ const fr: Diccionario = {
   pedidoCurso: 'Commande en cours',
   carta: 'Carte', comanda: 'Commande', estado: 'Suivi', opinion: 'Avis',
   cargando: 'Chargement de la carte...',
+  insumosPeruanos: 'Ingrédients péruviens',
+  idiomaEtiqueta: 'Langue',
+  sinConexionPedido: 'Pas de connexion : votre commande est enregistrée sur cet appareil et sera envoyée automatiquement au retour du signal. Ne fermez pas cette page.',
+  eliminarMisDatos: 'Supprimer mes données de santé', datosEliminados: 'Vos données de santé ont été supprimées.',
+  alergiaOcultos: 'Nous avons masqué {n} plats qui contiennent vos allergènes.', alergiaMostrar: 'Les afficher (avec avertissement)', alergiaOcultar: 'Les masquer de nouveau',
   confirmoConflictoAlergeno: 'Ma commande contient des plats avec des allergènes que j’ai déclarés. Je confirme les vouloir et je comprends que le chef doit approuver leur préparation.',
   mayorEdadAlcohol: 'Je déclare avoir plus de 18 ans et que les boissons alcoolisées de cette commande (vin, pisco ou cocktails) sont destinées à des adultes.',
   preciosIncluyen: 'Les prix incluent 10 % de service et 18 % de taxe.',
@@ -1101,6 +1116,11 @@ const pt: Diccionario = {
   pedidoCurso: 'Pedido em andamento',
   carta: 'Cardápio', comanda: 'Pedido', estado: 'Status', opinion: 'Opinião',
   cargando: 'Carregando cardápio...',
+  insumosPeruanos: 'Ingredientes peruanos',
+  idiomaEtiqueta: 'Idioma',
+  sinConexionPedido: 'Sem conexão: o seu pedido foi guardado neste dispositivo e será enviado automaticamente quando o sinal voltar. Não feche esta página.',
+  eliminarMisDatos: 'Excluir meus dados de saúde', datosEliminados: 'Os seus dados de saúde foram excluídos.',
+  alergiaOcultos: 'Ocultamos {n} pratos que contêm as suas alergias.', alergiaMostrar: 'Mostrá-los (com aviso)', alergiaOcultar: 'Ocultá-los novamente',
   confirmoConflictoAlergeno: 'O meu pedido inclui pratos com alérgenos que declarei. Confirmo que os quero e entendo que o chef deverá aprovar o preparo.',
   mayorEdadAlcohol: 'Declaro ter mais de 18 anos e que as bebidas alcoólicas deste pedido (vinho, pisco ou coquetéis) são para maiores de idade.',
   preciosIncluyen: 'Os preços incluem 10% de serviço e 18% de imposto.',
@@ -1382,6 +1402,11 @@ const de: Diccionario = {
   pedidoCurso: 'Bestellung läuft',
   carta: 'Karte', comanda: 'Bestellung', estado: 'Status', opinion: 'Bewertung',
   cargando: 'Karte wird geladen...',
+  insumosPeruanos: 'Peruanische Zutaten',
+  idiomaEtiqueta: 'Sprache',
+  sinConexionPedido: 'Keine Verbindung: Ihre Bestellung ist auf diesem Gerät gespeichert und wird automatisch gesendet, sobald das Signal zurückkehrt. Schließen Sie diese Seite nicht.',
+  eliminarMisDatos: 'Meine Gesundheitsdaten löschen', datosEliminados: 'Ihre Gesundheitsdaten wurden gelöscht.',
+  alergiaOcultos: 'Wir haben {n} Gerichte ausgeblendet, die Ihre Allergene enthalten.', alergiaMostrar: 'Anzeigen (mit Warnhinweis)', alergiaOcultar: 'Wieder ausblenden',
   confirmoConflictoAlergeno: 'Meine Bestellung enthält Gerichte mit von mir angegebenen Allergenen. Ich bestätige, sie zu wünschen, und weiß, dass der Koch die Zubereitung freigeben muss.',
   mayorEdadAlcohol: 'Ich erkläre, dass ich über 18 Jahre alt bin und der Wein oder Pisco in dieser Bestellung nur für Erwachsene bestimmt ist.',
   preciosIncluyen: 'Preise inklusive 10 % Service und 18 % Steuer.',
@@ -1432,7 +1457,7 @@ const de: Diccionario = {
   mesaConectando: 'Tisch wird verbunden...', mesaSinConexion: 'Tisch offline', mesa: 'Tisch',
 };
 
-const DICC: Record<Idioma, Diccionario> = { es, en, fr, pt, de };
+export const DICC: Record<Idioma, Diccionario> = { es, en, fr, pt, de };
 
 export const texto = (idioma: Idioma, clave: ClaveTexto, vars?: Record<string, string | number>): string => {
   let s = (DICC[idioma] ?? es)[clave] ?? es[clave];

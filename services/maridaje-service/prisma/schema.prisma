@@ -101,6 +101,7 @@ model Recomendacion {
   comandaId     String?       @map("comanda_id")   // si fue aceptada
   sesionMesaId  String        @map("sesion_mesa_id")
   aceptada      Boolean?      // null = no respondida
+  respuesta     String?       // RF08: ACEPTADA | MODIFICADA | RECHAZADA
   timestamp     DateTime      @default(now())
 
   // Relaciones

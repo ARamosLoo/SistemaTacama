@@ -62,6 +62,8 @@ model Comanda {
   conflictoConfirmadoComensal Boolean @default(false) @map("conflicto_confirmado_comensal")
   alergenoAprobadoPor     String?   @map("alergeno_aprobado_por")
   alergenoAprobadoEn      DateTime? @map("alergeno_aprobado_en")
+  // El cliente genera una clave por pedido: un reintento tras perder la respuesta no crea una comanda duplicada
+  claveIdempotencia       String?   @unique @map("clave_idempotencia")
 
   // Relaciones
   items           DetalleComanda[]

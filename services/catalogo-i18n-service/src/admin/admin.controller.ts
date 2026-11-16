@@ -4,15 +4,20 @@
  * PATCH /api/v1/admin/platos/:id        → precio y disponibilidad
  * POST  /api/v1/admin/platos/:id/foto   → foto del plato (data URL base64)
  */
-import { Controller, Get, Patch, Post, Param, Body, Headers, ForbiddenException } from '@nestjs/common';
+import { Controller, Get, Patch, Post, Put, Param, Body, Headers, ForbiddenException } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { AdminService } from './admin.service';
 import { rolDelToken } from '../common/sesion';
 
 class ActualizarPlatoDto {
   @IsOptional() @IsNumber() precioBase?: number;
   @IsOptional() @IsBoolean() disponible?: boolean;
+}
+
+class ComposicionDto {
+  @IsOptional() @IsArray() @IsString({ each: true }) alergenos?: string[];
+  @IsOptional() @IsArray() @IsString({ each: true }) ingredientes?: string[];
 }
 
 class FotoDto {
@@ -45,6 +50,20 @@ export class AdminController {
   async actualizar(@Param('id') id: string, @Body() dto: ActualizarPlatoDto, @Headers('authorization') a?: string) {
     exigir(a);
     return { data: await this.admin.actualizar(id, dto) };
+  }
+
+  @Get('platos/:id/composicion')
+  @ApiOperation({ summary: 'Alérgenos e ingredientes de un plato (RF19)' })
+  async composicion(@Param('id') id: string, @Headers('authorization') a?: string) {
+    exigir(a);
+    return { data: await this.admin.composicion(id) };
+  }
+
+  @Put('platos/:id/composicion')
+  @ApiOperation({ summary: 'Editar alérgenos e ingredientes de un plato (RF19)' })
+  async actualizarComposicion(@Param('id') id: string, @Body() dto: ComposicionDto, @Headers('authorization') a?: string) {
+    exigir(a);
+    return { data: await this.admin.actualizarComposicion(id, dto) };
   }
 
   @Post('platos/:id/foto')

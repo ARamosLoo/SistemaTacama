@@ -5,19 +5,22 @@ import { PlatoCard } from '../components/PlatoCard';
 import { MaridajeModal } from '../components/MaridajeModal';
 import { GrupoModal } from '../components/GrupoModal';
 import { Plato } from '../types';
+import { contieneAlergia } from '../lib/alergias';
 import { SECCIONES, TIPO_ETIQUETA } from '../lib/i18n';
 import { Search, Wine, SlidersHorizontal, Users } from 'lucide-react';
 
 const GRUPO_BEBIDAS = ['BEBIDAS', 'CAFE', 'INFUSIONES'];
 
 export const CartaPage: React.FC<{ onEditarGustos: () => void }> = ({ onEditarGustos }) => {
-  const { platos: todosLosPlatos, etiquetas, agregarAlCarrito, cargandoCarta, errorCarta, idioma, recomendados, perfil, momento, setMomento, comensales, activoIdx, seleccionarComensal, nombreComensal, setMostrarRecomendacion, avisoStock, t } = useApp();
+  const { platos: todosLosPlatos, etiquetas, agregarAlCarrito, cargandoCarta, errorCarta, idioma, recomendados, perfil, momento, setMomento, comensales, activoIdx, seleccionarComensal, nombreComensal, setMostrarRecomendacion, avisoStock, alergiasDeclaradas, t } = useApp();
   // La carta se segmenta por momento del día: solo se muestran los platos de desayuno o de almuerzo
   const platos = todosLosPlatos.filter((p) => p.momentos.includes(momento.toUpperCase()));
   const [categoriaActiva, setCategoriaActiva] = useState<string>('TODOS');
   const [busqueda, setBusqueda] = useState<string>('');
   const [platoParaMaridaje, setPlatoParaMaridaje] = useState<Plato | null>(null);
   const [grupoAbierto, setGrupoAbierto] = useState(false);
+  // RF16: los platos con alérgenos declarados se ocultan; el comensal puede mostrarlos (con su advertencia)
+  const [mostrarIncompatibles, setMostrarIncompatibles] = useState(false);
 
   const etiquetaSeccion = (id: string) => {
     const s = SECCIONES.find((x) => x.id === id);
@@ -43,9 +46,10 @@ export const CartaPage: React.FC<{ onEditarGustos: () => void }> = ({ onEditarGu
   const enSeccion = (p: Plato, id: string) =>
     id === 'BEBIDAS_GRUPO' ? GRUPO_BEBIDAS.includes(p.seccion) : p.seccion === id;
 
+  const incompatibles = platos.filter((p) => contieneAlergia(p, alergiasDeclaradas));
   const idsMostrar = categoriaActiva === 'TODOS' ? SECCIONES.map((s) => s.id) : [categoriaActiva];
   const bloques = idsMostrar
-    .map((id) => ({ id, platos: platos.filter((p) => enSeccion(p, id) && coincideBusqueda(p)) }))
+    .map((id) => ({ id, platos: platos.filter((p) => enSeccion(p, id) && coincideBusqueda(p) && (mostrarIncompatibles || !contieneAlergia(p, alergiasDeclaradas))) }))
     .filter((b) => b.platos.length > 0);
 
   const mostrarRecomendados = perfil && !perfil.omitido && categoriaActiva === 'TODOS' && !q;
@@ -79,6 +83,21 @@ export const CartaPage: React.FC<{ onEditarGustos: () => void }> = ({ onEditarGu
           </button>
         ))}
       </div>
+
+      {/* RF16: aviso de platos ocultos por las alergias declaradas */}
+      {incompatibles.length > 0 && (
+        <div role="status" className="flex flex-wrap items-center gap-2 text-xs bg-rose-50 border border-rose-200 text-rose-900 rounded-xl px-3 py-2">
+          <span>{t('alergiaOcultos', { n: String(incompatibles.length) })}</span>
+          <button
+            type="button"
+            onClick={() => setMostrarIncompatibles((v) => !v)}
+            aria-pressed={mostrarIncompatibles}
+            className="font-semibold underline underline-offset-2 hover:text-rose-700"
+          >
+            {mostrarIncompatibles ? t('alergiaOcultar') : t('alergiaMostrar')}
+          </button>
+        </div>
+      )}
 
       {/* Comensal para quien se pide (mesas con varias personas) */}
       {(

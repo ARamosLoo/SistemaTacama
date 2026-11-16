@@ -110,7 +110,7 @@ export const CocinaKdsPage: React.FC = () => {
           <div>
             <h2 className="font-serif-tacama text-xl font-bold text-stone-900 flex flex-wrap items-center gap-2">
               KDS · Pantalla de Cocina en Tiempo Real
-              <span className="text-xs bg-emerald-500/20 text-emerald-600 border border-emerald-500/40 px-2 py-0.5 rounded-full flex items-center gap-1 font-sans">
+              <span className="text-xs bg-emerald-500/20 text-emerald-800 border border-emerald-500/40 px-2 py-0.5 rounded-full flex items-center gap-1 font-sans">
                 <span className={`w-2 h-2 rounded-full ${conectado ? "bg-emerald-600 animate-ping" : "bg-rose-600"}`} />
                 {conectado ? "WebSocket Conectado (3004)" : "WebSocket desconectado"}
               </span>
@@ -236,7 +236,7 @@ export const CocinaKdsPage: React.FC = () => {
                     <div key={item.id} className="pt-2 first:pt-0">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-2">
-                          <span className="w-5 h-5 rounded bg-stone-200 text-amber-600 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="w-5 h-5 rounded bg-stone-200 text-amber-800 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
                             {item.cantidad}
                           </span>
                           <div>

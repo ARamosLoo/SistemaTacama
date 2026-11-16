@@ -49,34 +49,36 @@ export class IndicadoresService {
     return { ok: true };
   }
 
+  /**
+   * KPIs generales. Las cuentas y la suma de ventas las hace la base de datos (GROUP BY y SUM):
+   * traer todos los eventos a memoria tardaba más de un segundo con 50 usuarios simultáneos.
+   */
   async obtenerKpisGenerales() {
-    const eventosComandas = await this.prisma.eventoNegocio.findMany({
-      where: {
-        tipo: { in: ['comanda.confirmada', 'comanda.anulada', 'maridaje.recomendado', 'maridaje.aceptado'] },
-      },
+    const filas = await this.prisma.eventoNegocio.groupBy({
+      by: ['tipo'],
+      where: { tipo: { in: ['comanda.confirmada', 'comanda.anulada', 'maridaje.recomendado', 'maridaje.aceptado'] } },
+      _count: { _all: true },
     });
+    const cuenta = (tipo: string) => filas.find((x) => x.tipo === tipo)?._count._all ?? 0;
 
-    const confirmadas = eventosComandas.filter((e) => e.tipo === 'comanda.confirmada');
-    const anuladas = eventosComandas.filter((e) => e.tipo === 'comanda.anulada');
+    const ventas = await this.prisma.$queryRaw<{ total: number }[]>`
+      SELECT COALESCE(SUM((payload->>'total')::numeric), 0)::float8 AS total
+      FROM analitica.eventos_negocio
+      WHERE tipo = 'comanda.confirmada' AND payload->>'total' ~ '^[0-9]+(\\.[0-9]+)?$'`;
+    const totalVentaPEN = Number(ventas[0]?.total ?? 0);
 
-    let totalVentaPEN = 0;
-    for (const e of confirmadas) {
-      const payload = e.payload as any;
-      if (payload && payload.total) {
-        totalVentaPEN += Number(payload.total);
-      }
-    }
+    const confirmadas = cuenta('comanda.confirmada');
+    const anuladas = cuenta('comanda.anulada');
+    const ticketPromedio = confirmadas > 0 ? totalVentaPEN / confirmadas : 0;
 
-    const ticketPromedio = confirmadas.length > 0 ? totalVentaPEN / confirmadas.length : 0;
-
-    const maridajesEmitidos = eventosComandas.filter((e) => e.tipo === 'maridaje.recomendado').length;
-    const maridajesAceptados = eventosComandas.filter((e) => e.tipo === 'maridaje.aceptado').length;
+    const maridajesEmitidos = cuenta('maridaje.recomendado');
+    const maridajesAceptados = cuenta('maridaje.aceptado');
     const tasaMaridaje = maridajesEmitidos > 0 ? (maridajesAceptados / maridajesEmitidos) * 100 : 0;
 
     return {
-      totalComandas: confirmadas.length + anuladas.length,
-      comandasConfirmadas: confirmadas.length,
-      comandasAnuladas: anuladas.length,
+      totalComandas: confirmadas + anuladas,
+      comandasConfirmadas: confirmadas,
+      comandasAnuladas: anuladas,
       ventaTotalPEN: Number(totalVentaPEN.toFixed(2)),
       ticketPromedioPEN: Number(ticketPromedio.toFixed(2)),
       maridajesEmitidos,

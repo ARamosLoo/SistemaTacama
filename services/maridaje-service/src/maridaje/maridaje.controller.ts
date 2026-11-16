@@ -31,7 +31,13 @@ class CrearReglaDto {
   @IsOptional() @IsIn(['NACIONAL', 'EXTRANJERO']) segmento?: string;
 }
 
-@ApiTags('maridaje')
+class RespuestaDto {
+  @ApiProperty() @IsString() reglaId: string;
+  @ApiProperty() @IsString() sesionMesaId: string;
+  @ApiProperty({ enum: ['ACEPTADA', 'MODIFICADA', 'RECHAZADA'] }) @IsIn(['ACEPTADA', 'MODIFICADA', 'RECHAZADA']) respuesta: string;
+  @ApiProperty({ required: false }) @IsOptional() @IsString() comandaId?: string;
+}
+
 class ActualizarReglaDto {
   @ApiProperty({ required: false, minimum: 1, maximum: 10 }) @IsOptional() @IsInt() @Min(1) @Max(10) puntaje?: number;
   @ApiProperty({ required: false }) @IsOptional() @IsString() motivo?: string;
@@ -50,6 +56,7 @@ function exigirSommelier(authorization?: string) {
   return sesion;
 }
 
+@ApiTags('maridaje')
 @Controller()
 export class MaridajeController {
   constructor(
@@ -82,16 +89,28 @@ export class MaridajeController {
     return { data: recomendaciones };
   }
 
-  /**
-   * GET /api/v1/reglas-maridaje
-   * Lista todas las reglas activas (sommelier / administrador).
-   */
+  /** POST /api/v1/maridajes/respuesta — RF08: el comensal acepta, modifica o rechaza la recomendación */
+  @Post('maridajes/respuesta')
+  @ApiOperation({ summary: 'Registrar la respuesta a una recomendación (RF08)' })
+  async registrarRespuesta(@Body() dto: RespuestaDto) {
+    return { data: await this.maridajeService.registrarRespuesta(dto.reglaId, dto.sesionMesaId, dto.respuesta, dto.comandaId) };
+  }
+
+  /** GET /api/v1/maridajes/guion?etiqueta=VIN-BL-001&plato=TAC-001 — RF09: guion de apoyo para el mozo */
+  @Get('maridajes/guion')
+  @ApiOperation({ summary: 'Guion de apoyo con argumentos de venta de una etiqueta (RF09)' })
+  async guion(@Query('etiqueta') etiqueta: string, @Query('plato') plato?: string) {
+    if (!etiqueta) throw new BadRequestException({ mensaje: 'El parámetro "etiqueta" es obligatorio', codigo: 'GEN_002' });
+    return { data: await this.maridajeService.guion(etiqueta, plato) };
+  }
+
   @Get('etiquetas')
   @ApiOperation({ summary: 'Catálogo de etiquetas Tacama (vinos y piscos)' })
   async getEtiquetas() {
     return { data: await this.maridajeService.listarEtiquetas() };
   }
 
+  /** GET /api/v1/reglas-maridaje — lista las reglas activas (solo sommelier) */
   @Get('reglas-maridaje')
   @ApiTags('reglas')
   @ApiOperation({ summary: 'Listar reglas de maridaje', description: 'Solo accesible por sommelier y administrador.' })
@@ -101,10 +120,16 @@ export class MaridajeController {
     return { data: await this.reglaService.findAll() };
   }
 
-  /**
-   * POST /api/v1/reglas-maridaje
-   * Crea o actualiza una regla (sommelier).
-   */
+  /** GET /api/v1/reglas-maridaje/respuestas — RF08: resumen de aceptadas, modificadas y rechazadas (sommelier) */
+  @Get('reglas-maridaje/respuestas')
+  @ApiTags('reglas')
+  @ApiOperation({ summary: 'Resumen de respuestas a las recomendaciones (RF08)' })
+  async resumenRespuestas(@Headers('authorization') authorization?: string) {
+    exigirSommelier(authorization);
+    return { data: await this.maridajeService.resumenRespuestas() };
+  }
+
+  /** POST /api/v1/reglas-maridaje — crea una regla (solo sommelier) */
   @Post('reglas-maridaje')
   @ApiTags('reglas')
   @ApiOperation({ summary: 'Crear regla de maridaje', description: 'Solo el sommelier puede crear reglas.' })

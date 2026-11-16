@@ -9,6 +9,7 @@ import { CuentasPage } from './pages/CuentasPage';
 import { LoginPage } from './pages/LoginPage';
 import { AuthProvider, useAuth, ACCESO_POR_ROL, NOMBRE_ROL, Modulo } from './lib/auth';
 import { HojaVid } from './components/Logo';
+import { pendientesEnCola, vaciarCola } from './lib/api';
 import { Creditos } from './components/Creditos';
 
 const MODULOS: { id: Modulo; etiqueta: string }[] = [
@@ -25,6 +26,14 @@ const Portal: React.FC = () => {
   const { usuario, logout } = useAuth();
   const permitidos = usuario ? ACCESO_POR_ROL[usuario.rol] : [];
   const [moduloActivo, setModuloActivo] = useState<Modulo>(permitidos[0] ?? 'kds');
+  // RNF14: acciones guardadas sin conexión; se reenvían al volver la red
+  const [enCola, setEnCola] = useState<number>(pendientesEnCola());
+  useEffect(() => {
+    const enviar = async () => { if (pendientesEnCola() > 0) setEnCola(await vaciarCola()); else setEnCola(0); };
+    const reloj = setInterval(() => { setEnCola(pendientesEnCola()); void enviar(); }, 5000);
+    window.addEventListener('online', enviar);
+    return () => { clearInterval(reloj); window.removeEventListener('online', enviar); };
+  }, []);
 
   // Cada inicio de sesión arranca en la pantalla inicial del rol
   useEffect(() => {
@@ -70,6 +79,12 @@ const Portal: React.FC = () => {
             </button>
           </div>
         </div>
+
+        {enCola > 0 && (
+          <div role="status" className="mt-3 bg-amber-100 text-amber-900 text-xs font-semibold px-3 py-2 rounded-xl border border-amber-300">
+            Sin conexión: {enCola} {enCola === 1 ? 'acción guardada' : 'acciones guardadas'} en este dispositivo; se enviarán solas al volver la red.
+          </div>
+        )}
 
         {/* Teléfono: lista desplegable con todos los módulos (ocupa poco alto) */}
         <div className="mt-3 sm:hidden">

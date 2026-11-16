@@ -5,6 +5,7 @@ import { useApp } from '../context/AppContext';
 import { HojaVid } from './Logo';
 import { NutriLinea, NutriDetalle } from './NutricionInfo';
 import { conflictosDe } from '../lib/alergias';
+import { GlosarioInsumos } from './GlosarioInsumos';
 import { Wine, Plus, ShieldAlert, Leaf } from 'lucide-react';
 
 interface PlatoCardProps {
@@ -88,6 +89,8 @@ export const PlatoCard: React.FC<PlatoCardProps> = ({ plato, onAbrirMaridaje, co
           {plato.descripcion && plato.descripcion !== plato.nombre && !['Guarnición.', 'Side dish.', 'Accompagnement.', 'Guarnição.', 'Beilage.'].includes(plato.descripcion) && (
             <p className="text-xs text-stone-600 line-clamp-3 leading-relaxed mt-2">{plato.descripcion}</p>
           )}
+
+          <GlosarioInsumos plato={plato} />
 
           {plato.maridajeTexto && (
             <p className="text-xs text-[#577A17] italic mt-2">

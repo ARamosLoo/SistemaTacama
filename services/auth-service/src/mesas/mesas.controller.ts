@@ -76,10 +76,10 @@ export class MesasController {
 
   /**
    * DELETE /api/v1/mesas/:mesaId/sesion
-   * Cierra la sesión activa de una mesa (anfitrión o jefe de salón).
+   * Cierra la sesión activa de una mesa (anfitrión, mozo o jefatura: el mozo asume las funciones de anfitrión).
    */
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(RolUsuario.ANFITRION, RolUsuario.JEFE_SALON, RolUsuario.ADMINISTRADOR)
+  @Roles(RolUsuario.ANFITRION, RolUsuario.MOZO, RolUsuario.JEFE_SALON, RolUsuario.ADMINISTRADOR)
   @Delete(':mesaId/sesion')
   @ApiBearerAuth('JWT')
   @ApiOperation({

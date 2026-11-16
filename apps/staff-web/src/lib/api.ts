@@ -42,19 +42,56 @@ export const emailRecordado = (): string => leer(EMAIL_KEY) ?? '';
 
 const tokenActual = (explicito?: string) => explicito ?? leer(TOKEN_KEY) ?? undefined;
 
+// ── RNF14: acciones del mozo guardadas sin conexión ─────────────
+// Si no hay red, la acción (tomar mesa, entregar, cobrar) se guarda en el dispositivo y se envía al volver la conexión.
+const CLAVE_COLA = 'tacama.staff.cola';
+interface AccionEnCola { path: string; method: string; body?: unknown; creada: string }
+const leerColaAcciones = (): AccionEnCola[] => {
+  try { return JSON.parse(localStorage.getItem(CLAVE_COLA) ?? '[]') as AccionEnCola[]; } catch { return []; }
+};
+const guardarColaAcciones = (c: AccionEnCola[]) => { try { localStorage.setItem(CLAVE_COLA, JSON.stringify(c)); } catch { /* sin almacenamiento */ } };
+export const pendientesEnCola = () => leerColaAcciones().length;
+
+/** Envía en orden lo que quedó guardado; se detiene si sigue sin haber red. Devuelve cuántas acciones quedan. */
+export async function vaciarCola(): Promise<number> {
+  let cola = leerColaAcciones();
+  while (cola.length > 0) {
+    const a = cola[0];
+    try {
+      await api(a.path, { method: a.method, body: a.body });
+    } catch (e) {
+      if (!(e instanceof ApiError)) break; // sigue sin red: se conserva
+      // El servidor la rechazó (p. ej. la mesa ya cambió de estado): no se reintenta
+    }
+    cola = cola.slice(1);
+    guardarColaAcciones(cola);
+  }
+  return cola.length;
+}
+
 export async function api<T = any>(
   path: string,
-  opts: { method?: string; body?: unknown; idioma?: string; token?: string } = {},
+  opts: { method?: string; body?: unknown; idioma?: string; token?: string; cola?: boolean } = {},
 ): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    method: opts.method ?? 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(opts.idioma ? { 'Accept-Language': opts.idioma } : {}),
-      ...(tokenActual(opts.token) ? { Authorization: `Bearer ${tokenActual(opts.token)}` } : {}),
-    },
-    body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${BASE}${path}`, {
+      method: opts.method ?? 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(opts.idioma ? { 'Accept-Language': opts.idioma } : {}),
+        ...(tokenActual(opts.token) ? { Authorization: `Bearer ${tokenActual(opts.token)}` } : {}),
+      },
+      body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
+    });
+  } catch (e) {
+    // Sin red: las acciones del mozo se guardan para enviarlas luego (RNF14)
+    if (opts.cola) {
+      guardarColaAcciones([...leerColaAcciones(), { path, method: opts.method ?? 'POST', body: opts.body, creada: new Date().toISOString() }]);
+      throw new ApiError(0, 'Sin conexión: la acción quedó guardada y se enviará sola al volver la red.');
+    }
+    throw e;
+  }
   const json = await res.json().catch(() => ({}));
   // Token vencido o cuenta desactivada: se cierra la sesión y se vuelve al ingreso
   if (res.status === 401 && tokenActual(opts.token) && path !== '/auth/login') {

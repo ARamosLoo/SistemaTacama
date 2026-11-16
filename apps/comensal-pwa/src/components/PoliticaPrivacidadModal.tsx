@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Modal } from './Modal';
 import { POLITICA } from '../lib/legal';
@@ -6,7 +6,8 @@ import { X } from 'lucide-react';
 
 /** Política de privacidad completa. El texto en español es el vinculante; los demás idiomas ven la traducción al inglés. */
 export const PoliticaPrivacidadModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-  const { idioma, t } = useApp();
+  const { idioma, t, eliminarDatosSalud } = useApp();
+  const [resultado, setResultado] = useState<string | null>(null);
   const texto = POLITICA[idioma === 'es' ? 'es' : 'en'];
   return (
     <Modal onClose={onClose} etiqueta={texto.titulo}>
@@ -28,6 +29,18 @@ export const PoliticaPrivacidadModal: React.FC<{ onClose: () => void }> = ({ onC
             </section>
           ))}
         </div>
+        {resultado && (
+          <p role="status" className="text-xs text-stone-700 bg-stone-100 rounded-lg px-3 py-2 mb-2">
+            {resultado === 'ok' ? t('datosEliminados') : resultado}
+          </p>
+        )}
+        <button
+          type="button"
+          onClick={async () => setResultado(await eliminarDatosSalud())}
+          className="w-full py-2.5 mb-2 rounded-xl text-xs font-semibold text-rose-800 border border-rose-300 hover:bg-rose-50 transition"
+        >
+          {t('eliminarMisDatos')}
+        </button>
         <button
           type="button"
           onClick={onClose}

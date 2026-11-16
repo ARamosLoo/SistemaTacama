@@ -66,3 +66,12 @@ body {
   button:not([role="switch"]), select, summary { min-height: 36px; }
   input[type="checkbox"], input[type="radio"] { min-width: 22px; min-height: 22px; }
 }
+
+/* Accesibilidad (RNF06, WCAG 2.1 AA):
+   - El texto gris "piedra 400" tenía contraste 2,6:1; se oscurece solo el texto (bordes e íconos no cambian): 5,0:1 sobre blanco.
+   - Ningún texto baja de 12 px: antes había textos de 9, 10 y 11 px. */
+.text-stone-400,
+.placeholder-stone-400::placeholder { color: #6B7355; }
+[class*="text-[9px]"],
+[class*="text-[10px]"],
+[class*="text-[11px]"] { font-size: 12px; line-height: 1.35; }

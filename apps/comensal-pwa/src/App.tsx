@@ -29,7 +29,7 @@ const EnvolturaBienvenida: React.FC<{ onListo: () => void }> = ({ onListo }) => 
 
 const MainContent: React.FC = () => {
   const [vistaActiva, setVistaActiva] = useState<'carta' | 'carrito' | 'seguimiento' | 'csat'>('carta');
-  const { carrito, comandaActivaId, perfil, mesaConfigurada, t, mostrarRecomendacion, terminosAceptados, aviso, totalPEN } = useApp();
+  const { carrito, comandaActivaId, perfil, mesaConfigurada, t, mostrarRecomendacion, terminosAceptados, aviso, totalPEN, pedidoEnCola, errorCola } = useApp();
   const [editandoGustos, setEditandoGustos] = useState(false);
   const [verTerminos, setVerTerminos] = useState(false);
 
@@ -48,6 +48,17 @@ const MainContent: React.FC = () => {
       <Header vistaActiva={vistaActiva} setVistaActiva={setVistaActiva} />
       <AlergenosModal />
       {mostrarRecomendacion && <RecomendacionModal onIrAlCarrito={() => setVistaActiva('carrito')} />}
+
+      {pedidoEnCola && (
+        <div role="status" className="bg-amber-100 text-amber-900 text-xs font-semibold px-4 py-2 text-center border-b border-amber-300">
+          {t('sinConexionPedido')}
+        </div>
+      )}
+      {errorCola && (
+        <div role="alert" className="bg-rose-100 text-rose-900 text-xs font-semibold px-4 py-2 text-center border-b border-rose-300">
+          {errorCola}
+        </div>
+      )}
 
       <main className="flex-grow">
         {vistaActiva === 'carta' && <CartaPage onEditarGustos={() => setEditandoGustos(true)} />}
@@ -126,7 +137,7 @@ const MainContent: React.FC = () => {
             <div className="relative">
               <ShoppingBag className="w-5 h-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-2 bg-amber-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-2 bg-amber-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
                   {totalItems}
                 </span>
               )}

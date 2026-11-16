@@ -1,5 +1,10 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 
+// Sin secreto, el servicio aceptaría cualquier token firmado a mano: en producción no se permite arrancar así
+if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET es obligatorio en producción: sin él no se puede verificar la firma de los tokens');
+}
+
 /**
  * Decodifica el JWT del personal. Si JWT_SECRET está definido (siempre en producción) verifica la firma HS256 y la
  * expiración; un token falsificado o vencido se trata como si no hubiera sesión. Sin JWT_SECRET (desarrollo local
@@ -18,7 +23,8 @@ function payloadDelToken(authorization?: string): Record<string, unknown> | null
       if (recibido.length !== esperado.length || !timingSafeEqual(recibido, esperado)) return null;
     }
     const payload = JSON.parse(Buffer.from(p, 'base64url').toString('utf8'));
-    if (secreto && typeof payload.exp === 'number' && payload.exp * 1000 < Date.now()) return null;
+    // Con la firma verificada, el token debe traer vencimiento y no estar vencido
+    if (secreto && (typeof payload.exp !== 'number' || payload.exp * 1000 < Date.now())) return null;
     return payload;
   } catch {
     return null;

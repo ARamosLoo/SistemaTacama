@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { api } from '../lib/api';
+import { ComposicionPlato } from '../components/ComposicionPlato';
 import { BookOpen, Search, ImageUp, CheckCircle2, AlertTriangle, PackageX, Save } from 'lucide-react';
 
 interface PlatoAdmin {
@@ -196,6 +197,7 @@ export const CartaAdminPage: React.FC = () => {
                     <span>{NOMBRE_SECCION(p.seccion)}</span>
                   </div>
                   <h3 className="font-serif-tacama text-sm font-bold text-stone-900 leading-snug">{p.nombreEs}</h3>
+                  <ComposicionPlato platoId={p.id} nombre={p.nombreEs} />
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
