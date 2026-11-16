@@ -40,3 +40,6 @@ logs
 services/catalogo-i18n-service/uploads/*
 !services/catalogo-i18n-service/uploads/.gitkeep
 docs/demo/
+
+# ── Copia embebida del proyecto (no versionar) ──
+SistemaTacama/
