@@ -568,6 +568,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setEstadoComanda('CONFIRMADA');
     setCsatEnviado(false);
     setCuenta({ solicitada: false, metodoPago: null });
+    setCarrito([]); // ya se envió: si no se vacía, "Agregar más" reenvía los mismos platos en otra comanda
     sincronizarRef.current();
     setTimeout(cargarEtiquetas, 1500); // refleja el descuento de stock
   };

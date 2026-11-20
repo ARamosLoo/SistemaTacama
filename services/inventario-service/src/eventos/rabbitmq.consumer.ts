@@ -35,6 +35,23 @@ export class RabbitMQConsumer implements OnModuleInit, OnModuleDestroy {
       // Prefetch 1: procesar un mensaje a la vez (garantiza orden)
       await this.channel.prefetch(1);
 
+      // Topología idempotente: no depende de que definitions.json se haya cargado en el broker.
+      // Los argumentos deben coincidir con infra/rabbitmq/definitions.json.
+      await this.channel.assertExchange('tacama.events', 'topic', { durable: true });
+      await this.channel.assertExchange('tacama.dlx', 'fanout', { durable: true });
+      await this.channel.assertQueue('tacama.dead-letters', { durable: true });
+      await this.channel.bindQueue('tacama.dead-letters', 'tacama.dlx', '');
+      await this.channel.assertQueue('inventario.comanda-confirmada', {
+        durable: true,
+        arguments: { 'x-dead-letter-exchange': 'tacama.dlx', 'x-message-ttl': 300000 },
+      });
+      await this.channel.assertQueue('inventario.comanda-anulada', {
+        durable: true,
+        arguments: { 'x-dead-letter-exchange': 'tacama.dlx' },
+      });
+      await this.channel.bindQueue('inventario.comanda-confirmada', 'tacama.events', 'comanda.confirmada');
+      await this.channel.bindQueue('inventario.comanda-anulada', 'tacama.events', 'comanda.anulada');
+
       // ── Consumir ComandaConfirmada (RN06) ────────────────────
       await this.channel.consume(
         'inventario.comanda-confirmada',

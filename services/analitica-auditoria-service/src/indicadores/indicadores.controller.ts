@@ -5,9 +5,10 @@
  * GET /api/v1/indicadores/csat
  */
 
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { IndicadoresService } from './indicadores.service';
+import { SoloDireccionGuard } from '../common/solo-direccion.guard';
 
 @ApiTags('Indicadores')
 @Controller('indicadores')
@@ -15,6 +16,7 @@ export class IndicadoresController {
   constructor(private readonly indicadoresService: IndicadoresService) {}
 
   @Get('venta-cruzada')
+  @UseGuards(SoloDireccionGuard)
   @ApiOperation({ summary: 'Obtener tasa de conversión de venta cruzada (maridajes recomendados vs aceptados)' })
   @ApiQuery({ name: 'fechaInicio', required: false, type: String })
   @ApiQuery({ name: 'fechaFin', required: false, type: String })
@@ -32,12 +34,14 @@ export class IndicadoresController {
   }
 
   @Get('kpis')
+  @UseGuards(SoloDireccionGuard)
   @ApiOperation({ summary: 'Obtener KPIs generales de ventas, comandas y ticket promedio' })
   async getKpis() {
     return this.indicadoresService.obtenerKpisGenerales();
   }
 
   @Get('csat')
+  @UseGuards(SoloDireccionGuard)
   @ApiOperation({ summary: 'Obtener métricas de satisfacción del cliente (CSAT)' })
   async getCsat() {
     return this.indicadoresService.obtenerCsat();

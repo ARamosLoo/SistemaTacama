@@ -54,7 +54,11 @@ export class RabbitMQProducer implements OnModuleInit, OnModuleDestroy {
     if (!this.channel) {
       this.logger.warn('Canal RabbitMQ no disponible, reintentando conexión...');
       await this.conectar();
-      return;
+      // Si tras reconectar sigue sin canal, el evento se perdería en silencio: se avisa con error
+      if (!this.channel) {
+        this.logger.error(`Evento [${routingKey}] NO publicado: RabbitMQ no disponible`);
+        return;
+      }
     }
 
     try {

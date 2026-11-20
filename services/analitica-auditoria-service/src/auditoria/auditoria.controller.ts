@@ -6,6 +6,7 @@
 
 import { Controller, Get, Post, Body, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { SoloDireccionGuard } from '../common/solo-direccion.guard';
 import { AuditoriaService, RegistrarLogDto, FiltrosAuditoriaDto } from './auditoria.service';
 
 @ApiTags('Auditoría')
@@ -14,6 +15,7 @@ export class AuditoriaController {
   constructor(private readonly auditoriaService: AuditoriaService) {}
 
   @Get()
+  @UseGuards(SoloDireccionGuard)
   @ApiOperation({ summary: 'Consultar logs de auditoría con filtros (RF22)' })
   @ApiQuery({ name: 'entidad', required: false, type: String })
   @ApiQuery({ name: 'accion', required: false, type: String })
